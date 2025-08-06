@@ -10,12 +10,12 @@ export default function AboutSection() {
             <p>
               NexusWealth Investment Solutions (NWIS) is at the forefront of revolutionizing real-world investment
               through decentralized innovation. Our platform leverages blockchain technology to create a transparent,
-              secure, and accessible ecosystem for wealth creation.
+              secure, and accessible ecosystem to create and manage wealth.
             </p>
             <p>
               We believe in empowering individuals to build generational wealth by providing access to diverse
               investment opportunities that were traditionally exclusive. Our NWIS token is the cornerstone of this
-              ecosystem, offering holders unique benefits and participation in the platform's growth.
+              ecosystem, offering holders unique benefits and participation in our institution's growth.
             </p>
             <p>
               Join us on our mission to democratize finance and create a future where everyone has the tools to achieve

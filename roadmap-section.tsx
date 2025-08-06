@@ -1,43 +1,53 @@
-import { CheckCircle } from "lucide-react"
+import { CheckCircle } from 'lucide-react'
 
 export default function RoadmapSection() {
   const roadmapPhases = [
     {
-      title: "Phase 1: Foundation & Presale (Q4 2024)",
+      title: "Phase 1: Foundation & ICO (Q3 2025)",
       items: [
-        "Project Inception & Whitepaper Release",
+        "Corporate Inception & Whitepaper Release",
         "Smart Contract Development & Audit",
         "Website Launch & Community Building",
-        "NWIS Token Presale - Stage 1",
+        "NWIS Token Presale - Series A Seed funding",
       ],
       completed: true,
     },
     {
-      title: "Phase 2: Platform Development (Q1 2025)",
+      title: "Phase 2: Platform Development, Marcketing/Fundraising (Q4 2025)",
       items: [
-        "NWIS Token Listing on DEXs",
+        "Resource Onboarding and Team Expansion",
         "Staking Platform Launch",
         "Initial Real-World Asset Integration",
-        "Partnership Expansion",
-      ],
-      completed: false,
-    },
-    {
-      title: "Phase 3: Ecosystem Expansion (Q2 2025)",
-      items: [
-        "Cross-Chain Compatibility",
-        "Decentralized Governance Implementation",
-        "NFT Integration for Asset Ownership",
         "Global Marketing Campaigns",
       ],
       completed: false,
     },
     {
-      title: "Phase 4: Future Growth (Q3 2025+)",
+      title: "Phase 3: Ecosystem Expansion (Q1 2026)",
       items: [
-        "Expansion to New Asset Classes",
-        "Mobile Application Development",
-        "Layer 2 Scaling Solutions",
+        "NWIS Token Listing on DEXs",
+        "Token Holders Access to NexusWealth Strategic Investment Paths",
+        "Partnership Expansion",
+        "NexusWealth Collateralized Loans",
+      ],
+      completed: false,
+    },
+    {
+      title: "Phase 4: Ecosystem Expansion (Q4 2026)",
+      items: [
+        "Cross-Chain Compatibility",
+        "Decentralized Governance Implementation",
+        "Frist 3rd Party Audit Publish",
+        "Yield Payouts",
+      ],
+      completed: false,
+    },
+    {
+      title: "Phase 5: Exponential Growth (Q2 2027+)",
+      items: [
+        "Expansion to New Global Investment Categories",
+        "Quarterly Audits",
+        "Monthly yield Payouts",
         "Global Regulatory Compliance",
       ],
       completed: false,
@@ -56,10 +66,11 @@ export default function RoadmapSection() {
             {roadmapPhases.map((phase, index) => (
               <div
                 key={index}
-                className="flex flex-col md:flex-row items-center md:items-start justify-center md:space-x-8"
+                className="relative flex flex-col md:flex-row items-center md:items-start"
               >
+                {/* Content for left side (or right if ordered) */}
                 <div
-                  className={`md:w-1/2 ${index % 2 === 0 ? "md:text-right md:pr-16" : "md:order-2 md:text-left md:pl-16"}`}
+                  className={`md:w-1/2 p-4 ${index % 2 === 0 ? "md:text-right md:pr-16" : "md:order-2 md:text-left md:pl-16"}`}
                 >
                   <h3 className="text-2xl font-semibold text-white mb-4">{phase.title}</h3>
                   <ul className="space-y-2 text-gray-300">
@@ -73,15 +84,19 @@ export default function RoadmapSection() {
                     ))}
                   </ul>
                 </div>
-                <div className="relative z-10 flex-shrink-0 mt-4 md:mt-0">
+
+                {/* Circle checkpoint - positioned absolutely within this relative phase div */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 z-10">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center ${phase.completed ? "bg-green-500" : "bg-gray-700 border-2 border-gray-500"}`}
                   >
                     {phase.completed && <CheckCircle className="h-4 w-4 text-white" />}
                   </div>
                 </div>
+
+                {/* Empty div to balance layout on the other side */}
                 <div
-                  className={`md:w-1/2 ${index % 2 === 0 ? "md:order-2 md:text-left md:pl-16" : "md:text-right md:pr-16"}`}
+                  className={`md:w-1/2 p-4 ${index % 2 === 0 ? "md:order-2 md:text-left md:pl-16" : "md:text-right md:pr-16"}`}
                 >
                   {/* Empty div to balance layout */}
                 </div>
