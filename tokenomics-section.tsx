@@ -1,9 +1,9 @@
 export default function TokenomicsSection() {
   const tokenomics = [
     { label: "Total Supply", value: "50,000,000,000 NWIS", percentage: 100, color: "from-purple-600 to-pink-600" },
-    { label: "Presale", value: "25,000,000,000 NWIS", percentage: 50, color: "from-blue-500 to-cyan-500" },
-    { label: "Liquidity", value: "10,000,000,000 NWIS", percentage: 20, color: "from-green-500 to-emerald-500" },
-    { label: "Marketing", value: "7,500,000,000 NWIS", percentage: 15, color: "from-orange-500 to-red-500" },
+    { label: "Presale", value: "30,000,000,000 NWIS", percentage: 60, color: "from-blue-500 to-cyan-500" },
+    { label: "Liquidity", value: "7,500,000,000 NWIS", percentage: 15, color: "from-green-500 to-emerald-500" },
+    { label: "Marketing", value: "5,000,000,000 NWIS", percentage: 10, color: "from-orange-500 to-red-500" },
     { label: "Team", value: "7,500,000,000 NWIS", percentage: 15, color: "from-yellow-500 to-amber-500" },
   ]
 
@@ -75,7 +75,7 @@ export default function TokenomicsSection() {
                     <stop offset="100%" stopColor="#f59e0b" />
                   </linearGradient>
                 </defs>
-                {/* Presale - 50% */}
+                {/* Presale - 60% */}
                 <circle
                   cx="50"
                   cy="50"
@@ -83,11 +83,11 @@ export default function TokenomicsSection() {
                   fill="none"
                   stroke="url(#presale-gradient)"
                   strokeWidth="8"
-                  strokeDasharray="125.6 251.2"
+                  strokeDasharray="150.72 251.2"
                   strokeDashoffset="0"
                   strokeLinecap="round"
                 />
-                {/* Liquidity - 20% */}
+                {/* Liquidity - 15% */}
                 <circle
                   cx="50"
                   cy="50"
@@ -95,11 +95,11 @@ export default function TokenomicsSection() {
                   fill="none"
                   stroke="url(#liquidity-gradient)"
                   strokeWidth="8"
-                  strokeDasharray="50.24 251.2"
-                  strokeDashoffset="-125.6"
+                  strokeDasharray="37.68 251.2"
+                  strokeDashoffset="-150.72"
                   strokeLinecap="round"
                 />
-                {/* Marketing - 15% */}
+                {/* Marketing - 10% */}
                 <circle
                   cx="50"
                   cy="50"
@@ -107,8 +107,8 @@ export default function TokenomicsSection() {
                   fill="none"
                   stroke="url(#marketing-gradient)"
                   strokeWidth="8"
-                  strokeDasharray="37.68 251.2"
-                  strokeDashoffset="-175.84"
+                  strokeDasharray="25.12 251.2"
+                  strokeDashoffset="-188.4"
                   strokeLinecap="round"
                 />
                 {/* Team - 15% */}

@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, QrCode } from "lucide-react"
+import Image from "next/image"
+import { Menu, X, QrCode } from 'lucide-react'
 import { WalletButton } from "./component/wallet-button"
 import { Button } from "@/component/UI/button"
 import * as ConnectKit from "connectkit" // Import ConnectKit for global access to its methods
@@ -27,13 +28,19 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-[#0c1220] border-b border-gray-800 sticky top-0 z-50">
+    <nav className="bg-[#2A3650] border-b border-gray-800 sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center mx-1 h-[Auto] w-[Auto] leading-7">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-white">
-              <span className="text-purple-500">Nexus</span>Wealth
+            <Link href="/">
+              <Image
+                src="/images/nexuswealth-logo-v2.jpg"
+                alt="NexusWealth Investment Solutions Logo"
+                width={150} // Adjusted width
+                height={35} // Adjusted height
+                className="h-auto"
+              />
             </Link>
           </div>
 
@@ -70,7 +77,7 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#0c1220] border-t border-gray-800">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#2A3650] border-t border-gray-800">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
