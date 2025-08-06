@@ -18,8 +18,7 @@ export default function AboutSection() {
               ecosystem, offering holders unique benefits and participation in our institution's growth.
             </p>
             <p>
-              Join us on our mission to democratize finance and create a future where everyone has the tools to achieve
-              financial freedom.
+              Join us on our mission to democratize finance and create a future where everyone has the tools to achieve financial freedom.
             </p>
           </div>
           <div className="flex justify-center">

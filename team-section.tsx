@@ -5,15 +5,15 @@ import Link from "next/link"
 export default function TeamSection() {
   const teamMembers = [
     {
-      name: "Alice Johnson",
+      name: "Michael Sarabian",
       role: "CEO & Founder",
       image: "/placeholder.svg?height=150&width=150",
       linkedin: "#",
       twitter: "#",
     },
     {
-      name: "Bob Williams",
-      role: "CTO",
+      name: "Ali JK",
+      role: "CTO & Co-Founder",
       image: "/placeholder.svg?height=150&width=150",
       linkedin: "#",
       twitter: "#",
