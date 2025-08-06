@@ -19,8 +19,8 @@ export default function TeamSection() {
       twitter: "#",
     },
     {
-      name: "Carol Davis",
-      role: "Head of Marketing",
+      name: "Pam Aryan",
+      role: "Lead Investment Strategist",
       image: "/placeholder.svg?height=150&width=150",
       linkedin: "#",
       twitter: "#",
