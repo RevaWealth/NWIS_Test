@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useAccount, useReadContract } from "wagmi"
 
-// Mock contract ABI for token calculation
+// Mock contract ABI for token calculation and purchase
 const TOKEN_SALE_ABI = [
   {
     inputs: [
@@ -13,6 +13,16 @@ const TOKEN_SALE_ABI = [
     name: "calculateTokens",
     outputs: [{ name: "", type: "uint256" }],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { name: "amount", type: "uint256" },
+      { name: "currency", type: "string" },
+    ],
+    name: "buyTokens",
+    outputs: [],
+    stateMutability: "nonpayable", // Or "payable" if it accepts ETH directly
     type: "function",
   },
 ] as const

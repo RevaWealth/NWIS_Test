@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useAccount } from "wagmi"
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSimulateContract } from "wagmi" // Import useSimulateContract
 import { ConnectKitButton } from "connectkit"
 import { Button } from "@/component/UI/button"
 import { Input } from "@/component/UI/input"
@@ -18,6 +18,33 @@ interface TokenPurchaseProps {
   tokenValue: string
 }
 
+// Mock contract ABI for token calculation and purchase
+const TOKEN_SALE_ABI = [
+  {
+    inputs: [
+      { name: "amount", type: "uint256" },
+      { name: "currency", type: "string" },
+    ],
+    name: "calculateTokens",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { name: "amount", type: "uint256" },
+      { name: "currency", type: "string" },
+    ],
+    name: "buyTokens",
+    outputs: [],
+    stateMutability: "nonpayable", // Or "payable" if it accepts ETH directly
+    type: "function",
+  },
+] as const
+
+// Mock contract address
+const TOKEN_SALE_CONTRACT = "0x1234567890123456789012345678901234567890"
+
 const currencyConfig = {
   ETH: { icon: EthIcon, color: "text-blue-400" },
   USDT: { icon: UsdtIcon, color: "text-green-500" },
@@ -28,13 +55,56 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
   const { isConnected } = useAccount()
   const [amount, setAmount] = useState("")
   const [currency, setCurrency] = useState<keyof typeof currencyConfig>("ETH")
-  const [isLoading, setIsLoading] = useState(false)
-  const [isPurchasing, setIsPurchasing] = useState(false)
   const [componentLoading, setComponentLoading] = useState(true)
   const { toast } = useToast()
 
   // Use token calculation hook
   const { tokenAmount, isCalculating } = useTokenCalculation({ amount, currency })
+
+  // Convert amount to BigInt for contract interaction, assuming 18 decimals for simplicity
+  // In a real app, you'd get decimals from the token contract
+  const amountInWei = amount ? BigInt(Number.parseFloat(amount) * 1e18) : undefined
+
+  // Wagmi hook for simulating the contract call (gas estimation)
+  const {
+    data: simulationData,
+    error: simulateError,
+    isLoading: isSimulating,
+  } = useSimulateContract({
+    address: TOKEN_SALE_CONTRACT,
+    abi: TOKEN_SALE_ABI,
+    functionName: "buyTokens",
+    args: amountInWei && currency ? [amountInWei, currency] : undefined,
+    query: {
+      enabled: Boolean(amountInWei && currency && isConnected), // Only simulate if connected and amount/currency are valid
+    },
+  })
+
+  // Wagmi hook for writing to the contract
+  const {
+    data: hash, // Get the transaction hash
+    writeContract,
+    isPending: isWritePending,
+    isSuccess: isWriteSuccess,
+    isError: isWriteError,
+    error: writeError,
+  } = useWriteContract()
+
+  // Wagmi hook for waiting for transaction receipt
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    isError: isConfirmationError,
+    error: confirmationError,
+  } = useWaitForTransactionReceipt({
+    hash,
+    query: {
+      enabled: Boolean(hash), // Only enable when a hash is available
+    },
+  })
+
+  // Combine loading states
+  const isPurchasing = isWritePending || isCalculating || isSimulating || isConfirming
 
   // Simulate component loading
   useEffect(() => {
@@ -43,6 +113,54 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
     }, 800)
     return () => clearTimeout(timer)
   }, [])
+
+  // Handle purchase success/error from wagmi (transaction sent)
+  useEffect(() => {
+    if (isWriteSuccess) {
+      toast({
+        title: "Transaction Sent",
+        description: `Transaction sent! Waiting for confirmation... Hash: ${hash?.slice(0, 6)}...`,
+      })
+    }
+
+    if (isWriteError) {
+      toast({
+        title: "Purchase Failed",
+        description: writeError?.message || "An unknown error occurred during purchase.",
+        variant: "destructive",
+      })
+    }
+  }, [isWriteSuccess, isWriteError, writeError, hash, toast])
+
+  // Handle transaction confirmation
+  useEffect(() => {
+    if (isConfirmed) {
+      toast({
+        title: "Purchase Confirmed",
+        description: `Your purchase of ${tokenAmount} NWIS tokens is confirmed!`,
+      })
+      setAmount("") // Clear amount after successful confirmation
+    }
+
+    if (isConfirmationError) {
+      toast({
+        title: "Transaction Failed",
+        description: confirmationError?.message || "Transaction confirmation failed.",
+        variant: "destructive",
+      })
+    }
+  }, [isConfirmed, isConfirmationError, confirmationError, tokenAmount, toast])
+
+  // Handle simulation errors
+  useEffect(() => {
+    if (simulateError) {
+      toast({
+        title: "Transaction Simulation Failed",
+        description: simulateError?.message || "Could not estimate gas for this transaction.",
+        variant: "destructive",
+      })
+    }
+  }, [simulateError, toast])
 
   const handlePurchase = async () => {
     if (!amount || Number.parseFloat(amount) <= 0) {
@@ -53,15 +171,17 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
       })
       return
     }
-    setIsPurchasing(true)
-    // Simulate purchase process
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    toast({
-      title: "Purchase Successful",
-      description: `You have successfully purchased ${tokenAmount} NWIS tokens with ${amount} ${currency}.`,
-    })
-    setIsPurchasing(false)
-    setAmount("") // Clear amount after purchase
+
+    if (!simulationData?.request) {
+      toast({
+        title: "Transaction Error",
+        description: "Could not prepare transaction. Please try again.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    writeContract(simulationData.request)
   }
 
   const handleCurrencyChange = async (newCurrency: keyof typeof currencyConfig) => {
@@ -128,10 +248,10 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
                 variant={currency === curr ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleCurrencyChange(curr)}
-                disabled={isLoading}
+                disabled={isSimulating} // Disable currency change during simulation
                 className={`${buttonClasses} flex items-center justify-center gap-2`}
               >
-                {isLoading && currency === curr ? (
+                {isSimulating && currency === curr ? (
                   <LoadingSpinner size="sm" />
                 ) : (
                   <>
@@ -151,7 +271,7 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             className="bg-gray-800 border-gray-700 text-white placeholder-gray-500"
-            disabled={!isConnected}
+            disabled={!isConnected || isSimulating} // Disable input during simulation
           />
 
           {/* Token Calculation Field */}
@@ -183,13 +303,13 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
         ) : (
           <Button
             onClick={handlePurchase}
-            disabled={!amount || isPurchasing || isCalculating}
+            disabled={!amount || isPurchasing || !simulationData?.request} // Disable if no valid simulation data
             className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white font-semibold py-3"
           >
             {isPurchasing ? (
               <>
                 <LoadingSpinner size="sm" className="mr-2" />
-                Processing Purchase...
+                {isSimulating ? "Estimating Gas..." : isConfirming ? "Confirming Transaction..." : "Processing Purchase..."}
               </>
             ) : (
               `Buy NWIS with ${currency}`

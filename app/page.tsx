@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { Clock } from "lucide-react"
+import { Clock } from 'lucide-react'
 import AnnouncementBar from "../announcement-bar"
 import Navbar from "../navbar"
 import CountdownTimer from "../countdown-timer"
@@ -17,8 +17,15 @@ import FAQSection from "../faq-section"
 import Footer from "../footer"
 import { PageLoader } from "../component/page-loader" // Updated import path
 
+interface TokenSaleData {
+  currentPrice: string;
+  amountRaised: string;
+  tokenValue: string;
+}
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
+  const [tokenSaleData, setTokenSaleData] = useState<TokenSaleData | null>(null);
 
   useEffect(() => {
     // Suppress Safe Apps SDK errors
@@ -41,19 +48,37 @@ export default function Home() {
     window.addEventListener("error", handleError)
     window.addEventListener("unhandledrejection", handleUnhandledRejection)
 
-    // Simulate initial loading
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1500)
+    // Simulate initial loading and fetch data
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/token-sale');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: TokenSaleData = await response.json();
+        setTokenSaleData(data);
+      } catch (error) {
+        console.error("Failed to fetch token sale data:", error);
+        // Fallback to default values if fetch fails
+        setTokenSaleData({
+          currentPrice: "$0.007125",
+          amountRaised: "$345,000",
+          tokenValue: "1 NWIS = $0.007125",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
 
     return () => {
       window.removeEventListener("error", handleError)
       window.removeEventListener("unhandledrejection", handleUnhandledRejection)
-      clearTimeout(timer)
     }
   }, [])
 
-  if (isLoading) {
+  if (isLoading || !tokenSaleData) {
     return <PageLoader />
   }
 
@@ -128,7 +153,11 @@ export default function Home() {
 
               <p className="text-gray-400 text-center text-sm mt-4 mb-6">Time's Almost Up</p>
 
-              <TokenPurchase currentPrice="$0.001" amountRaised="$345,000" tokenValue="1 NWIS = $0.007125" />
+              <TokenPurchase
+                currentPrice={tokenSaleData.currentPrice}
+                amountRaised={tokenSaleData.amountRaised}
+                tokenValue={tokenSaleData.tokenValue}
+              />
             </div>
           </div>
         </div>
