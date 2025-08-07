@@ -58,7 +58,7 @@ export default function Navbar() {
             <WalletButton />
             <Button
               onClick={handleMobileConnect}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 flex items-center gap-2"
+              className="bg-gradient-to-r from-pink-600 to-purple-500 hover:from-pink-700 hover:to-purple-600 text-white font-semibold py-3 flex items-center gap-2"
               aria-label="Connect with Mobile Wallet (QR Code)" // Added for accessibility
             >
               <QrCode className="h-4 w-4" />
@@ -92,7 +92,7 @@ export default function Navbar() {
                 <WalletButton />
                 <Button
                   onClick={handleMobileConnect}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-pink-600 to-purple-500 hover:from-pink-700 hover:to-purple-600 text-white font-semibold py-3 flex items-center justify-center gap-2"
                   aria-label="Connect with Mobile Wallet (QR Code)" // Added for accessibility
                 >
                   <QrCode className="h-4 w-4" />

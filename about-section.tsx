@@ -14,11 +14,10 @@ export default function AboutSection() {
             </p>
             <p>
               We believe in empowering individuals to build generational wealth by providing access to diverse
-              investment opportunities that were traditionally exclusive. Our NWIS token is the cornerstone of this
-              ecosystem, offering holders unique benefits and participation in our institution's growth.
+              investment opportunities that were traditionally exclusive. This approach not only enhances liquidity but also reduces traditional barriers to entry, offering unprecedented access to lucrative investment avenues, including Agriculture, Infrastructure, Renewable Energy, and Real Estate.
             </p>
             <p>
-              Join us on our mission to democratize finance and create a future where everyone has the tools to achieve financial freedom.
+              Our NWIS token is the cornerstone of this ecosystem, offering holders unique benefits and participation in our journey to build the next global asset manager and financial services giant. Join us on our mission to democratize finance and create a future where everyone has the tools to achieve financial freedom.
             </p>
           </div>
           <div className="flex justify-center">
