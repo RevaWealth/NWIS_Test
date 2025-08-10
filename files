@@ -1,41 +1,53 @@
+// component/wallet-button.tsx
+"use client"
+
+import { ConnectKitButton } from "connectkit"
+import { Button } from "@/component/UI/button"
+
+export function WalletButton() {
+  return (
+    <ConnectKitButton.Custom>
+      {({ isConnected, show, address }) => {
+        return (
+          <Button
+            onClick={show}
+            className="bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-3 transition-colors duration-200"
+          >
+            {isConnected ? (address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connected") : "Connect Wallet"}
+          </Button>
+        )
+      }}
+    </ConnectKitButton.Custom>
+  )
+}
+
 // navbar.tsx
-import Image from 'next/image';
+import React from "react"
+import { Button } from "@/component/UI/button"
+import { ConnectKitButton } from "connectkit"
 
-const Navbar = () => {
-return (
-  <div>
-    <Image
-      src="/images/nwis-logo.png"
-      alt="NWIS logo"
-      width={2048}
-      height={448}
-      priority
-      className="h-7 md:h-9 lg:h-10 w-auto object-contain shrink-0"
-    />
-    {/* /** rest of code here **/ */}
-  </div>
-);
-};
-
-export default Navbar;
-
-// components/institutions/navbar.tsx
-import Image from 'next/image';
-
-const InstitutionNavbar = () => {
-return (
-  <div>
-    <Image
-      src="/images/nwis-logo.png"
-      alt="NWIS logo"
-      width={2048}
-      height={448}
-      priority
-      className="h-7 md:h-9 lg:h-10 w-auto object-contain shrink-0"
-    />
-    {/* /** rest of code here **/ */}
-  </div>
-);
-};
-
-export default InstitutionNavbar;
+export function Navbar() {
+  return (
+    <nav className="bg-gray-800 p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="flex items-center">
+          <h1 className="text-white text-2xl font-bold">My App</h1>
+        </div>
+        <div className="hidden md:flex">
+          <Button
+            className="bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-2 px-3 flex items-center gap-2 transition-colors duration-200"
+          >
+            QR Connect
+          </Button>
+        </div>
+        <div className="md:hidden">
+          <Button
+            className="w-full bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-2 flex items-center justify-center gap-2 transition-colors duration-200"
+          >
+            QR Connect
+          </Button>
+        </div>
+      </div>
+    </nav>
+  )
+}

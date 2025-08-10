@@ -268,7 +268,7 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
             {({ show }) => (
               <Button
                 onClick={show}
-                className="w-full bg-gradient-to-r from-[#CFA238] to-[#A57E24] hover:brightness-110 text-white font-semibold py-3 transition-all duration-200"
+                className="w-full bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-3 transition-colors duration-200"
               >
                 CONNECT WALLET
               </Button>
