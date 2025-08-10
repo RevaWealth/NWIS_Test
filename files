@@ -1,0 +1,52 @@
+/// about-section.tsx
+import React from 'react';
+
+const AboutSection = () => {
+  return (
+    <section id="about-nexuswealth" className="py-20 bg-[#0c1220] scroll-mt-24">
+      {/* Content of the about section goes here */}
+    </section>
+  );
+};
+
+export default AboutSection;
+
+// navbar.tsx
+import React from 'react';
+import Link from 'next/link';
+
+const Navbar = () => {
+  const navItems = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "#about-nexuswealth" },
+    { name: "Services", href: "/services" },
+    { name: "Contact", href: "/contact" },
+  ];
+
+  return (
+    <nav className="bg-white">
+      <ul className="flex justify-center">
+        {navItems.map((item) => (
+          <li key={item.name} className="px-4">
+            <Link href={item.href}>{item.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+// app/globals.css
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Additional styles can be added here */

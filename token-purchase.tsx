@@ -37,7 +37,7 @@ const TOKEN_SALE_ABI = [
     ],
     name: "buyTokens",
     outputs: [],
-    stateMutability: "nonpayable", // Or "payable" if it accepts ETH directly
+    stateMutability: "nonpayable",
     type: "function",
   },
 ] as const
@@ -48,7 +48,7 @@ const TOKEN_SALE_CONTRACT = "0x1234567890123456789012345678901234567890"
 const currencyConfig = {
   ETH: { icon: EthIcon, color: "text-blue-400" },
   USDT: { icon: UsdtIcon, color: "text-green-500" },
-  USDC: { icon: UsdcIcon, color: "text-blue-500" }, // Keep icon color as blue-500
+  USDC: { icon: UsdcIcon, color: "text-blue-500" },
 }
 
 export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }: TokenPurchaseProps) {
@@ -62,7 +62,6 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
   const { tokenAmount, isCalculating } = useTokenCalculation({ amount, currency })
 
   // Convert amount to BigInt for contract interaction, assuming 18 decimals for simplicity
-  // In a real app, you'd get decimals from the token contract
   const amountInWei = amount ? BigInt(Number.parseFloat(amount) * 1e18) : undefined
 
   // Wagmi hook for simulating the contract call (gas estimation)
@@ -76,13 +75,13 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
     functionName: "buyTokens",
     args: amountInWei && currency ? [amountInWei, currency] : undefined,
     query: {
-      enabled: Boolean(amountInWei && currency && isConnected), // Only simulate if connected and amount/currency are valid
+      enabled: Boolean(amountInWei && currency && isConnected),
     },
   })
 
   // Wagmi hook for writing to the contract
   const {
-    data: hash, // Get the transaction hash
+    data: hash,
     writeContract,
     isPending: isWritePending,
     isSuccess: isWriteSuccess,
@@ -99,7 +98,7 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
   } = useWaitForTransactionReceipt({
     hash,
     query: {
-      enabled: Boolean(hash), // Only enable when a hash is available
+      enabled: Boolean(hash),
     },
   })
 
@@ -185,11 +184,9 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
   }
 
   const handleCurrencyChange = async (newCurrency: keyof typeof currencyConfig) => {
-    setIsLoading(true)
     setCurrency(newCurrency)
     // Simulate currency conversion loading
     await new Promise((resolve) => setTimeout(resolve, 500))
-    setIsLoading(false)
   }
 
   if (componentLoading) {
@@ -231,14 +228,14 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
         <div className="grid grid-cols-3 gap-2">
           {(Object.keys(currencyConfig) as Array<keyof typeof currencyConfig>).map((curr) => {
             const { icon: Icon, color } = currencyConfig[curr]
-            let buttonClasses = "bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700" // Default unselected state
+            let buttonClasses = "bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700"
             if (currency === curr) {
               if (curr === "USDT") {
                 buttonClasses = "bg-green-600 hover:bg-green-700 text-white"
               } else if (curr === "USDC") {
-                buttonClasses = "bg-blue-600 hover:bg-blue-700 text-white" // Specific blue for USDC
+                buttonClasses = "bg-blue-600 hover:bg-blue-700 text-white"
               } else {
-                buttonClasses = "bg-purple-600 hover:bg-purple-700 text-white" // Existing purple for ETH
+                buttonClasses = "bg-purple-600 hover:bg-purple-700 text-white"
               }
             }
 
@@ -248,7 +245,7 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
                 variant={currency === curr ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleCurrencyChange(curr)}
-                disabled={isSimulating} // Disable currency change during simulation
+                disabled={isSimulating}
                 className={`${buttonClasses} flex items-center justify-center gap-2`}
               >
                 {isSimulating && currency === curr ? (
@@ -270,8 +267,8 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
             placeholder={`Enter ${currency} amount`}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="bg-gray-800 border-gray-700 text-white placeholder-gray-500"
-            disabled={!isConnected || isSimulating} // Disable input during simulation
+            className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 text-base"
+            disabled={!isConnected || isSimulating}
           />
 
           {/* Token Calculation Field */}
@@ -303,7 +300,7 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
         ) : (
           <Button
             onClick={handlePurchase}
-            disabled={!amount || isPurchasing || !simulationData?.request} // Disable if no valid simulation data
+            disabled={!amount || isPurchasing || !simulationData?.request}
             className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white font-semibold py-3"
           >
             {isPurchasing ? (

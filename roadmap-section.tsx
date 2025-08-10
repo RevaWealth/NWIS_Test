@@ -55,7 +55,7 @@ export default function RoadmapSection() {
   ]
 
   return (
-    <section id="roadmap" className="py-20 bg-[#070b14]">
+    <section id="roadmap" className="py-20 bg-[#070b14] bg-sky-950">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold text-center text-white mb-12">Our Roadmap</h2>
         <div className="relative">

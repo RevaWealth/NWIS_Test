@@ -3,6 +3,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Normalize text scaling on mobile browsers to avoid unexpected zoom/resizing */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Prevent horizontal scroll that can cause micro layout shifts */
+body {
+  overflow-x: hidden;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -119,11 +130,21 @@
   }
 }
 
+/* Prevent iOS Safari zoom on form focus by ensuring 16px font-size on mobile */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  /* Force white background regardless of system theme (light only is forced above) */
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-neutral-900;
   }
 }

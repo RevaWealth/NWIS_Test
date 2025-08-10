@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-20 bg-[#0c1220]">
+    <section id="about" className="py-20 bg-[#0c1220] bg-sky-950">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold text-center text-white mb-12">About NexusWealth</h2>
         <div className="grid md:grid-cols-2 gap-12 items-center">

@@ -23,13 +23,13 @@ export default function TokenomicsSection() {
   })
 
   return (
-    <section className="py-20 bg-[#0c1220] relative">
+    <section className="py-20 bg-[#0c1220] relative bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            <span className="text-pink-500">NWIS</span> Tokenomics
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-black">
+            <span className="text-black">NWIS</span> Tokenomics
           </h2>
-          <p className="text-gray-400 max-w-3xl mx-auto text-lg">
+          <p className="max-w-3xl mx-auto text-lg text-black">
             Transparent and sustainable token distribution designed for long-term growth and community benefit.
           </p>
         </div>
@@ -38,15 +38,15 @@ export default function TokenomicsSection() {
             {tokenomics.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 bg-[#070b14] rounded-lg border border-gray-800"
+                className="flex items-center justify-between p-4 bg-[#070b14] rounded-lg border border-gray-800 bg-white"
               >
                 <div className="flex items-center">
                   <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${item.color} mr-4`}></div>
-                  <span className="text-white font-medium">{item.label}</span>
+                  <span className="font-medium text-black">{item.label}</span>
                 </div>
                 <div className="text-right">
-                  <div className="text-white font-bold">{item.value}</div>
-                  <div className="text-gray-400 text-sm">{item.percentage}%</div>
+                  <div className="font-bold text-black">{item.value}</div>
+                  <div className="text-sm text-slate-500">{item.percentage}%</div>
                 </div>
               </div>
             ))}
@@ -126,8 +126,8 @@ export default function TokenomicsSection() {
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white">50B</div>
-                  <div className="text-gray-400">Total Supply</div>
+                  <div className="text-3xl font-bold text-black">50B</div>
+                  <div className="text-gray-500">Total Supply</div>
                 </div>
               </div>
             </div>

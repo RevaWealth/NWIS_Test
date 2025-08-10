@@ -6,15 +6,14 @@ import Image from "next/image"
 import { Menu, X, QrCode } from 'lucide-react'
 import { WalletButton } from "./component/wallet-button"
 import { Button } from "@/component/UI/button"
-import * as ConnectKit from "connectkit" // Import ConnectKit for global access to its methods
+import * as ConnectKit from "connectkit"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navItems = [
-    { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
-    { name: "Features", href: "#features" },
+    { name: "Whitepaper", href: "/whitepaper" }, // opens our new page
     { name: "Tokenomics", href: "#tokenomics" },
     { name: "Roadmap", href: "#roadmap" },
     { name: "Team", href: "#team" },
@@ -22,24 +21,27 @@ export default function Navbar() {
   ]
 
   const handleMobileConnect = () => {
-    // Use ConnectKit.open() which is made available by ConnectKitProvider
     ConnectKit.open({ initialConnectionMethod: "walletConnect" })
-    setIsMenuOpen(false) // Close mobile menu after clicking
+    setIsMenuOpen(false)
   }
 
   return (
-    <nav className="bg-[#2A3650] border-b border-gray-800 sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mx-1 h-[Auto] w-[Auto] leading-7">
+    <nav
+      role="navigation"
+      className="w-full bg-[#2A3650] border-b border-gray-800 sticky top-0 inset-x-0 z-50"
+    >
+      <div className="w-full px-4 text-sky-900">
+        <div className="flex justify-between items-center mx-1 h-auto w-full leading-7 bg-sky-950 text-sky-950">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/">
+            <Link href="/" aria-label="Go to homepage" className="flex items-center">
               <Image
-                src="/images/nexuswealth-logo-v2.jpg"
-                alt="NexusWealth Investment Solutions Logo"
-                width={150} // Adjusted width
-                height={35} // Adjusted height
-                className="h-auto"
+                src="/images/NWLogo.jpg"
+                alt="NexusWealth Investment Solutions logo"
+                width={2048}
+                height={448}
+                priority
+                className="h-9 md:h-11 lg:h-12 w-auto object-contain shrink-0"
               />
             </Link>
           </div>
@@ -47,7 +49,11 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <Link key={item.name} href={item.href} className="text-gray-300 hover:text-white transition-colors">
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-gray-300 hover:text-white transition-colors"
+              >
                 {item.name}
               </Link>
             ))}
@@ -59,16 +65,19 @@ export default function Navbar() {
             <Button
               onClick={handleMobileConnect}
               className="bg-gradient-to-r from-pink-600 to-purple-500 hover:from-pink-700 hover:to-purple-600 text-white font-semibold py-3 flex items-center gap-2"
-              aria-label="Connect with Mobile Wallet (QR Code)" // Added for accessibility
+              aria-label="Connect with Mobile Wallet (QR Code)"
             >
               <QrCode className="h-4 w-4" />
-              {/* Removed "Mobile Wallet" text */}
             </Button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-300 hover:text-white">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-gray-300 hover:text-white"
+              aria-label="Toggle menu"
+            >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
@@ -93,10 +102,9 @@ export default function Navbar() {
                 <Button
                   onClick={handleMobileConnect}
                   className="w-full bg-gradient-to-r from-pink-600 to-purple-500 hover:from-pink-700 hover:to-purple-600 text-white font-semibold py-3 flex items-center justify-center gap-2"
-                  aria-label="Connect with Mobile Wallet (QR Code)" // Added for accessibility
+                  aria-label="Connect with Mobile Wallet (QR Code)"
                 >
                   <QrCode className="h-4 w-4" />
-                  {/* Removed "Connect Mobile Wallet" text */}
                 </Button>
               </div>
             </div>
