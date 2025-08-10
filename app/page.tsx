@@ -144,7 +144,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="p-6">
+            <div className="p-6 bg-sky-950">
               <p className="text-gray-400 text-sm text-center mb-4">{"Can't find tokens in your wallet?"}</p>
 
               <h3 className="text-2xl font-bold text-center mb-6">
