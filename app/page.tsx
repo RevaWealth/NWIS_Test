@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { Clock } from "lucide-react"
+// removed unused Clock import
 import AnnouncementBar from "../announcement-bar"
 import Navbar from "../navbar"
 import CountdownTimer from "../countdown-timer"
@@ -36,7 +36,6 @@ export default function Home() {
         return false
       }
     }
-
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       if (event.reason?.message?.includes("safe-apps-sdk") || event.reason?.message?.includes("version.split")) {
         console.warn("Suppressed Safe Apps SDK promise rejection:", event.reason.message)
@@ -44,22 +43,17 @@ export default function Home() {
         return false
       }
     }
-
     window.addEventListener("error", handleError)
     window.addEventListener("unhandledrejection", handleUnhandledRejection)
 
-    // Fetch data
     const fetchData = async () => {
       try {
         const response = await fetch("/api/token-sale")
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
         const data: TokenSaleData = await response.json()
         setTokenSaleData(data)
       } catch (error) {
         console.error("Failed to fetch token sale data:", error)
-        // Fallback to default values if fetch fails
         setTokenSaleData({
           currentPrice: "$0.007125",
           amountRaised: "$345,000",
@@ -69,7 +63,6 @@ export default function Home() {
         setIsLoading(false)
       }
     }
-
     fetchData()
 
     return () => {
@@ -87,95 +80,85 @@ export default function Home() {
       <AnnouncementBar />
       <Navbar />
 
-      <main className="flex-1 relative overflow-hidden border-white bg-white text-center">
-        {/* Background gradient effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-transparent pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none"></div>
-
-        {/* Wireframe graphics */}
-        <div className="absolute bottom-0 left-0 w-1/3 h-[300px] opacity-50">
-          <Image
-            src="/placeholder.svg?height=300&width=400"
-            alt="Wireframe graphic"
-            width={400}
-            height={300}
-            className="object-contain"
-            sizes="(max-width: 768px) 50vw, 33vw"
-          />
-        </div>
-        <div className="absolute bottom-0 right-0 w-1/3 h-[300px] opacity-50">
-          <Image
-            src="/placeholder.svg?height=300&width=400"
-            alt="Wireframe graphic"
-            width={400}
-            height={300}
-            className="object-contain"
-            sizes="(max-width: 768px) 50vw, 33vw"
-          />
-        </div>
-
+      <main className="flex-1 relative overflow-hidden bg-white text-center">
         {/* Hero Section */}
-        <div className="w-full text-center relative z-10 bg-white px-0 mx-0">
-          <h1 className="font-bold mb-4 text-4xl sm:text-5xl md:text-7xl text-sky-900">
-            NexusWealth Investment Solutions{" "}
-          </h1>
-          <h2 className="font-bold mb-6 py-5 text-2xl sm:text-3xl md:text-4xl text-orange-500">
-            <span className="text-orange-500">Empowering Individuals </span>
-            <span className="text-orange-500">{"to Build Generational Wealth"}</span>
-            <span className="text-orange-500"> through </span>
-            <br className="md:hidden" />
-            <span className="text-orange-500">Blockchain</span>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto mb-16">
-            Revolutionizing real-world investment through decentralized innovation.
-          </p>
+        <section className="relative w-full overflow-hidden py-16 sm:py-20 md:py-24">
+          {/* Background image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/shutterstock_2506349295.jpg"
+              alt="Family flying a kite on the beach with ocean waves in the background"
+              fill
+              priority
+              className="object-cover object-[70%_center] sm:object-center pointer-events-none select-none"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+            />
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-white/40 via-white/20 to-transparent" />
+          </div>
 
-          {/* Token Sale Box */}
-          <div className="max-w-lg mx-auto bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
-            <div className="relative">
-              <div className="bg-gradient-to-r from-purple-600 to-blue-500 p-4 text-white flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="bg-purple-900/50 rounded-lg p-2 mr-3">
-                    <Clock className="h-5 w-5" />
-                  </div>
-                  <span className="font-bold">{"Series A"} </span>
-                </div>
-                <span className="text-sm"> {"Seed Funding"} </span>
-              </div>
+          {/* Content */}
+          <div className="relative z-10 max-w-7xl mx-auto px-4">
+            <div className="mx-auto max-w-4xl text-center">
+              <h1 className="font-bold mb-4 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-sky-900">
+                NexusWealth Investment Solutions
+              </h1>
+              <h2 className="font-bold mb-6 py-2 sm:py-3 text-2xl sm:text-3xl md:text-4xl text-[rgba(165,126,36,1)]">
+                Empowering Individuals to Build Generational Wealth through Blockchain Tokenization
+              </h2>
+              <p className="max-w-2xl mx-auto text-sky-800">
+                Revolutionizing real-world investment through Tokenized innovation.
+              </p>
             </div>
 
-            <div className="p-6 bg-sky-950">
-              <p className="text-gray-400 text-sm text-center mb-4">{"Can't find tokens in your wallet?"}</p>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-[minmax(0,520px)_1fr] md:gap-10 items-start">
+              {/* Left column: Token Sale Box (stays centered on mobile, shifted left on md+) */}
+              <div className="w-full max-w-lg mx-auto md:mx-0 md:-ml-4 lg:-ml-10 xl:-ml-16 2xl:-ml-24 bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
+                <div className="relative">
+                  <div className="bg-sky-900 p-4 text-white flex items-center justify-between">
+                    <div className="flex items-center">
+                      <span className="font-bold">{"Series A"} </span>
+                    </div>
+                    <span className="text-sm"> {"Seed Funding"} </span>
+                  </div>
+                </div>
 
-              <h3 className="text-2xl font-bold text-center mb-6">
-                <span className="text-indigo-400"> First Stage - Buy </span>
-                <span className="text-pink-500">NWIS</span>
-                <span className="text-white"> Now</span>
-              </h3>
+                <div className="p-6 bg-sky-950">
+                  <p className="text-gray-400 text-sm text-center mb-4">Can't find tokens in your wallet?</p>
 
-              <CountdownTimer days={6} hours={2} minutes={28} seconds={14} />
+                  <h3 className="text-2xl font-bold text-center mb-6">
+                    <span className="text-white">First Stage - Buy </span>
+                    <span className="text-[rgba(165,126,36,1)]">NWIS</span>
+                    <span className="text-white"> Now</span>
+                  </h3>
 
-              <p className="text-gray-400 text-center text-sm mt-4 mb-6">{"Time's Almost Up"}</p>
+                  <CountdownTimer days={6} hours={2} minutes={28} seconds={14} />
 
-              <TokenPurchase
-                currentPrice={tokenSaleData.currentPrice}
-                amountRaised={tokenSaleData.amountRaised}
-                tokenValue={tokenSaleData.tokenValue}
-              />
+                  <p className="text-gray-400 text-center text-sm mt-4 mb-6">Time's Almost Up</p>
+
+                  <TokenPurchase
+                    currentPrice={tokenSaleData.currentPrice}
+                    amountRaised={tokenSaleData.amountRaised}
+                    tokenValue={tokenSaleData.tokenValue}
+                  />
+                </div>
+              </div>
+
+              {/* Right column left empty to keep family unobstructed */}
+              <div className="hidden md:block" aria-hidden="true" />
             </div>
           </div>
-        </div>
-      </main>
+        </section>
 
-      {/* Additional Sections */}
-      <AboutSection />
-      <FeaturesSection />
-      <RoadmapSection />
-      <TokenomicsSection />
-      <TeamSection />
-      <PartnersSection />
-      <FAQSection />
-      <Footer />
+        {/* Additional Sections */}
+        <AboutSection />
+        <FeaturesSection />
+        <RoadmapSection />
+        <TokenomicsSection />
+        <TeamSection />
+        <PartnersSection />
+        <FAQSection />
+        <Footer />
+      </main>
     </div>
   )
 }

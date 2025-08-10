@@ -1,0 +1,77 @@
+"use client"
+
+import { ConnectKitButton } from "connectkit"
+import { Button } from "@/component/UI/button"
+import { QrCode } from "@/component/UI/icons/QrCode"
+
+export function WalletButton() {
+return (
+  <ConnectKitButton.Custom>
+    {({ isConnected, show, address }) => {
+      return (
+        <Button
+          onClick={show}
+          className="bg-gradient-to-r from-[#D4A433] to-[#A57E24] hover:from-[#E0AE39] hover:to-[#946F20] text-white font-semibold py-3 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#E0AE39]"
+        >
+          {isConnected ? (address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connected") : "Connect Wallet"}
+        </Button>
+      )
+    }}
+  </ConnectKitButton.Custom>
+)
+}
+
+// Assuming this is the navbar.tsx file
+export function Navbar() {
+const handleMobileConnect = () => {
+  // mobile connect logic here
+}
+
+return (
+  <div>
+    {/* Desktop QR button */}
+    <Button
+      onClick={handleMobileConnect}
+      className="bg-gradient-to-r from-[#D4A433] to-[#A57E24] hover:from-[#E0AE39] hover:to-[#946F20] text-white font-semibold py-2 px-3 flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#E0AE39]"
+      aria-label="Connect with Mobile Wallet (QR Code)"
+    >
+      <QrCode className="h-4 w-4" />
+    </Button>
+
+    {/* Mobile QR button */}
+    <Button
+      onClick={handleMobileConnect}
+      className="w-full bg-gradient-to-r from-[#D4A433] to-[#A57E24] hover:from-[#E0AE39] hover:to-[#946F20] text-white font-semibold py-2 flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#E0AE39]"
+      aria-label="Connect with Mobile Wallet (QR Code)"
+    >
+      <QrCode className="h-4 w-4" />
+    </Button>
+  </div>
+)
+}
+
+// Assuming this is the token-purchase.tsx file
+export function TokenPurchase({ isConnected }) {
+const handleMobileConnect = () => {
+  // mobile connect logic here
+}
+
+return (
+  <div>
+    {!isConnected ? (
+      <ConnectKitButton.Custom>
+        {({ show }) => (
+          <Button
+            onClick={show}
+            className="w-full bg-gradient-to-r from-[#D4A433] to-[#A57E24] hover:from-[#E0AE39] hover:to-[#946F20] text-white font-semibold py-3 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#E0AE39]"
+          >
+            CONNECT WALLET
+          </Button>
+        )}
+      </ConnectKitButton.Custom>
+    ) : (
+      // ... other connected state JSX here
+    )}
+  </div>
+)
+}

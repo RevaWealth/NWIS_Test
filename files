@@ -1,52 +1,41 @@
-/// about-section.tsx
-import React from 'react';
-
-const AboutSection = () => {
-  return (
-    <section id="about-nexuswealth" className="py-20 bg-[#0c1220] scroll-mt-24">
-      {/* Content of the about section goes here */}
-    </section>
-  );
-};
-
-export default AboutSection;
-
 // navbar.tsx
-import React from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
 
 const Navbar = () => {
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "#about-nexuswealth" },
-    { name: "Services", href: "/services" },
-    { name: "Contact", href: "/contact" },
-  ];
-
-  return (
-    <nav className="bg-white">
-      <ul className="flex justify-center">
-        {navItems.map((item) => (
-          <li key={item.name} className="px-4">
-            <Link href={item.href}>{item.name}</Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
+return (
+  <div>
+    <Image
+      src="/images/nwis-logo.png"
+      alt="NWIS logo"
+      width={2048}
+      height={448}
+      priority
+      className="h-7 md:h-9 lg:h-10 w-auto object-contain shrink-0"
+    />
+    {/* /** rest of code here **/ */}
+  </div>
+);
 };
 
 export default Navbar;
 
-// app/globals.css
-html {
-  scroll-behavior: smooth;
-}
+// components/institutions/navbar.tsx
+import Image from 'next/image';
 
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-}
+const InstitutionNavbar = () => {
+return (
+  <div>
+    <Image
+      src="/images/nwis-logo.png"
+      alt="NWIS logo"
+      width={2048}
+      height={448}
+      priority
+      className="h-7 md:h-9 lg:h-10 w-auto object-contain shrink-0"
+    />
+    {/* /** rest of code here **/ */}
+  </div>
+);
+};
 
-/* Additional styles can be added here */
+export default InstitutionNavbar;
