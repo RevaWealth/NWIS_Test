@@ -6,13 +6,29 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ConnectKitProvider } from "connectkit"
 import { config } from "@/lib/wagmi" // Import the wagmi config
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      retryDelay: 1000,
+    },
+  },
+})
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <ConnectKitProvider theme="midnight" mode="dark">
+        <ConnectKitProvider 
+          theme="midnight" 
+          mode="dark"
+          options={{
+            hideBalance: false,
+            hideNoBalanceCTA: false,
+            hideSwitchButton: false,
+            embedGoogleFonts: true,
+          }}
+        >
           {children}
         </ConnectKitProvider>
       </QueryClientProvider>

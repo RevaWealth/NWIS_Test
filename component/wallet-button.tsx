@@ -2,11 +2,31 @@
 
 import { ConnectKitButton } from "connectkit"
 import { Button } from "@/component/UI/button"
+import { useState } from "react"
 
 export function WalletButton() {
+  const [hasError, setHasError] = useState(false)
+
+  if (hasError) {
+    return (
+      <Button
+        onClick={() => setHasError(false)}
+        className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 transition-colors duration-200"
+      >
+        Retry Connection
+      </Button>
+    )
+  }
+
   return (
     <ConnectKitButton.Custom>
-      {({ isConnected, show, address }) => {
+      {({ isConnected, show, address, error }) => {
+        // Handle any connection errors
+        if (error && !hasError) {
+          console.warn("Wallet connection error:", error)
+          setHasError(true)
+        }
+
         return (
           <Button
             onClick={show}
