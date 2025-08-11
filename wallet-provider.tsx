@@ -24,9 +24,11 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
           mode="dark"
           options={{
             hideBalance: false,
-            hideNoBalanceCTA: false,
-            hideSwitchButton: false,
             embedGoogleFonts: true,
+            // Ensure QR code functionality is enabled
+            walletConnectCTA: "link",
+            // Enable all wallet connection methods
+            initialChainId: 1,
           }}
         >
           {children}

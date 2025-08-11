@@ -13,7 +13,7 @@ export default function RoadmapSection() {
       completed: true,
     },
     {
-      title: "Phase 2: Platform Development, Marcketing/Fundraising (Q4 2025)",
+      title: "Phase 2: Platform Development, Marketing/Fundraising (Q4 2025)",
       items: [
         "Resource Onboarding and Team Expansion",
         "Staking Platform Launch",
@@ -37,7 +37,7 @@ export default function RoadmapSection() {
       items: [
         "Cross-Chain Compatibility",
         "Decentralized Governance Implementation",
-        "Frist 3rd Party Audit Publish",
+        "First 3rd Party Audit Publish",
         "Yield Payouts",
       ],
       completed: false,
@@ -47,7 +47,7 @@ export default function RoadmapSection() {
       items: [
         "Expansion to New Global Investment Categories",
         "Quarterly Audits",
-        "Monthly yield Payouts",
+        "Monthly Yield Payouts",
         "Global Regulatory Compliance",
       ],
       completed: false,
@@ -55,50 +55,68 @@ export default function RoadmapSection() {
   ]
 
   return (
-    <section id="roadmap" className="py-20 bg-[#070b14] bg-sky-950">
+    <section id="roadmap" className="py-12 md:py-20 bg-[#070b14] bg-sky-950">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-white mb-12">Our Roadmap</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8 md:mb-12">Our Roadmap</h2>
         <div className="relative">
-          {/* Vertical line */}
+          {/* Vertical line - hidden on mobile, visible on desktop */}
           <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-700 hidden md:block"></div>
 
-          <div className="space-y-16">
+          <div className="space-y-8 md:space-y-16">
             {roadmapPhases.map((phase, index) => (
               <div
                 key={index}
-                className="relative flex flex-col md:flex-row items-center md:items-start"
+                className="relative flex flex-col items-center md:items-start"
               >
-                {/* Content for left side (or right if ordered) */}
+                {/* Mobile: Centered layout, Desktop: Alternating left/right */}
                 <div
-                  className={`md:w-1/2 p-4 ${index % 2 === 0 ? "md:text-right md:pr-16" : "md:order-2 md:text-left md:pl-16"}`}
+                  className={`w-full md:w-1/2 p-4 text-center md:text-left ${
+                    index % 2 === 0 
+                      ? "md:text-right md:pr-16" 
+                      : "md:order-2 md:text-left md:pl-16"
+                  }`}
                 >
-                  <h3 className="text-2xl font-semibold text-white mb-4">{phase.title}</h3>
-                  <ul className="space-y-2 text-gray-300">
+                  <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 md:mb-4 leading-tight">
+                    {phase.title}
+                  </h3>
+                  <ul className="space-y-2 text-gray-300 text-sm md:text-base">
                     {phase.items.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-center">
+                      <li key={itemIndex} className="flex items-start justify-center md:justify-start">
                         <CheckCircle
-                          className={`h-5 w-5 mr-2 ${phase.completed ? "text-green-500" : "text-gray-500"}`}
+                          className={`h-4 w-4 md:h-5 md:w-5 mr-2 mt-0.5 flex-shrink-0 ${
+                            phase.completed ? "text-green-500" : "text-gray-500"
+                          }`}
                         />
-                        {item}
+                        <span className="text-left">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* Circle checkpoint - positioned absolutely within this relative phase div */}
+                {/* Circle checkpoint - centered on mobile, positioned on desktop */}
                 <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 z-10">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${phase.completed ? "bg-green-500" : "bg-gray-700 border-2 border-gray-500"}`}
+                    className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center ${
+                      phase.completed 
+                        ? "bg-green-500" 
+                        : "bg-gray-700 border-2 border-gray-500"
+                    }`}
                   >
-                    {phase.completed && <CheckCircle className="h-4 w-4 text-white" />}
+                    {phase.completed && (
+                      <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                    )}
                   </div>
                 </div>
 
-                {/* Empty div to balance layout on the other side */}
+                {/* Empty div to balance layout on desktop only */}
                 <div
-                  className={`md:w-1/2 p-4 ${index % 2 === 0 ? "md:order-2 md:text-left md:pl-16" : "md:text-right md:pr-16"}`}
+                  className={`hidden md:block md:w-1/2 p-4 ${
+                    index % 2 === 0 
+                      ? "md:order-2 md:text-left md:pl-16" 
+                      : "md:text-right md:pr-16"
+                  }`}
                 >
-                  {/* Empty div to balance layout */}
+                  {/* Empty div to balance layout on desktop */}
                 </div>
               </div>
             ))}

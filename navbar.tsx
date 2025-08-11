@@ -6,7 +6,7 @@ import Image from "next/image"
 import { Menu, X, QrCode, ChevronDown, Users, Building2, MessageCircle } from "lucide-react"
 import { Button } from "@/component/UI/button"
 import { WalletButton } from "@/component/wallet-button"
-import { ConnectKitButton } from "connectkit"
+import { MobileWalletButton } from "@/component/mobile-wallet-button"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -42,7 +42,6 @@ export default function Navbar() {
   }
 
   const handleMobileConnect = () => {
-    // For mobile, we'll use the WalletButton component's functionality
     setIsMenuOpen(false)
   }
 
@@ -143,13 +142,7 @@ export default function Navbar() {
           {/* Wallet Buttons for Desktop */}
           <div className="hidden md:flex items-center space-x-3">
             <WalletButton />
-            <Button
-              onClick={handleMobileConnect}
-              className="bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-2 px-3 flex items-center gap-2 transition-colors duration-200"
-              aria-label="Connect with Mobile Wallet (QR Code)"
-            >
-              <QrCode className="h-4 w-4" />
-            </Button>
+            <MobileWalletButton />
           </div>
 
           {/* Mobile menu button */}
@@ -207,16 +200,10 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-              <div className="px-3 py-2 space-y-2">
-                <WalletButton />
-                <Button
-                  onClick={handleMobileConnect}
-                  className="w-full bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-2 flex items-center justify-center gap-2 transition-colors duration-200"
-                  aria-label="Connect with Mobile Wallet (QR Code)"
-                >
-                  <QrCode className="h-4 w-4" />
-                </Button>
-              </div>
+                              <div className="px-3 py-2 space-y-2">
+                  <WalletButton />
+                  <MobileWalletButton onConnect={() => setIsMenuOpen(false)} />
+                </div>
             </div>
           </div>
         )}
