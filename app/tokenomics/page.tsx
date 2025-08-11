@@ -63,7 +63,7 @@ export default function TokenomicsPage() {
             <span className="text-sky-600">NWIS</span> Tokenomics
           </h2>
           <p className="max-w-3xl mx-auto text-lg text-gray-600">
-            Transparent and sustainable token distribution designed for long-term growth and community benefit.
+            Transparent and sustainable token distribution designed for long-term growth and investors benefit.
           </p>
         </div>
 
