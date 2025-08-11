@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Facebook, Linkedin, Twitter, Youtube } from "lucide-react"
+import { Facebook, Linkedin, X, Youtube } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -20,7 +20,7 @@ export default function Footer() {
           </div>
           <div className="flex space-x-4">
             <Link href="#" target="_blank" rel="noopener noreferrer">
-              <Twitter className="h-6 w-6 hover:text-blue-400" />
+              <X className="h-6 w-6 hover:text-blue-400" />
             </Link>
             <Link href="#" target="_blank" rel="noopener noreferrer">
               <Linkedin className="h-6 w-6 hover:text-blue-600" />
