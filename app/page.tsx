@@ -112,7 +112,7 @@ export default function Home() {
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-[minmax(0,520px)_1fr] md:gap-10 items-start">
               {/* Left column: Token Sale Box (stays centered on mobile, shifted left on md+) */}
-              <div className="w-full max-w-lg mx-auto md:mx-0 md:-ml-4 lg:-ml-10 xl:-ml-16 2xl:-ml-24 bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
+              <div className="w-full max-w-lg mx-auto md:mx-0 md:-ml-20 lg:-ml-28 xl:-ml-32 2xl:-ml-40 bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
                 <div className="relative">
                   <div className="bg-sky-900 p-4 text-white flex items-center justify-between">
                     <div className="flex items-center">
