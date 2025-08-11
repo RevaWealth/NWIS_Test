@@ -98,7 +98,7 @@ export default function Home() {
 
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-4">
-            <div className="mx-auto max-w-4xl text-center">
+            <div className="mx-auto max-w-7xl text-center">
               <h1 className="font-bold mb-4 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-sky-900">
                 NexusWealth Investment Solutions
               </h1>

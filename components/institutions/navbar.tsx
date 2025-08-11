@@ -21,7 +21,7 @@ export default function InstitutionsNavbar() {
       <nav className="mx-auto flex h-7 md:h-8 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/institutions" className="flex items-center gap-3" aria-label="Institutions Home">
           <Image
-            src="/images/nwis-logo.png"
+            src="/images/NWIS.png"
             alt="NWIS logo"
             width={2048}
             height={448}

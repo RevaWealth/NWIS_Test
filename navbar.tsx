@@ -26,14 +26,14 @@ export default function Navbar() {
   }
 
   return (
-    <nav role="navigation" className="w-full bg-[#2A3650] border-b border-gray-800 sticky top-0 inset-x-0 z-50">
+    <nav role="navigation" className="w-full bg-sky-950 border-b border-gray-800 sticky top-0 inset-x-0 z-50">
       <div className="w-full px-4">
         <div className="flex justify-between items-center mx-1 w-full">
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" aria-label="Go to homepage" className="flex items-center">
               <Image
-                src="/images/nwis-logo.png"
+                src="/images/NWIS.png"
                 alt="NWIS logo"
                 width={2048}
                 height={448}
@@ -80,7 +80,7 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#2A3650] border-t border-gray-800">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-sky-950 border-t border-gray-800">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
