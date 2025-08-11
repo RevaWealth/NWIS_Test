@@ -30,7 +30,7 @@ export default function TokenomicsSection() {
             <span className="text-black">NWIS</span> Tokenomics
           </h2>
           <p className="max-w-3xl mx-auto text-lg text-black">
-            Transparent and sustainable token distribution designed for long-term growth and community benefit.
+            Transparent and sustainable token distribution designed for long-term growth and investors benefit.
           </p>
         </div>
         <div className="grid lg:grid-cols-2 gap-12 items-center">
