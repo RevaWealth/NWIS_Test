@@ -59,21 +59,21 @@ export default function RoadmapSection() {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8 md:mb-12">Our Roadmap</h2>
         <div className="relative">
-          {/* Vertical line - hidden on mobile, visible on desktop */}
+          {/* Vertical timeline line - hidden on mobile, visible on desktop */}
           <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-700 hidden md:block"></div>
 
           <div className="space-y-8 md:space-y-16">
             {roadmapPhases.map((phase, index) => (
               <div
                 key={index}
-                className="relative flex flex-col items-center md:items-start"
+                className="relative flex flex-col md:flex-row items-center"
               >
-                {/* Mobile: Centered layout, Desktop: Alternating left/right */}
-                <div
-                  className={`w-full md:w-1/2 p-4 text-center md:text-left ${
+                {/* Phase content - alternates left and right */}
+                <div 
+                  className={`w-full md:w-1/2 p-4 text-center ${
                     index % 2 === 0 
-                      ? "md:text-right md:pr-16" 
-                      : "md:order-2 md:text-left md:pl-16"
+                      ? 'md:text-left md:pl-16' 
+                      : 'md:order-2 md:text-left md:pl-16'
                   }`}
                 >
                   <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 md:mb-4 leading-tight">
@@ -81,19 +81,27 @@ export default function RoadmapSection() {
                   </h3>
                   <ul className="space-y-2 text-gray-300 text-sm md:text-base">
                     {phase.items.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-start justify-center md:justify-start">
+                      <li key={itemIndex} className={`flex items-start ${
+                        index % 2 === 0 
+                          ? 'justify-center md:justify-start' 
+                          : 'justify-center md:justify-start'
+                      }`}>
                         <CheckCircle
                           className={`h-4 w-4 md:h-5 md:w-5 mr-2 mt-0.5 flex-shrink-0 ${
                             phase.completed ? "text-green-500" : "text-gray-500"
                           }`}
                         />
-                        <span className="text-left">{item}</span>
+                        <span className={`${
+                          index % 2 === 0 
+                            ? 'text-center md:text-left' 
+                            : 'text-center md:text-left'
+                        }`}>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* Circle checkpoint - centered on mobile, positioned on desktop */}
+                {/* Center timeline circle */}
                 <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 z-10">
                   <div
                     className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center ${
@@ -108,16 +116,10 @@ export default function RoadmapSection() {
                   </div>
                 </div>
 
-                {/* Empty div to balance layout on desktop only */}
-                <div
-                  className={`hidden md:block md:w-1/2 p-4 ${
-                    index % 2 === 0 
-                      ? "md:order-2 md:text-left md:pl-16" 
-                      : "md:text-right md:pr-16"
-                  }`}
-                >
-                  {/* Empty div to balance layout on desktop */}
-                </div>
+                {/* Empty space for balance */}
+                <div className={`hidden md:block md:w-1/2 ${
+                  index % 2 === 0 ? 'md:order-2' : ''
+                }`}></div>
               </div>
             ))}
           </div>
