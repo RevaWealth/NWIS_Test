@@ -208,6 +208,41 @@ export default function TokenomicsPage() {
             <p className="text-gray-600">Token holders participate in key decisions and benefit from platform success.</p>
           </div>
         </div>
+
+        {/* New Sky-950 Section */}
+        <div className="mt-16 bg-sky-950 w-full">
+          <div className="w-full text-center py-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-12">
+              <span style={{color: '#a57e24'}}>NWIS</span> Token Distribution - <span className="text-sky-300">Timeline</span>
+            </h2>
+            
+            {/* Image between title and buttons */}
+            <div className="flex justify-center mb-12">
+              <Image
+                src="/images/NWISTDT.png"
+                alt="NWIS Token Distribution"
+                width={5400}
+                height={5400}
+                className="w-auto h-auto max-w-4xl object-contain"
+              />
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                href="/token-purchase" 
+                className="inline-flex items-center justify-center px-8 py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition-colors duration-200"
+              >
+                Buy NWIS Tokens
+              </Link>
+              <Link 
+                href="/about/story" 
+                className="inline-flex items-center justify-center px-8 py-3 border-2 border-sky-300 text-sky-300 hover:bg-sky-300 hover:text-sky-950 font-semibold rounded-lg transition-colors duration-200"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
