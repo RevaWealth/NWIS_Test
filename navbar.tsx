@@ -145,11 +145,17 @@ export default function Navbar() {
             <MobileWalletButton />
           </div>
 
+          {/* Wallet Buttons for Mobile - Show in main navbar */}
+          <div className="md:hidden flex items-center space-x-2">
+            <WalletButton />
+            <MobileWalletButton />
+          </div>
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-200 hover:text-white"
+              className="text-gray-200 hover:text-white ml-2"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -160,28 +166,28 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-sky-950 border-t border-gray-800">
+            <div className="px-3 pt-3 pb-4 space-y-2 sm:px-4 bg-sky-950 border-t border-gray-800">
               {navItems.map((item) => (
                 <div key={item.name}>
                   {item.hasDropdown ? (
                     <div className="space-y-2">
-                      <div className="px-3 py-2 text-gray-200 font-medium border-b border-gray-700">
+                      <div className="px-3 py-3 text-gray-200 font-medium border-b border-gray-700 text-base">
                         {item.name}
                       </div>
                       {aboutDropdownItems.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}
                           href={dropdownItem.href}
-                          className="block px-6 py-2 text-gray-300 hover:text-white transition-colors"
+                          className="block px-6 py-3 text-gray-300 hover:text-white transition-colors text-sm"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <span>{dropdownItem.name}</span>
                         </Link>
                       ))}
-                      <div className="px-6 py-2">
+                      <div className="px-6 py-3">
                         <Link
                           href="/contact"
-                          className="flex items-center justify-center space-x-2 w-full bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                          className="flex items-center justify-center space-x-2 w-full bg-sky-600 hover:bg-sky-700 text-white px-4 py-3 rounded-lg transition-colors font-medium text-sm"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <MessageCircle className="h-4 w-4" />
@@ -192,7 +198,7 @@ export default function Navbar() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="text-gray-200 hover:text-white block px-3 py-2 text-base font-medium"
+                      className="text-gray-200 hover:text-white block px-3 py-3 text-base font-medium"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
@@ -200,10 +206,9 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-                              <div className="px-3 py-2 space-y-2">
-                  <WalletButton />
-                  <MobileWalletButton onConnect={() => setIsMenuOpen(false)} />
-                </div>
+              <div className="px-3 py-3 space-y-3 border-t border-gray-700 pt-4">
+                {/* Wallet buttons are now visible in main navbar on mobile */}
+              </div>
             </div>
           </div>
         )}

@@ -63,14 +63,14 @@ export default function CountdownTimer({
     const value = timeLeft[interval as keyof typeof timeLeft]
     timerComponents.push(
       <div key={interval} className="flex flex-col items-center">
-        <span className="text-4xl font-bold text-white">{String(value).padStart(2, "0")}</span>
-        <span className="text-sm text-gray-400">{interval.charAt(0).toUpperCase() + interval.slice(1)}</span>
+        <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{String(value).padStart(2, "0")}</span>
+        <span className="text-xs sm:text-sm text-gray-400">{interval.charAt(0).toUpperCase() + interval.slice(1)}</span>
       </div>,
     )
   })
 
   return (
-    <div className="flex justify-center space-x-6">
+    <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6">
       {timerComponents.length ? timerComponents : <span className="text-white">Time's up!</span>}
     </div>
   )

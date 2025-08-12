@@ -14,6 +14,49 @@ body {
   overflow-x: hidden;
 }
 
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better spacing for mobile */
+  .space-y-1 > * + * {
+    margin-top: 0.25rem;
+  }
+  
+  .space-y-2 > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  .space-y-3 > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Prevent text from being too small on mobile */
+  p, span, div {
+    font-size: clamp(14px, 4vw, 16px);
+  }
+  
+  h1 {
+    font-size: clamp(24px, 8vw, 32px);
+  }
+  
+  h2 {
+    font-size: clamp(20px, 6vw, 28px);
+  }
+  
+  h3 {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

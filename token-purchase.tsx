@@ -175,11 +175,11 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
   return (
     <div className="space-y-6">
       <div className="bg-transparent p-0">
-        <h3 className="text-sky-950 text-2xl font-semibold text-center md:text-left">Token Sale</h3>
+        <h3 className="text-sky-950 text-lg sm:text-xl md:text-2xl font-semibold text-center md:text-left">Token Sale</h3>
       </div>
       {/* Progress Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between text-xs sm:text-sm">
           <span className="text-gray-400">Raised</span>
           <span className="text-white">{progressPercentage.toFixed(2)}%</span>
         </div>
@@ -192,14 +192,14 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
 
       {/* Current Price */}
       <div className="text-center">
-        <p className="text-gray-400 text-sm mb-1">Current Price</p>
-        <p className="text-2xl font-bold text-white">{currentPrice}</p>
+        <p className="text-gray-400 text-xs sm:text-sm mb-1">Current Price</p>
+        <p className="text-xl sm:text-2xl font-bold text-white">{currentPrice}</p>
         <p className="text-gray-500 text-xs">{tokenValue}</p>
       </div>
 
       {/* Purchase Form */}
-      <div className="space-y-4">
-        <div className="grid grid-cols-3 gap-2">
+      <div className="space-y-3 sm:space-y-4">
+        <div className="grid grid-cols-3 gap-1 sm:gap-2">
           {(Object.keys(currencyConfig) as Array<keyof typeof currencyConfig>).map((curr) => {
             const { icon: Icon, color } = currencyConfig[curr]
             let buttonClasses = "bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700"
@@ -223,13 +223,13 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
                 size="sm"
                 onClick={() => handleCurrencyChange(curr)}
                 disabled={isSimulating}
-                className={`${buttonClasses} flex items-center justify-center gap-2`}
+                className={`${buttonClasses} flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm py-2`}
               >
                 {isSimulating && currency === curr ? (
                   <LoadingSpinner size="sm" />
                 ) : (
                   <>
-                    <Icon className={`h-4 w-4 ${currency === curr ? "text-white" : color}`} />
+                    <Icon className={`h-3 w-3 sm:h-4 sm:w-4 ${currency === curr ? "text-white" : color}`} />
                     {curr}
                   </>
                 )}
@@ -238,24 +238,24 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
           })}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 sm:space-y-3">
           <Input
             type="number"
             placeholder={`Enter ${currency} amount`}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 text-base"
+            className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 text-sm sm:text-base h-12 sm:h-10"
             disabled={!isConnected || isSimulating}
           />
 
           {/* Token Calculation Field */}
           <div className="bg-gray-800/50 border border-gray-700 rounded-md p-3">
             <div className="flex justify-between items-center">
-              <span className="text-gray-400 text-sm">You will receive:</span>
+              <span className="text-gray-400 text-xs sm:text-sm">You will receive:</span>
               {isCalculating ? (
                 <LoadingSpinner size="sm" className="text-purple-400" />
               ) : (
-                <span className="text-white font-medium">{tokenAmount ? `${tokenAmount} NWIS` : "0 NWIS"}</span>
+                <span className="text-white font-medium text-sm sm:text-base">{tokenAmount ? `${tokenAmount} NWIS` : "0 NWIS"}</span>
               )}
             </div>
             {!isConnected && <p className="text-xs text-gray-500 mt-1">Connect wallet to see token calculation</p>}
@@ -268,7 +268,7 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
             {({ show }) => (
               <Button
                 onClick={show}
-                className="w-full bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-3 transition-colors duration-200"
+                className="w-full bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold py-3 sm:py-3 h-12 sm:h-10 text-sm sm:text-base transition-colors duration-200"
               >
                 CONNECT WALLET
               </Button>
@@ -278,7 +278,7 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
           <Button
             onClick={handlePurchase}
             disabled={!amount || isPurchasing || !simulationData?.request}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white font-semibold py-3"
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white font-semibold py-3 h-12 sm:h-10 text-sm sm:text-base"
           >
             {isPurchasing ? (
               <>
@@ -297,11 +297,11 @@ export default function TokenPurchase({ currentPrice, amountRaised, tokenValue }
       </div>
 
       {/* Additional Info */}
-      <div className="text-center space-y-2">
-        <p className="text-xs text-gray-500">
+      <div className="text-center space-y-2 pt-2">
+        <p className="text-xs text-gray-500 px-2">
           Min purchase: 10 {currency} • Max purchase: 10,000 {currency}
         </p>
-        <p className="text-xs text-gray-500">Next price increase in: 2,847,392 NWIS</p>
+        <p className="text-xs text-gray-500 px-2">Next price increase in: 2,847,392 NWIS</p>
       </div>
     </div>
   )

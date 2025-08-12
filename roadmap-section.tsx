@@ -76,6 +76,21 @@ export default function RoadmapSection() {
                       : 'md:order-2 md:text-left md:pl-16'
                   }`}
                 >
+                  {/* Mobile milestone icon - positioned above title on mobile */}
+                  <div className="md:hidden flex justify-center mb-4">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        phase.completed 
+                          ? "bg-green-500" 
+                          : "bg-gray-700 border-2 border-gray-500"
+                      }`}
+                    >
+                      {phase.completed && (
+                        <CheckCircle className="h-4 w-4 text-white" />
+                      )}
+                    </div>
+                  </div>
+
                   <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 md:mb-4 leading-tight">
                     {phase.title}
                   </h3>
@@ -101,17 +116,17 @@ export default function RoadmapSection() {
                   </ul>
                 </div>
 
-                {/* Center timeline circle */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 z-10">
+                {/* Desktop center timeline circle - hidden on mobile */}
+                <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 z-10">
                   <div
-                    className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       phase.completed 
                         ? "bg-green-500" 
                         : "bg-gray-700 border-2 border-gray-500"
                     }`}
                   >
                     {phase.completed && (
-                      <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                      <CheckCircle className="h-4 w-4 text-white" />
                     )}
                   </div>
                 </div>

@@ -82,7 +82,7 @@ export default function Home() {
 
       <main className="flex-1 relative overflow-hidden bg-white text-center">
         {/* Hero Section */}
-        <section className="relative w-full overflow-hidden py-16 sm:py-20 md:py-24">
+        <section className="relative w-full overflow-hidden py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
           {/* Background image */}
           <div className="absolute inset-0 z-0">
             <Image
@@ -97,35 +97,35 @@ export default function Home() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 max-w-7xl mx-auto px-4">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl text-center">
-              <h1 className="font-bold mb-4 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-sky-900">
+              <h1 className="font-bold mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-sky-900 leading-tight">
                 NexusWealth Investment Solutions
               </h1>
-              <h2 className="font-bold mb-6 py-2 sm:py-3 text-2xl sm:text-3xl md:text-4xl text-[rgba(165,126,36,1)]">
+              <h2 className="font-bold mb-4 sm:mb-6 py-2 sm:py-3 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-[rgba(165,126,36,1)] leading-tight">
                 Empowering Individuals to Build Generational Wealth through Blockchain Tokenization
               </h2>
-              <p className="max-w-2xl mx-auto text-sky-800">
+              <p className="max-w-2xl mx-auto text-sky-800 text-sm sm:text-base px-2">
                 Revolutionizing real-world investment through Tokenized innovation.
               </p>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-[minmax(0,520px)_1fr] md:gap-10 items-start">
-              {/* Left column: Token Sale Box (stays centered on mobile, shifted left on md+) */}
-              <div className="w-full max-w-lg mx-auto md:mx-0 md:-ml-20 lg:-ml-28 xl:-ml-32 2xl:-ml-40 bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
+            <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-[minmax(0,520px)_1fr] md:gap-10 items-start">
+              {/* Left column: Token Sale Box (responsive positioning) */}
+              <div className="w-full max-w-lg mx-auto md:mx-0 md:-ml-8 lg:-ml-16 xl:-ml-20 2xl:-ml-32 bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
                 <div className="relative">
-                  <div className="bg-sky-900 p-4 text-white flex items-center justify-between">
+                  <div className="bg-sky-900 p-3 sm:p-4 text-white flex items-center justify-between">
                     <div className="flex items-center">
-                      <span className="font-bold">{"Series A"} </span>
+                      <span className="font-bold text-sm sm:text-base">{"Series A"} </span>
                     </div>
-                    <span className="text-sm"> {"Seed Funding"} </span>
+                    <span className="text-xs sm:text-sm"> {"Seed Funding"} </span>
                   </div>
                 </div>
 
-                <div className="p-6 bg-sky-950">
-                  <p className="text-gray-400 text-sm text-center mb-4">Can't find tokens in your wallet?</p>
+                <div className="p-4 sm:p-6 bg-sky-950">
+                  <p className="text-gray-400 text-xs sm:text-sm text-center mb-3 sm:mb-4">Can't find tokens in your wallet?</p>
 
-                  <h3 className="text-2xl font-bold text-center mb-6">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-center mb-4 sm:mb-6 leading-tight">
                     <span className="text-white">First Stage - Buy </span>
                     <span className="text-[rgba(165,126,36,1)]">NWIS</span>
                     <span className="text-white"> Now</span>
@@ -133,7 +133,7 @@ export default function Home() {
 
                   <CountdownTimer days={6} hours={2} minutes={28} seconds={14} />
 
-                  <p className="text-gray-400 text-center text-sm mt-4 mb-6">Time's Almost Up</p>
+                  <p className="text-gray-400 text-center text-xs sm:text-sm mt-3 sm:mt-4 mb-4 sm:mb-6">Time's Almost Up</p>
 
                   <TokenPurchase
                     currentPrice={tokenSaleData.currentPrice}
