@@ -16,7 +16,7 @@ export default function WhitepaperPage() {
 
 
   const handleOpenInNewTab = () => {
-    window.open('/whitepaper.pdf', '_blank')
+    window.open('/Whitepaper.pdf', '_blank')
   }
 
   return (
@@ -67,7 +67,7 @@ export default function WhitepaperPage() {
           )}
           
           <iframe
-            src="/whitepaper.pdf"
+            src="/Whitepaper.pdf"
             className="w-full h-[calc(100vh-200px)] min-h-[600px]"
             onLoad={handleLoad}
             title="NexusWealth Whitepaper"
