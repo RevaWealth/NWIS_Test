@@ -55,8 +55,8 @@ export default function RoadmapSection() {
   ]
 
   return (
-    <section id="roadmap" className="py-12 md:py-20 bg-[#070b14] bg-sky-950">
-      <div className="container mx-auto px-4">
+    <section id="roadmap" className="py-20 bg-[#070b14] bg-sky-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8 md:mb-12">Our Roadmap</h2>
         <div className="relative">
           {/* Vertical timeline line - hidden on mobile, visible on desktop */}
