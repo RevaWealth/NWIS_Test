@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Mail, Phone, MapPin, Send } from "lucide-react"
+import Navbar from "../../navbar"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -44,6 +45,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-950 via-blue-900 to-sky-950">
+      <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -82,7 +84,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="text-white font-semibold">Response Time</h3>
-                  <p className="text-sky-200">Within 24 hours</p>
+                  <p className="text-sky-200">5 to 7 business days</p>
                 </div>
               </div>
 
@@ -102,7 +104,7 @@ export default function ContactPage() {
               <ul className="text-sky-200 space-y-2 text-sm">
                 <li>• Technical support with wallet connections</li>
                 <li>• Questions about NWIS token purchases</li>
-                <li>• Investment strategy guidance</li>
+
                 <li>• Partnership opportunities</li>
                 <li>• General inquiries about our platform</li>
               </ul>

@@ -38,7 +38,7 @@ export default function ContactSection() {
               Support@NWIS.io
             </a>
           </p>
-          <p className="text-sm mt-2">Response time: Within 24 hours</p>
+                                <p className="text-sm mt-2">Response time: 5 to 7 business days</p>
         </div>
       </div>
     </section>
