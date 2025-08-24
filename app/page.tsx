@@ -12,6 +12,7 @@ import RoadmapSection from "../roadmap-section"
 import TeamSection from "../team-section"
 import PartnersSection from "../partners-section"
 import FAQSection from "../faq-section"
+import ContactSection from "../contact-section"
 import Footer from "../footer"
 import { PageLoader } from "../component/page-loader"
 import MobileVideo from "../component/mobile-video"
@@ -148,6 +149,7 @@ export default function Home() {
         <TeamSection />
         <PartnersSection />
         <FAQSection />
+        <ContactSection />
         <Footer />
       </main>
     </div>
