@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import CountdownTimer from "../../countdown-timer"
 import TokenPurchase from "../../token-purchase"
+import Navbar from "../../navbar"
 
 interface TokenSaleData {
   currentPrice: string
@@ -48,28 +49,13 @@ export default function TokenPurchasePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-sky-950 shadow-sm border-b border-sky-800">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/" className="hover:opacity-80 transition-opacity">
-                <Image
-                  src="/images/NWIS.png"
-                  alt="NWIS logo"
-                  width={80}
-                  height={80}
-                  className="h-12 w-auto object-contain"
-                />
-              </Link>
-            </div>
-            <div className="flex-1 text-center">
-              <h1 className="text-2xl font-bold text-white">Buy NWIS Tokens</h1>
-              <p className="text-[#a57e24]">Start on your path to financial freedom</p>
-            </div>
-            <div className="flex items-center">
-              {/* Placeholder for potential future buttons */}
-            </div>
-          </div>
+      <Navbar />
+
+      {/* Hero Section */}
+      <div className="bg-gradient-to-b from-sky-950 to-sky-900 py-16 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Buy NWIS Tokens</h1>
+          <p className="text-xl text-[#a57e24] font-medium">Start on your path to financial freedom</p>
         </div>
       </div>
 
@@ -136,3 +122,4 @@ export default function TokenPurchasePage() {
     </div>
   )
 }
+

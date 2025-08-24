@@ -25,15 +25,26 @@ export default function AboutSection() {
             </p>
           </div>
           <div className="flex justify-center">
-            <Image
-              src="/images/shutterstock_1669254991.jpg"
-              alt="Family running together in a sunny field — freedom and prosperity"
-              width={600}
-              height={400}
-              className="rounded-xl shadow-lg"
-              sizes="(min-width: 768px) 600px, 100vw"
-              priority
-            />
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="rounded-xl shadow-lg w-full max-w-[600px] h-[400px] object-cover"
+            >
+              <source src="/images/ST1.mp4" type="video/mp4" />
+              {/* Fallback image if video fails to load */}
+              <Image
+                src="/images/NWISTDT.png"
+                alt="Family running together in a sunny field — freedom and prosperity"
+                width={600}
+                height={400}
+                className="rounded-xl shadow-lg"
+                sizes="(min-width: 768px) 600px, 100vw"
+                priority
+              />
+            </video>
           </div>
         </div>
       </div>

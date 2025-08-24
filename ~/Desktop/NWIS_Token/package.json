@@ -1,0 +1,44 @@
+{
+  "name": "nwis-token",
+  "version": "1.0.0",
+  "description": "NexusWealth Investment Solutions (NWIS) Token - Advanced ERC20 with voting, bridging, and governance features",
+  "main": "truffle-config.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "test": "truffle test",
+    "deploy:local": "truffle migrate --network development",
+    "deploy:sepolia": "truffle migrate --f 4 --to 4 --network sepolia",
+    "deploy:mainnet": "truffle migrate --f 4 --to 4 --network mainnet",
+    "verify:sepolia": "truffle run verify --network sepolia",
+    "verify:mainnet": "truffle run verify --network mainnet",
+    "console:local": "truffle console --network development",
+    "console:sepolia": "truffle console --network sepolia"
+  },
+  "keywords": [
+    "ethereum",
+    "erc20",
+    "token",
+    "governance",
+    "voting",
+    "bridging",
+    "defi",
+    "nexuswealth"
+  ],
+  "author": "NexusWealth Team",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "web3": "^4.16.0"
+  },
+  "devDependencies": {
+    "ganache": "^7.9.2",
+    "truffle": "^5.11.5",
+    "truffle-plugin-verify": "^0.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
+

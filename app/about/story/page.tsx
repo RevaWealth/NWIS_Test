@@ -88,25 +88,25 @@ export default function AboutNexusWealthPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-sky-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sky-50 to-blue-50 py-8 sm:py-12 md:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold text-sky-900 mb-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-sky-900 mb-4 sm:mb-6">
               Revolutionizing Investment Through Blockchain
             </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto px-4">
               As a global investment manager and fiduciary to our community, our purpose at NexusWealth is to help everyone experience financial well-being. 
               Since 2023, we've been a leading provider of blockchain-based investment solutions.
             </p>
           </div>
 
           {/* Company Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {companyStats.map((stat, index) => (
-              <div key={index} className="text-center p-6 bg-white rounded-xl shadow-lg border border-gray-100">
-                <div className="text-3xl font-bold text-sky-600 mb-2">{stat.value}</div>
-                <div className="text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
-                <div className="text-sm text-gray-600">{stat.description}</div>
+              <div key={index} className="text-center p-4 sm:p-6 bg-white rounded-xl shadow-lg border border-gray-100">
+                <div className="text-2xl sm:text-3xl font-bold text-sky-600 mb-2">{stat.value}</div>
+                <div className="text-base sm:text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
+                <div className="text-xs sm:text-sm text-gray-600">{stat.description}</div>
               </div>
             ))}
           </div>
@@ -116,7 +116,7 @@ export default function AboutNexusWealthPage() {
       {/* Navigation Tabs */}
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8">
+          <nav className="flex flex-wrap justify-center sm:justify-start space-x-2 sm:space-x-4 md:space-x-8 overflow-x-auto">
             {[
               { id: 'overview', label: 'Overview' },
               { id: 'principles', label: 'Principles' },
@@ -127,7 +127,7 @@ export default function AboutNexusWealthPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                className={`py-2 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-sky-500 text-sky-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -141,22 +141,22 @@ export default function AboutNexusWealthPage() {
       </section>
 
       {/* Tab Content */}
-      <section className="py-16">
+      <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <div className="space-y-16">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8 sm:space-y-12 md:space-y-16">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-start lg:items-center">
                 <div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-6">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
                     Our Mission
                   </h3>
-                  <p className="text-lg text-gray-600 mb-6">
+                  <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
                     NexusWealth Investment Solutions (NWIS) is at the forefront of revolutionizing real-world investment 
                     through decentralized innovation. Our platform leverages blockchain technology to create a transparent, 
                     secure, and accessible ecosystem for wealth creation.
                   </p>
-                  <p className="text-lg text-gray-600 mb-6">
+                  <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
                     We believe in empowering individuals to build generational wealth by providing access to diverse 
                     investment opportunities that were traditionally exclusive to institutional and accredited investors.
                   </p>
@@ -166,29 +166,40 @@ export default function AboutNexusWealthPage() {
                   </div>
                 </div>
                 <div className="relative">
-                  <Image
-                    src="/images/SS5.jpg"
-                    alt="Global investment opportunities"
-                    width={600}
-                    height={400}
-                    className="rounded-xl shadow-lg"
-                  />
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    className="rounded-xl shadow-lg w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
+                  >
+                    <source src="/images/ST2.mp4" type="video/mp4" />
+                    {/* Fallback image if video fails to load */}
+                    <Image
+                      src="/images/SS5.jpg"
+                      alt="Global investment opportunities"
+                      width={600}
+                      height={400}
+                      className="rounded-xl shadow-lg"
+                    />
+                  </video>
                 </div>
               </div>
 
               {/* Core Values */}
               <div>
-                <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">Our Core Values</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <h3 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 sm:mb-12">Our Core Values</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                   {coreValues.map((value, index) => {
                     const Icon = value.icon
                     return (
-                      <div key={index} className="text-center p-6 bg-gray-50 rounded-lg">
-                        <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <Icon className="h-8 w-8 text-sky-600" />
+                      <div key={index} className="text-center p-4 sm:p-6 bg-gray-50 rounded-lg">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                          <Icon className="h-6 w-6 sm:h-8 sm:w-8 text-sky-600" />
                         </div>
-                        <h4 className="text-xl font-semibold text-gray-900 mb-3">{value.title}</h4>
-                        <p className="text-gray-600">{value.description}</p>
+                        <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{value.title}</h4>
+                        <p className="text-sm sm:text-base text-gray-600">{value.description}</p>
                       </div>
                     )
                   })}

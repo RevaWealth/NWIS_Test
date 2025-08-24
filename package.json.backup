@@ -1,0 +1,71 @@
+{
+  "name": "nwis-token",
+  "version": "1.0.0",
+  "description": "NexusWealth Investment Solutions (NWIS) Token - Advanced ERC20 with voting, bridging, and governance features",
+  "main": "truffle-config.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "test": "truffle test",
+    "deploy:local": "truffle migrate --network development",
+    "deploy:sepolia": "truffle migrate --f 4 --to 4 --network sepolia",
+    "deploy:mainnet": "truffle migrate --f 4 --to 4 --network mainnet",
+    "deploy:base": "truffle migrate --f 4 --to 4 --network base",
+    "deploy:baseSepolia": "truffle migrate --f 4 --to 4 --network baseSepolia",
+    "verify:sepolia": "truffle run verify --network sepolia",
+    "verify:mainnet": "truffle run verify --network mainnet",
+    "verify:base": "truffle run verify --network base",
+    "console:local": "truffle console --network development",
+    "console:sepolia": "truffle console --network sepolia",
+    "console:mainnet": "truffle console --network mainnet",
+    "console:base": "truffle console --network base",
+    "setup:bridge": "node scripts/setup-bridge.js",
+    "bridge:deploy": "node scripts/deploy-bridge.js"
+  },
+  "keywords": [
+    "ethereum",
+    "erc20",
+    "token",
+    "governance",
+    "voting",
+    "bridging",
+    "defi",
+    "nexuswealth",
+    "base",
+    "multichain"
+  ],
+  "author": "NexusWealth Team",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-toast": "^1.2.15",
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "@wagmi/core": "^2.19.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "connectkit": "^1.9.1",
+    "ethers": "^5.7.2",
+    "lucide-react": "^0.541.0",
+    "next": "^15.5.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwind-merge": "^3.3.1",
+    "viem": "^2.34.0",
+    "wagmi": "^2.16.4",
+    "web3": "^4.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "ganache": "^7.9.2",
+    "truffle": "^5.11.5",
+    "truffle-plugin-verify": "^0.6.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
