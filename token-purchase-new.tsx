@@ -436,6 +436,10 @@ export default function TokenPurchaseNew({
             Remaining Tier Tokens: {isLoadingContractData ? "Loading..." : `${(contractData.currentTier.endAmount - contractData.totalTokensSold).toLocaleString()} NWIS`}
           </span>
         </div>
+        {/* Debug info - remove after testing */}
+        <div className="text-xs text-gray-600 mt-1">
+          Debug: Tier End: {contractData.currentTier.endAmount.toLocaleString()}, Sold: {contractData.totalTokensSold.toLocaleString()}, Remaining: {(contractData.currentTier.endAmount - contractData.totalTokensSold).toLocaleString()}
+        </div>
       </div>
 
       {/* Currency Selection */}
