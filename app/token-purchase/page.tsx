@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import CountdownTimer from "../../countdown-timer"
-import TokenPurchase from "../../token-purchase"
+import TokenPurchaseNew from "../../token-purchase-new"
 import Navbar from "../../navbar"
 
 interface TokenSaleData {
@@ -88,11 +88,7 @@ export default function TokenPurchasePage() {
 
               <p className="text-gray-400 text-center text-sm mt-4 mb-6">Time's Almost Up</p>
 
-              <TokenPurchase
-                currentPrice={tokenSaleData.currentPrice}
-                amountRaised={tokenSaleData.amountRaised}
-                tokenValue={tokenSaleData.tokenValue}
-              />
+              <TokenPurchaseNew />
             </div>
           </div>
 

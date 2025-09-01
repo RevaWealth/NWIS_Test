@@ -12,9 +12,9 @@ import { useTokenCalculation } from "./hooks/use-token-calculation"
 import { useToast } from "@/hooks/use-toast"
 
 interface TokenPurchaseProps {
-  currentPrice: string
-  amountRaised: string
-  tokenValue: string
+  currentPrice?: string
+  amountRaised?: string
+  tokenValue?: string
   progressPercentage?: string
   totalTokensForSale?: string
   totalTokensSold?: string
@@ -72,9 +72,9 @@ const currencyConfig = {
 }
 
 export default function TokenPurchaseNew({ 
-  currentPrice, 
-  amountRaised, 
-  tokenValue,
+  currentPrice = "$0.0010", 
+  amountRaised = "$0", 
+  tokenValue = "1 NWIS = $0.0010",
   progressPercentage = "0",
   totalTokensForSale = "1000000",
   totalTokensSold = "0",
