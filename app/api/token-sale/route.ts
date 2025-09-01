@@ -1,86 +1,204 @@
 import { NextResponse } from 'next/server';
 import Web3 from 'web3';
 
-// Contract ABI for the presale contract
+// Contract ABI for the NexusWealthPresale contract - UPDATED
 const PRESALE_ABI = [
+  // Sale Status
   {
     "inputs": [],
-    "name": "getSaleInfo",
+    "name": "saleStatus",
+    "outputs": [{"type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalTokensforSale",
+    "outputs": [{"type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalTokensSold",
+    "outputs": [{"type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // Current Tier Information
+  {
+    "inputs": [],
+    "name": "getCurrentTierInfo",
     "outputs": [
-      { "name": "_saleActive", "type": "bool" },
-      { "name": "_tokenPrice", "type": "uint256" },
-      { "name": "_totalTokensForSale", "type": "uint256" },
-      { "name": "_totalTokensSold", "type": "uint256" },
-      { "name": "_minPurchase", "type": "uint256" },
-      { "name": "_maxPurchase", "type": "uint256" },
-      { "name": "_saleStartTime", "type": "uint256" },
-      { "name": "_saleEndTime", "type": "uint256" }
+      {"name": "tierIndex", "type": "uint256"},
+      {"name": "startAmount", "type": "uint256"},
+      {"name": "endAmount", "type": "uint256"},
+      {"name": "price", "type": "uint256"}
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  // Next Tier Information
+  {
+    "inputs": [],
+    "name": "getNextTierInfo",
+    "outputs": [
+      {"name": "hasNextTier", "type": "bool"},
+      {"name": "tierIndex", "type": "uint256"},
+      {"name": "startAmount", "type": "uint256"},
+      {"name": "endAmount", "type": "uint256"},
+      {"name": "price", "type": "uint256"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // Purchase Preview
+  {
+    "inputs": [
+      {"name": "token", "type": "address"},
+      {"name": "amount", "type": "uint256"}
+    ],
+    "name": "getTokenAmount",
+    "outputs": [{"type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // Token Whitelist Check
+  {
+    "inputs": [{"name": "", "type": "address"}],
+    "name": "payableTokens",
+    "outputs": [{"type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // Buy function for ERC20 tokens
+  {
+    "inputs": [
+      {"name": "tokenAddress", "type": "address"},
+      {"name": "tokenAmount", "type": "uint256"}
+    ],
+    "name": "buyToken",
+    "outputs": [{"type": "bool"}],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ];
 
-// Contract addresses from our deployment
-const PRESALE_CONTRACT_ADDRESS = "0xBcFc8FD134C113F3DBeb419A207d4D1cc477dC47";
-const LOCAL_BLOCKCHAIN_URL = "http://127.0.0.1:8545";
+// Contract address on Sepolia testnet - UPDATED
+const PRESALE_CONTRACT_ADDRESS = "0x30e0c9c7e3661176595f1d2b1a1563a990ac0b0e";
+
+// Sepolia RPC endpoint (using Alchemy)
+const SEPOLIA_RPC_URL = "https://eth-sepolia.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht";
 
 export async function GET() {
   try {
-    // Connect to local blockchain
-    const web3 = new Web3(LOCAL_BLOCKCHAIN_URL);
+    console.log('🔗 Connecting to Sepolia testnet...');
+    
+    // Connect to Sepolia testnet
+    const web3 = new Web3(SEPOLIA_RPC_URL);
+    
+    // Test basic connection
+    const blockNumber = await web3.eth.getBlockNumber();
+    console.log('✅ Connected to Sepolia. Latest block:', blockNumber);
     
     // Create contract instance
     const presaleContract = new web3.eth.Contract(PRESALE_ABI, PRESALE_CONTRACT_ADDRESS);
     
-    // Get sale information from smart contract
-    const saleInfo = await presaleContract.methods.getSaleInfo().call();
+    console.log('📊 Fetching sale status...');
+    const saleStatus = await presaleContract.methods.saleStatus().call();
+    console.log('✅ Sale status:', saleStatus);
     
-    // Convert wei to ether for display
-    const tokenPriceEth = web3.utils.fromWei(saleInfo._tokenPrice, 'ether');
-    const totalTokensForSale = web3.utils.fromWei(saleInfo._totalTokensForSale, 'ether');
-    const totalTokensSold = web3.utils.fromWei(saleInfo._totalTokensSold, 'ether');
-    const minPurchase = web3.utils.fromWei(saleInfo._minPurchase, 'ether');
-    const maxPurchase = web3.utils.fromWei(saleInfo._maxPurchase, 'ether');
+    console.log('📊 Fetching total tokens for sale...');
+    const totalTokensForSale = await presaleContract.methods.totalTokensforSale().call();
+    console.log('✅ Total tokens for sale:', totalTokensForSale);
     
-    // Calculate amount raised (tokens sold * price)
-    const amountRaised = parseFloat(totalTokensSold) * parseFloat(tokenPriceEth);
+    console.log('📊 Fetching total tokens sold...');
+    const totalTokensSold = await presaleContract.methods.totalTokensSold().call();
+    console.log('✅ Total tokens sold:', totalTokensSold);
+    
+    // Get current tier information
+    console.log('📊 Fetching current tier info...');
+    const currentTierInfo = await presaleContract.methods.getCurrentTierInfo().call();
+    console.log('✅ Current tier info:', currentTierInfo);
+    
+    console.log('📊 Fetching next tier info...');
+    const nextTierInfo = await presaleContract.methods.getNextTierInfo().call();
+    console.log('✅ Next tier info:', nextTierInfo);
+    
+    // Convert price from smallest units (6 decimals) to USD
+    const currentPriceUSD = parseFloat(currentTierInfo.price) / 1e6;
     
     // Calculate progress percentage
-    const progressPercentage = (parseFloat(totalTokensSold) / parseFloat(totalTokensForSale)) * 100;
+    const progressPercentage = totalTokensForSale > 0 
+      ? ((parseFloat(totalTokensSold) / parseFloat(totalTokensForSale)) * 100).toFixed(2)
+      : "0.00";
+    
+    // Calculate amount raised (tokens sold * current price)
+    const amountRaised = parseFloat(totalTokensSold) * currentPriceUSD;
     
     const data = {
-      currentPrice: `$${parseFloat(tokenPriceEth).toFixed(6)}`,
+      saleActive: saleStatus,
+      currentPrice: `$${currentPriceUSD.toFixed(4)}`,
       amountRaised: `$${amountRaised.toLocaleString()}`,
-      tokenValue: `1 NWIS = $${parseFloat(tokenPriceEth).toFixed(6)}`,
-      progressPercentage: progressPercentage.toFixed(2),
-      totalTokensForSale: totalTokensForSale,
-      totalTokensSold: totalTokensSold,
-      minPurchase: minPurchase,
-      maxPurchase: maxPurchase,
-      saleActive: saleInfo._saleActive,
-      saleStartTime: saleInfo._saleStartTime,
-      saleEndTime: saleInfo._saleEndTime
+      tokenValue: `1 NWIS = $${currentPriceUSD.toFixed(4)}`,
+      progressPercentage: progressPercentage,
+      totalTokensForSale: totalTokensForSale.toString(),
+      totalTokensSold: totalTokensSold.toString(),
+      currentTier: {
+        index: currentTierInfo.tierIndex.toString(),
+        startAmount: currentTierInfo.startAmount.toString(),
+        endAmount: currentTierInfo.endAmount.toString(),
+        price: currentPriceUSD
+      },
+      nextTier: nextTierInfo.hasNextTier ? {
+        index: nextTierInfo.tierIndex.toString(),
+        startAmount: nextTierInfo.startAmount.toString(),
+        endAmount: nextTierInfo.endAmount.toString(),
+        price: parseFloat(nextTierInfo.price) / 1e6
+      } : null,
+      tokensUntilNextTier: nextTierInfo.hasNextTier 
+        ? (parseFloat(nextTierInfo.startAmount) - parseFloat(totalTokensSold)).toString()
+        : "0"
     };
 
     return NextResponse.json(data);
     
   } catch (error) {
-    console.error('Error fetching token sale data:', error);
+    console.error('❌ Error fetching token sale data:', error);
+    
+    // Log specific error details for debugging
+    if (error.message) {
+      console.error('❌ Error message:', error.message);
+    }
+    if (error.code) {
+      console.error('❌ Error code:', error.code);
+    }
+    
+    // Log the specific step that failed
+    console.error('❌ Contract connection failed. Using fallback data.');
     
     // Fallback data if contract connection fails
     const fallbackData = {
-      currentPrice: "$0.007125",
-      amountRaised: "$0",
-      tokenValue: "1 NWIS = $0.007125",
-      progressPercentage: "0.00",
-      totalTokensForSale: "1000000",
-      totalTokensSold: "0",
-      minPurchase: "0.01",
-      maxPurchase: "10",
       saleActive: false,
-      saleStartTime: "0",
-      saleEndTime: "0"
+      currentPrice: "$0.001",
+      amountRaised: "$0",
+      tokenValue: "1 NWIS = $0.001",
+      progressPercentage: "0.00",
+      totalTokensForSale: "30000000000000000000000000000", // 30B tokens with 18 decimals
+      totalTokensSold: "0",
+      currentTier: {
+        index: "0",
+        startAmount: "0",
+        endAmount: "1000000000000000000000000000",
+        price: 0.001
+      },
+      nextTier: {
+        index: "1",
+        startAmount: "1000000000000000000000000000",
+        endAmount: "3500000000000000000000000000",
+        price: 0.002
+      },
+      tokensUntilNextTier: "1000000000000000000000000000"
     };
 
     return NextResponse.json(fallbackData);
