@@ -9,6 +9,7 @@ import { LoadingSpinner } from "./component/loading-spinner"
 import { TokenPurchaseSkeleton } from "./component/loading-skeleton"
 import { EthIcon, UsdtIcon, UsdcIcon } from "./component/crypto-icons"
 import { useTokenCalculation } from "./hooks/use-token-calculation"
+import { useEthPrice } from "./hooks/use-eth-price"
 import { useToast } from "@/hooks/use-toast"
 
 interface TokenPurchaseProps {
@@ -88,10 +89,15 @@ export default function TokenPurchaseNew({
   const [currency, setCurrency] = useState<keyof typeof currencyConfig>("ETH")
   const [debouncedAmount, setDebouncedAmount] = useState("")
   const [timestamp, setTimestamp] = useState(BigInt(1735689600)) // Default timestamp
+  
+  // Live ETH price from API
+  const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
+  
   const [contractData, setContractData] = useState({
     totalTokensForSale: 0,
     totalTokensSold: 0,
     progressPercentage: "0",
+    saleActive: false,
     currentTier: {
       index: 0,
       startAmount: 0,
@@ -154,6 +160,7 @@ export default function TokenPurchaseNew({
           totalTokensForSale: forSaleTokens,
           totalTokensSold: soldTokens,
           progressPercentage: percentage,
+          saleActive: data.saleActive || false,
           currentTier: {
             index: parseInt(currentTier.index),
             startAmount: tierStartTokens,
@@ -182,7 +189,7 @@ export default function TokenPurchaseNew({
   const { tokenAmount, isCalculating } = useTokenCalculation({ 
     amount: debouncedAmount, 
     currency,
-    enabled: debouncedAmount !== "" && debouncedAmount === amount // Only calculate when amounts match
+    enabled: debouncedAmount !== "" && debouncedAmount === amount && contractData.saleActive // Only calculate when amounts match and sale is active
   })
 
   // Trigger calculation on Enter key or blur (clicking outside)
@@ -226,8 +233,7 @@ export default function TokenPurchaseNew({
     [amountInWei, isConnected, saleActive, debouncedAmount, amount]
   )
 
-  // Get current ETH price for ETH purchases
-  const [ethPrice, setEthPrice] = useState<number>(2500) // Default $2500
+
 
   // Wagmi hooks for ERC20 purchases
   const {
@@ -260,7 +266,7 @@ export default function TokenPurchaseNew({
     ],
     value: amountInWei,
     query: { 
-      enabled: shouldSimulate && currency === "ETH" && debouncedAmount === amount 
+      enabled: shouldSimulate && currency === "ETH" && debouncedAmount === amount && contractData.saleActive
     },
   })
 
@@ -344,6 +350,15 @@ export default function TokenPurchaseNew({
 
   // Purchase handler
   const handlePurchase = async () => {
+    if (!contractData.saleActive) {
+      toast({
+        title: "Sale Not Active",
+        description: "The token sale is not currently active.",
+        variant: "destructive",
+      })
+      return
+    }
+    
     if (!amount || Number.parseFloat(amount) <= 0) {
       toast({
         title: "Invalid Amount",
@@ -436,10 +451,7 @@ export default function TokenPurchaseNew({
             Remaining Tier Tokens: {isLoadingContractData ? "Loading..." : `${(contractData.currentTier.endAmount - contractData.totalTokensSold).toLocaleString()} NWIS`}
           </span>
         </div>
-        {/* Debug info - remove after testing */}
-        <div className="text-xs text-gray-600 mt-1">
-          Debug: Tier End: {contractData.currentTier.endAmount.toLocaleString()}, Sold: {contractData.totalTokensSold.toLocaleString()}, Remaining: {(contractData.currentTier.endAmount - contractData.totalTokensSold).toLocaleString()}
-        </div>
+
       </div>
 
       {/* Currency Selection */}
@@ -466,7 +478,7 @@ export default function TokenPurchaseNew({
                 variant={isSelected ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleCurrencyChange(curr as keyof typeof currencyConfig)}
-                disabled={isSimulating || !saleActive}
+                disabled={isSimulating || !contractData.saleActive}
                 className={`${buttonClasses} ${borderClass} flex items-center justify-center gap-2 text-sm py-2 px-4 min-w-[100px] h-10`}
               >
                 {isSimulating && currency === curr ? (
@@ -504,7 +516,7 @@ export default function TokenPurchaseNew({
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
             className="w-full bg-gray-800 border-gray-600 text-white placeholder-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-            disabled={!saleActive || isPurchasing}
+            disabled={!contractData.saleActive || isPurchasing}
           />
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-400">
             {currency}
@@ -574,7 +586,7 @@ export default function TokenPurchaseNew({
         ) : (
           <Button
             onClick={handlePurchase}
-            disabled={!amount || !saleActive || isPurchasing || !simulationData || !isCorrectNetwork}
+            disabled={!amount || !contractData.saleActive || isPurchasing || !simulationData || !isCorrectNetwork}
             className="w-full text-white font-medium py-3"
             style={{ backgroundColor: '#a57e24' }}
           >
@@ -659,7 +671,13 @@ export default function TokenPurchaseNew({
         <div>Function: {currency === "ETH" ? "buyTokenWithEthPrice" : "buyToken"}</div>
         <div>Currency: {currency}</div>
         <div>Amount: {amount} {currency}</div>
-        {currency === "ETH" && <div>ETH Price: ${ethPrice}</div>}
+                    {currency === "ETH" && (
+              <div>
+                ETH Price: ${ethPrice.toFixed(2)}
+                {isEthPriceLoading && <span className="text-blue-400"> (updating...)</span>}
+                {ethPriceError && <span className="text-red-400"> (error: {ethPriceError})</span>}
+              </div>
+            )}
         <div className="mt-2 pt-2 border-t border-gray-600">
           <div>Status: {isSimulating ? "Simulating..." : isWritePending ? "Sending..." : isConfirming ? "Confirming..." : "Ready"}</div>
           <div>Simulation: {simulateError ? "Failed" : simulationData ? "Success" : "Pending"}</div>
