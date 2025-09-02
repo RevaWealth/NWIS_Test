@@ -33,9 +33,11 @@ const TOKEN_SALE_CONTRACT = "0x1234567890123456789012345678901234567890"
 interface UseTokenCalculationProps {
   amount: string
   currency: string
+  ethPrice?: number
+  enabled?: boolean
 }
 
-export function useTokenCalculation({ amount, currency }: UseTokenCalculationProps) {
+export function useTokenCalculation({ amount, currency, ethPrice = 2500, enabled = true }: UseTokenCalculationProps) {
   const { isConnected } = useAccount()
   const [isCalculating, setIsCalculating] = useState(false)
   const [tokenAmount, setTokenAmount] = useState<string>("")
@@ -47,7 +49,7 @@ export function useTokenCalculation({ amount, currency }: UseTokenCalculationPro
     functionName: "calculateTokens",
     args: amount && currency ? [BigInt(Number.parseFloat(amount) * 1e18), currency] : undefined,
     query: {
-      enabled: Boolean(amount && currency && isConnected),
+      enabled: Boolean(amount && currency && isConnected && enabled),
     },
   })
 
@@ -57,27 +59,37 @@ export function useTokenCalculation({ amount, currency }: UseTokenCalculationPro
       return
     }
 
+    // Don't clear token amount if just disabled - only clear if no amount or not connected
+    if (!enabled) {
+      return
+    }
+
     setIsCalculating(true)
 
     // Simulate smart contract call delay
     const timer = setTimeout(() => {
-      // Mock calculation based on currency rates
-      const rates = {
-        ETH: 140.35,
-        USDT: 1.0,
-        USDC: 1.0,
-        BNB: 300.0, // Added BNB rate for completeness based on TokenPurchase
+      // Calculate based on currency rates with live ETH price
+      let calculatedTokens = 0
+      
+      if (currency === "ETH") {
+        // For ETH: (ETH amount * ETH price in USD) / NWIS token price ($0.001)
+        const ethAmountUSD = Number.parseFloat(amount) * ethPrice
+        calculatedTokens = ethAmountUSD / 0.001
+      } else if (currency === "USDT" || currency === "USDC") {
+        // For stablecoins: (amount * 1) / NWIS token price ($0.001)
+        // Note: USDT/USDC have 6 decimals, but we're calculating based on USD value
+        calculatedTokens = Number.parseFloat(amount) / 0.001
+      } else {
+        // Fallback for other currencies
+        calculatedTokens = Number.parseFloat(amount) / 0.001
       }
-
-      const rate = rates[currency as keyof typeof rates] || 1
-      const calculatedTokens = Number.parseFloat(amount) * rate
 
       setTokenAmount(calculatedTokens.toLocaleString())
       setIsCalculating(false)
     }, 300)
 
     return () => clearTimeout(timer)
-  }, [amount, currency, isConnected])
+  }, [amount, currency, isConnected, enabled, ethPrice])
 
   return {
     tokenAmount,

@@ -1,5 +1,7 @@
 'use client'
 
+'use client'
+
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -84,9 +86,9 @@ export default function TokenPurchasePage() {
                 <span className="text-white"> Now</span>
               </h3>
 
-              <CountdownTimer days={6} hours={2} minutes={28} seconds={14} />
+              <CountdownTimer />
 
-              <p className="text-gray-400 text-center text-sm mt-4 mb-6">Time's Almost Up</p>
+              <p className="text-gray-400 text-center text-sm mt-4 mb-6">ICO Starts October 1st, 2025</p>
 
               <TokenPurchaseNew />
             </div>
@@ -104,7 +106,7 @@ export default function TokenPurchasePage() {
               >
                 Learn More About NexusWealth
               </Link>
-              <span className="text-gray-400">•</span>
+              <span className="text-xs text-gray-400">•</span>
               <Link
                 href="/tokenomics"
                 className="text-sky-600 hover:text-sky-700 font-medium transition-colors"
