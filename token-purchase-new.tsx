@@ -133,6 +133,18 @@ export default function TokenPurchaseNew({
   const [tokenAllowance, setTokenAllowance] = useState<bigint>(BigInt(0))
   const [isCheckingAllowance, setIsCheckingAllowance] = useState(false)
   const [isApproving, setIsApproving] = useState(false)
+  
+  // Local override for approval state when we know approval is complete
+  const [approvalCompleted, setApprovalCompleted] = useState(false)
+  
+  // Manual simulation trigger state
+  const [forceSimulation, setForceSimulation] = useState(0)
+  
+  // Flag to prevent multiple auto-triggers
+  const [hasAutoTriggered, setHasAutoTriggered] = useState(false)
+  
+  // Local approval pending state that we control
+  const [localIsApproving, setLocalIsApproving] = useState(false)
 
 
   // ConnectKit modal hook
@@ -228,6 +240,8 @@ export default function TokenPurchaseNew({
     if (currency === "ETH" || !amountInSmallestUnits) return
     
     setIsApproving(true)
+    setLocalIsApproving(true) // Set our local state
+    
     try {
       const tokenAddress = getTokenAddress(currency)
       
@@ -252,6 +266,7 @@ export default function TokenPurchaseNew({
         variant: "destructive",
       })
       setIsApproving(false)
+      setLocalIsApproving(false) // Reset our local state
     }
   }
 
@@ -329,7 +344,10 @@ export default function TokenPurchaseNew({
     functionName: 'allowance',
     args: address ? [address, PRESALE_CONTRACT_ADDRESS] : undefined,
     query: {
-      enabled: currency !== "ETH" && !!address && !!amountInSmallestUnits,
+      enabled: currency !== "ETH" && !!address,
+      // Always enabled for ERC20 tokens to catch blockchain updates
+      refetchInterval: 2000, // Refetch every 2 seconds
+      refetchIntervalInBackground: true,
     }
   })
 
@@ -366,6 +384,11 @@ export default function TokenPurchaseNew({
         refetchAllowance()
       }, 500)
     }
+    
+    // Reset auto-trigger flag when currency changes
+    if (currency !== "ETH") {
+      setHasAutoTriggered(false)
+    }
   }, [mounted, currency, address, amountInSmallestUnits, refetchAllowance])
 
   // Wagmi hooks for ERC20 purchases
@@ -385,7 +408,9 @@ export default function TokenPurchaseNew({
         contractData.saleActive && 
         debouncedAmount === amount &&
         currency !== "ETH"
-      )
+      ),
+      // Force re-evaluation when forceSimulation changes
+      refetchInterval: forceSimulation > 0 ? 1000 : false,
     },
   })
 
@@ -474,6 +499,17 @@ export default function TokenPurchaseNew({
     error: approveError,
   } = useWriteContract()
 
+  // Debug logging for approval state changes
+  useEffect(() => {
+    console.log('🔍 Approval State Debug:', {
+      isApprovePending,
+      isApproveSuccess,
+      isApproveError,
+      approveHash: approveHash?.slice(0, 6) + '...',
+      timestamp: new Date().toISOString()
+    })
+  }, [isApprovePending, isApproveSuccess, isApproveError, approveHash])
+
   const {
     data: purchaseHash,
     writeContract: writePurchaseContract,
@@ -485,8 +521,8 @@ export default function TokenPurchaseNew({
 
   // Track what type of transaction we're executing
   const [isExecutingApproval, setIsExecutingApproval] = useState(false)
-
-  // Check if approval is needed based on actual blockchain allowance
+  
+    // Check if approval is needed based on actual blockchain allowance
   const needsApproval = useMemo(() => {
     if (currency === "ETH") return false
     if (!amountInSmallestUnits) return false
@@ -510,17 +546,21 @@ export default function TokenPurchaseNew({
     }
     
     // Check if blockchain allowance is sufficient for the current amount
-    const result = allowanceData < amountInSmallestUnits || isApprovePending
+    // If approval was completed locally, don't check isApprovePending
+    const effectiveIsApprovePending = approvalCompleted ? false : isApprovePending
+    const result = allowanceData < amountInSmallestUnits || effectiveIsApprovePending
     console.log('needsApproval calculation (using blockchain):', {
       currency,
       amountInSmallestUnits: amountInSmallestUnits?.toString(),
       blockchainAllowance: allowanceData?.toString(),
       isApprovePending,
+      approvalCompleted,
+      effectiveIsApprovePending,
       allowanceSufficient: allowanceData >= amountInSmallestUnits,
       result
     })
     return result
-  }, [currency, amountInSmallestUnits, allowanceData, tokenAllowance, isApprovePending])
+  }, [currency, amountInSmallestUnits, allowanceData, tokenAllowance, isApprovePending, approvalCompleted])
 
   // Enhanced simulation enabled state - includes approval checking
   const shouldSimulate = useMemo(() => {
@@ -676,6 +716,10 @@ export default function TokenPurchaseNew({
       
       // Reset the approval state
       setIsApproving(false)
+      setLocalIsApproving(false) // Reset our local state
+      
+      // Set local approval completed flag to override isApprovePending
+      setApprovalCompleted(true)
       
       // Immediately refresh allowance from blockchain
       refetchAllowance()
@@ -684,6 +728,7 @@ export default function TokenPurchaseNew({
       setTimeout(() => {
         console.log('Forcing manual allowance check...')
         checkTokenAllowance()
+        refetchAllowance() // Refresh again
       }, 1000)
       
       // Also refresh again after a short delay to ensure blockchain state is updated
@@ -692,14 +737,50 @@ export default function TokenPurchaseNew({
         refetchAllowance()
         // Force another manual check
         checkTokenAllowance()
+        refetchAllowance() // One more refresh
       }, 3000)
       
-      console.log('Approval success - immediately refreshed allowance and scheduled another refresh')
+      // Additional aggressive refresh after 5 seconds
+      const aggressiveRefreshTimer = setTimeout(() => {
+        console.log('Aggressive allowance refresh...')
+        refetchAllowance()
+        checkTokenAllowance()
+      }, 5000)
       
-      // Cleanup timer
-      return () => clearTimeout(refreshTimer)
+      console.log('Approval success - immediately refreshed allowance and scheduled multiple refreshes')
+      
+      // Cleanup timers
+      return () => {
+        clearTimeout(refreshTimer)
+        clearTimeout(aggressiveRefreshTimer)
+      }
     }
   }, [isApproveSuccess, approveHash, amountInSmallestUnits, toast, refetchAllowance])
+
+  // Auto-trigger simulation ONLY when approval transaction is actually successful
+  useEffect(() => {
+    // Only trigger for ERC20 tokens
+    if (currency === "ETH") return
+    
+    // Only trigger when we have a successful approval transaction AND haven't triggered yet
+    if (isApproveSuccess && approveHash && !hasAutoTriggered && amountInSmallestUnits) {
+      console.log('🎯 Auto-triggering simulation - approval transaction successful!')
+      
+      // Set flag to prevent multiple triggers
+      setHasAutoTriggered(true)
+      
+      // Trigger simulation by incrementing forceSimulation
+      setForceSimulation(prev => prev + 1)
+      
+      toast({
+        title: "Simulation Auto-Triggered",
+        description: "Approval confirmed! Automatically triggering transaction simulation...",
+      })
+    }
+  }, [isApproveSuccess, approveHash, currency, amountInSmallestUnits, toast, hasAutoTriggered])
+
+  // Removed the second auto-trigger that was causing early simulation triggering
+  // Now we only auto-trigger when an actual approval transaction is successful
 
   useEffect(() => {
     if (simulateError) {
@@ -989,15 +1070,15 @@ export default function TokenPurchaseNew({
                 handlePurchase()
               }
             }}
-            disabled={!amount || !contractData.saleActive || isPurchasing || (!needsApproval && !simulationData) || !isCorrectNetwork}
+            disabled={!amount || !contractData.saleActive || isPurchasing || localIsApproving || (!needsApproval && !simulationData) || !isCorrectNetwork}
             className="w-full text-white font-medium py-3"
             style={{ backgroundColor: needsApproval ? '#3b82f6' : '#a57e24' }}
             title={`Debug: amount=${!!amount}, saleActive=${contractData.saleActive}, isPurchasing=${isPurchasing}, needsApproval=${needsApproval}, simulationData=${!!simulationData}, isCorrectNetwork=${isCorrectNetwork}`}
           >
-            {isPurchasing ? (
+            {(isPurchasing || localIsApproving) ? (
               <div className="flex items-center gap-2">
                 <LoadingSpinner size="sm" />
-                {isApprovePending ? "Approving..." : (isPurchasePending ? "Sending..." : isConfirming ? "Confirming..." : "Processing...")}
+                {localIsApproving ? "Approving..." : (isPurchasePending ? "Sending..." : isConfirming ? "Confirming..." : "Processing...")}
               </div>
             ) : !isCorrectNetwork ? (
               "Switch to Sepolia"
@@ -1079,6 +1160,7 @@ export default function TokenPurchaseNew({
           <div>Sale Active: {contractData.saleActive ? "✅" : "❌"}</div>
           <div>Is Purchasing: {isPurchasing ? "❌" : "✅"}</div>
           <div>Needs Approval: {needsApproval ? "🔐" : "✅"}</div>
+          <div>Approval Completed: {approvalCompleted ? "✅" : "❌"}</div>
           <div>Simulation Data: {simulationData ? "✅" : "❌"}</div>
           <div>Correct Network: {isCorrectNetwork ? "✅" : "❌"}</div>
           <div>Currency: {currency}</div>
@@ -1087,6 +1169,13 @@ export default function TokenPurchaseNew({
           <div>Amount In Smallest Units: {amountInSmallestUnits?.toString() || "undefined"}</div>
           <div>Is Connected: {isConnected ? "✅" : "❌"}</div>
           <div>Is Simulating: {isSimulating ? "🔄" : "⏸️"}</div>
+          <div>Force Simulation Counter: {forceSimulation}</div>
+          <div>Simulation Trigger Status: {forceSimulation > 0 ? "🔄 Active" : "⏸️ Inactive"}</div>
+          <div>Auto-Trigger Status: {isApproveSuccess && approveHash && !hasAutoTriggered && currency !== "ETH" ? "🎯 Ready" : "⏸️ Waiting"}</div>
+          <div>Approval Transaction Success: {isApproveSuccess ? "✅ Yes" : "❌ No"}</div>
+          <div>Has Auto-Triggered: {hasAutoTriggered ? "✅ Yes" : "❌ No"}</div>
+          <div>Local Is Approving: {localIsApproving ? "🔄 Yes" : "⏸️ No"}</div>
+          <div>Hook Is Approve Pending: {isApprovePending ? "🔄 Yes" : "⏸️ No"}</div>
           
           {/* Allowance Debug Info */}
           <div className="mt-2 p-2 bg-blue-900/20 border border-blue-700 rounded">
@@ -1119,6 +1208,43 @@ export default function TokenPurchaseNew({
                 disabled={isAllowanceLoading}
               >
                 {isAllowanceLoading ? "Checking..." : "Refresh Allowance"}
+              </Button>
+              
+              {/* Force Allowance Refresh Button */}
+              <Button
+                onClick={() => {
+                  console.log('Force allowance refresh triggered')
+                  refetchAllowance()
+                  setTimeout(() => refetchAllowance(), 500)
+                  setTimeout(() => refetchAllowance(), 1000)
+                  toast({
+                    title: "Allowance Refresh",
+                    description: "Forced multiple allowance refreshes",
+                  })
+                }}
+                variant="outline"
+                size="sm"
+                className="ml-2 bg-green-800 hover:bg-green-700 text-green-200 border-green-600"
+              >
+                Force Refresh
+              </Button>
+              
+              {/* Force Simulation Button */}
+              <Button
+                onClick={() => {
+                  console.log('Force simulation triggered')
+                  // Force a re-evaluation of simulation hooks
+                  setForceSimulation(prev => prev + 1)
+                  toast({
+                    title: "Simulation Triggered",
+                    description: "Forcing simulation re-evaluation",
+                  })
+                }}
+                variant="outline"
+                size="sm"
+                className="ml-2 bg-purple-800 hover:bg-purple-700 text-purple-200 border-purple-600"
+              >
+                Force Simulation
               </Button>
             </div>
           )}
