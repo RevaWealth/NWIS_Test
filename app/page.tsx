@@ -14,6 +14,7 @@ import PartnersSection from "../partners-section"
 import FAQSection from "../faq-section"
 import ContactSection from "../contact-section"
 import Footer from "../footer"
+import CountdownTimer from "../countdown-timer"
 import { PageLoader } from "../component/page-loader"
 import MobileVideo from "../component/mobile-video"
 import Link from "next/link"
@@ -127,6 +128,16 @@ export default function Home() {
               <p className="max-w-2xl mx-auto text-sky-800 text-sm sm:text-base px-2">
                 Revolutionizing real-world investment through Tokenized innovation.
               </p>
+              
+              {/* ICO Launch Countdown Timer */}
+              <div className="mt-8 sm:mt-10 flex justify-center">
+                <div className="bg-white/20 rounded-2xl p-6 sm:p-8 shadow-xl">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#a57e24] mb-4 sm:mb-6">
+                    ICO Launch
+                  </h3>
+                  <CountdownTimer />
+                </div>
+              </div>
               
               {/* Buy NWIS Token Button */}
               <div className="mt-8 sm:mt-10 flex justify-center">
