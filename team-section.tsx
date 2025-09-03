@@ -10,23 +10,23 @@ export default function TeamSection() {
   const teamMembers = [
     {
       name: "Michael Sarabian",
-      role: "CEO & Co-Founder",
+      role: "Co-Founder & CEO",
       image: "/images/Michael.jpeg",
       linkedin: "http://linkedin.com/in/michael-sarabian-17a306371",
       twitter: "#",
     },
     {
-      name: "Ali JK",
-      role: "CTO & Co-Founder",
-      image: "/placeholder.svg?height=150&width=150",
-      linkedin: "https://www.linkedin.com/in/ali-jk",
+      name: "Jonathan Goebel",
+      role: "Co-Founder & CFO",
+      image: "/images/Jon.jpg",
+      linkedin: "http://linkedin.com/in/jonathan-goebel-4131726a",
       twitter: "#",
     },
     {
-      name: "Jonathan Goebel",
-      role: "CFO",
-      image: "/placeholder.svg?height=150&width=150",
-      linkedin: "http://linkedin.com/in/jonathan-goebel-4131726a",
+      name: "Ali JK",
+      role: "Co-Founder & CTO",
+      image: "/images/Ali.jpg",
+      linkedin: "https://www.linkedin.com/in/ali-jk",
       twitter: "#",
     },
     {
