@@ -1,12 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Building2, Users, TrendingUp, Globe, Shield, Target, ArrowRight, ChevronRight } from 'lucide-react'
+import Navbar from '../../../navbar'
 
 export default function AboutNexusWealthPage() {
+  const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState('overview')
+
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab && ['overview', 'principles', 'leadership', 'history', 'sustainability'].includes(tab)) {
+      setActiveTab(tab)
+    }
+  }, [searchParams])
 
   const companyStats = [
     { label: "Assets Under Management", value: "Coming Soon", description: "Total NWIS token market cap" },
@@ -65,27 +75,16 @@ export default function AboutNexusWealthPage() {
   ]
   return (
     <div className="min-h-screen bg-white">
+      {/* Navbar */}
+      <Navbar />
+      
       {/* Header */}
       <div className="bg-sky-950 shadow-sm border-b border-sky-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/" className="hover:opacity-80 transition-opacity">
-                <Image
-                  src="/images/NWIS.png"
-                  alt="NWIS logo"
-                  width={80}
-                  height={80}
-                  className="h-12 w-auto object-contain"
-                />
-              </Link>
-            </div>
-            <div className="flex-1 text-center">
+          <div className="flex items-center justify-center">
+            <div className="text-center">
               <h1 className="text-2xl font-bold text-white">About NexusWealth Investment Solutions</h1>
               <p className="text-[#a57e24]">Building the next generation global leader in asset management and financial services</p>
-            </div>
-            <div className="flex items-center">
-              {/* Placeholder for potential future buttons */}
             </div>
           </div>
         </div>

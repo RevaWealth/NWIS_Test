@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Navbar from '../../navbar'
 
 export default function TokenomicsPage() {
   const tokenomics = [
@@ -30,31 +31,8 @@ export default function TokenomicsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <div className="bg-sky-950 shadow-sm border-b border-sky-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
-            <div className="flex items-center">
-              <Link href="/" className="hover:opacity-80 transition-opacity">
-                <Image
-                  src="/images/NWIS.png"
-                  alt="NWIS logo"
-                  width={80}
-                  height={80}
-                  className="h-10 sm:h-12 w-auto object-contain"
-                />
-              </Link>
-            </div>
-            <div className="flex-1 text-center">
-              <h1 className="text-xl sm:text-2xl font-bold text-white">NWIS Tokenomics</h1>
-              <p className="text-sm sm:text-base text-sky-200">Transparent and sustainable token distribution</p>
-            </div>
-            <div className="flex items-center">
-              {/* Placeholder for potential future buttons */}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Navbar */}
+      <Navbar />
 
       {/* Tokenomics Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">

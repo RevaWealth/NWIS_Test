@@ -19,13 +19,13 @@ export default function Navbar() {
     { name: "About", href: "#about", hasDropdown: true },
     { name: "Whitepaper", href: "/whitepaper" },
     { name: "Tokenomics", href: "/tokenomics" },
-    { name: "Roadmap", href: "#roadmap" },
-    { name: "FAQ", href: "#faq" },
+    { name: "Roadmap", href: "/#roadmap" },
+    { name: "FAQ", href: "/#faq" },
   ]
 
   const aboutDropdownItems = [
     { name: "About NexusWealth Investment Solution", href: "/about/story", icon: Building2 },
-    { name: "Our Team", href: "/about/team", icon: Users },
+    { name: "Our Team", href: "/about/story?tab=leadership", icon: Users },
   ]
 
   const handleMouseEnter = () => {
