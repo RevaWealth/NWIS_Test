@@ -9,12 +9,11 @@ export default function AboutNexusWealthPage() {
   const [activeTab, setActiveTab] = useState('overview')
 
   const companyStats = [
-    { label: "Assets Under Management", value: "$50B+", description: "Total NWIS token market cap" },
-    { label: "Global Reach", value: "150+", description: "Countries with NWIS holders" },
-    { label: "Investment Sectors", value: "4", description: "Agriculture, Infrastructure, Energy, Real Estate" },
-    { label: "Community Members", value: "10K+", description: "Active NWIS token holders" },
+    { label: "Assets Under Management", value: "Coming Soon", description: "Total NWIS token market cap" },
+    { label: "Global Reach", value: "Coming Soon", description: "Countries with NWIS holders" },
+    { label: "Investment Sectors", value: "Coming Soon", description: "Agriculture, Infrastructure, Energy, Real Estate" },
+    { label: "Community Members", value: "Coming Soon", description: "Active NWIS token holders" },
   ]
-
   const coreValues = [
     {
       icon: Shield,
@@ -40,25 +39,30 @@ export default function AboutNexusWealthPage() {
 
   const leadershipTeam = [
     {
-      name: "Alex Chen",
-      title: "Chief Executive Officer",
-      bio: "Former Goldman Sachs executive with 15+ years in institutional investment management",
-      image: "/images/placeholder-user.jpg"
+      name: "Michael Sarabian",
+      title: "Co-Founder & CEO",
+      bio: "Visionary leader with extensive experience in blockchain technology and Solutions Architecture, driving NexusWealth's mission to democratize investment opportunities.",
+      image: "/images/Michael.JPEG"
     },
     {
-      name: "Sarah Rodriguez",
-      title: "Chief Technology Officer",
-      bio: "Blockchain pioneer and former CTO at major DeFi protocols",
-      image: "/images/placeholder-user.jpg"
+      name: "Jonathan Goebel",
+      title: "Co-Founder & CFO",
+      bio: "Financial strategist with deep expertise in corporate finance and investment management, ensuring sustainable growth and financial excellence.",
+      image: "/images/Jon.jpg"
     },
     {
-      name: "Michael Thompson",
-      title: "Chief Investment Officer",
-      bio: "20+ years experience in alternative investments and real estate tokenization",
-      image: "/images/placeholder-user.jpg"
+      name: "Ali JK",
+      title: "Co-Founder & CTO",
+      bio: "Technology innovator and blockchain expert, leading the development of cutting-edge tokenization platforms and secure investment infrastructure.",
+      image: "/images/Ali.jpg"
+    },
+    {
+      name: "Pari Mah",
+      title: "VP of Marketing",
+      bio: "Marketing strategist with proven track record in building brand awareness and driving community engagement in the E-commerce and fintech space.",
+      image: "/images/Pari.jpg"
     }
   ]
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -263,20 +267,22 @@ export default function AboutNexusWealthPage() {
           {activeTab === 'leadership' && (
             <div>
               <h3 className="text-3xl font-bold text-gray-900 mb-8">Our Leadership Team</h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {leadershipTeam.map((member, index) => (
                   <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                     <div className="p-6">
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        width={120}
-                        height={120}
-                        className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-                      />
+                      <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
+                        <Image
+                          src={member.image}
+                          alt={member.name}
+                          width={128}
+                          height={128}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                       <h4 className="text-xl font-semibold text-gray-900 text-center mb-2">{member.name}</h4>
-                      <p className="text-sky-600 text-center mb-3">{member.title}</p>
-                      <p className="text-gray-600 text-center text-sm">{member.bio}</p>
+                      <p className="text-sky-600 text-center mb-3 font-medium">{member.title}</p>
+                      <p className="text-gray-600 text-center text-sm leading-relaxed">{member.bio}</p>
                     </div>
                   </div>
                 ))}
@@ -291,7 +297,7 @@ export default function AboutNexusWealthPage() {
               <div className="space-y-8">
                 <div className="flex items-start space-x-6">
                   <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-sky-600 font-bold text-lg">2023</span>
+                    <span className="text-sky-600 font-bold text-lg">2024</span>
                   </div>
                   <div>
                     <h4 className="text-xl font-semibold text-gray-900 mb-2">Foundation</h4>
@@ -303,7 +309,7 @@ export default function AboutNexusWealthPage() {
                 </div>
                 <div className="flex items-start space-x-6">
                   <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-sky-600 font-bold text-lg">2024</span>
+                    <span className="text-sky-600 font-bold text-lg">2025</span>
                   </div>
                   <div>
                     <h4 className="text-xl font-semibold text-gray-900 mb-2">Platform Launch</h4>
@@ -315,7 +321,7 @@ export default function AboutNexusWealthPage() {
                 </div>
                 <div className="flex items-start space-x-6">
                   <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-sky-600 font-bold text-lg">2025</span>
+                    <span className="text-sky-600 font-bold text-lg">2026</span>
                   </div>
                   <div>
                     <h4 className="text-xl font-semibold text-gray-900 mb-2">Global Expansion</h4>

@@ -131,8 +131,8 @@ export default function Home() {
               
               {/* ICO Launch Countdown Timer */}
               <div className="mt-8 sm:mt-10 flex justify-center">
-                <div className="bg-white/20 rounded-2xl p-6 sm:p-8 shadow-xl">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#a57e24] mb-4 sm:mb-6">
+                <div>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#a57e24] mb-4 sm:mb-6 text-center">
                     ICO Launch
                   </h3>
                   <CountdownTimer />
