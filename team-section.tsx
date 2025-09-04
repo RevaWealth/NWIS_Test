@@ -11,7 +11,7 @@ export default function TeamSection() {
     {
       name: "Michael Sarabian",
       role: "Co-Founder & CEO",
-      image: "/images/Michael.jpeg",
+      image: "/images/Michael.JPEG",
       linkedin: "http://linkedin.com/in/michael-sarabian-17a306371",
       twitter: "#",
     },
