@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useChainId, useReadContract } from "wagmi" 
 import { ConnectKitButton, useModal } from "connectkit"
 import { Button } from "@/component/UI/button"
@@ -153,8 +153,8 @@ export default function TokenPurchaseNew({
   // Check if wallet is on correct network (Sepolia)
   const isCorrectNetwork = chainId === 11155111 // Sepolia chain ID
 
-  // Fetch contract data
-  const fetchContractData = async () => {
+  // Fetch contract data - memoized to prevent hydration issues
+  const fetchContractData = useCallback(async () => {
     setIsLoadingContractData(true)
     try {
       const response = await fetch('/api/token-sale')
@@ -214,61 +214,11 @@ export default function TokenPurchaseNew({
     } finally {
       setIsLoadingContractData(false)
     }
-  }
+  }, [])
 
 
 
-  // Check token allowance for ERC20 tokens from blockchain
-  const checkTokenAllowance = async () => {
-    if (currency === "ETH" || !amountInSmallestUnits || !address) return
-    
-    setIsCheckingAllowance(true)
-    try {
-      // Refetch allowance from blockchain
-      await refetchAllowance()
-    } catch (error) {
-      console.error('Error checking token allowance:', error)
-      setTokenAllowance(BigInt(0))
 
-    } finally {
-      setIsCheckingAllowance(false)
-    }
-  }
-
-  // Approve tokens for spending
-  const approveTokens = async () => {
-    if (currency === "ETH" || !amountInSmallestUnits) return
-    
-    setIsApproving(true)
-    setLocalIsApproving(true) // Set our local state
-    
-    try {
-      const tokenAddress = getTokenAddress(currency)
-      
-      // Call the ERC20 approve function using writeApproveContract
-      writeApproveContract({
-        address: tokenAddress as `0x${string}`,
-        abi: ERC20_ABI,
-        functionName: 'approve',
-        args: [PRESALE_CONTRACT_ADDRESS, amountInSmallestUnits]
-      })
-      
-      toast({
-        title: "Approval Transaction Sent",
-        description: "Approval transaction sent! Please confirm in your wallet.",
-      })
-      
-    } catch (error) {
-      console.error('Error approving tokens:', error)
-      toast({
-        title: "Approval Failed",
-        description: error instanceof Error ? error.message : "Failed to approve tokens",
-        variant: "destructive",
-      })
-      setIsApproving(false)
-      setLocalIsApproving(false) // Reset our local state
-    }
-  }
 
   // Only render on client to avoid hydration issues
   useEffect(() => {
@@ -276,12 +226,17 @@ export default function TokenPurchaseNew({
     setTimestamp(BigInt(Math.floor(Date.now() / 1000)))
   }, [])
 
-  // Fetch contract data after component is mounted
+  // Fetch contract data after component is mounted with a small delay to ensure hydration is complete
   useEffect(() => {
     if (mounted) {
-      fetchContractData()
+      // Add a small delay to ensure hydration is complete
+      const timer = setTimeout(() => {
+        fetchContractData()
+      }, 100)
+      
+      return () => clearTimeout(timer)
     }
-  }, [mounted])
+  }, [mounted, fetchContractData])
 
 
 
@@ -521,6 +476,58 @@ export default function TokenPurchaseNew({
 
   // Track what type of transaction we're executing
   const [isExecutingApproval, setIsExecutingApproval] = useState(false)
+  
+  // Check token allowance for ERC20 tokens from blockchain
+  const checkTokenAllowance = useCallback(async () => {
+    if (currency === "ETH" || !amountInSmallestUnits || !address) return
+    
+    setIsCheckingAllowance(true)
+    try {
+      // Refetch allowance from blockchain
+      await refetchAllowance()
+    } catch (error) {
+      console.error('Error checking token allowance:', error)
+      setTokenAllowance(BigInt(0))
+
+    } finally {
+      setIsCheckingAllowance(false)
+    }
+  }, [currency, amountInSmallestUnits, address, refetchAllowance])
+
+  // Approve tokens for spending
+  const approveTokens = useCallback(async () => {
+    if (currency === "ETH" || !amountInSmallestUnits) return
+    
+    setIsApproving(true)
+    setLocalIsApproving(true) // Set our local state
+    
+    try {
+      const tokenAddress = getTokenAddress(currency)
+      
+      // Call the ERC20 approve function using writeApproveContract
+      writeApproveContract({
+        address: tokenAddress as `0x${string}`,
+        abi: ERC20_ABI,
+        functionName: 'approve',
+        args: [PRESALE_CONTRACT_ADDRESS, amountInSmallestUnits]
+      })
+      
+      toast({
+        title: "Approval Transaction Sent",
+        description: "Approval transaction sent! Please confirm in your wallet.",
+      })
+      
+    } catch (error) {
+      console.error('Error approving tokens:', error)
+      toast({
+        title: "Approval Failed",
+        description: error instanceof Error ? error.message : "Failed to approve tokens",
+        variant: "destructive",
+      })
+      setIsApproving(false)
+      setLocalIsApproving(false) // Reset our local state
+    }
+  }, [currency, amountInSmallestUnits, writeApproveContract, toast])
   
     // Check if approval is needed based on actual blockchain allowance
   const needsApproval = useMemo(() => {
