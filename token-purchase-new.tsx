@@ -110,10 +110,17 @@ export default function TokenPurchaseNew({
   const [amount, setAmount] = useState("")
   const [currency, setCurrency] = useState<keyof typeof currencyConfig>("ETH")
   const [debouncedAmount, setDebouncedAmount] = useState("")
-  const [timestamp, setTimestamp] = useState(BigInt(1735689600)) // Default timestamp
+  const [timestamp, setTimestamp] = useState(BigInt(Math.floor(Date.now() / 1000))) // Current timestamp in seconds
   
   // Live ETH price from API
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
+  
+  // Update timestamp whenever ETH price is fetched to ensure it's current
+  useEffect(() => {
+    if (ethPrice && !isEthPriceLoading) {
+      setTimestamp(BigInt(Math.floor(Date.now() / 1000)))
+    }
+  }, [ethPrice, isEthPriceLoading])
   
   const [contractData, setContractData] = useState({
     totalTokensForSale: 0,
@@ -888,7 +895,8 @@ export default function TokenPurchaseNew({
   }
 
   return (
-    <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4 sm:p-6">
+    <>
+      <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4 sm:p-6">
       {/* Sale Progress */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
@@ -1053,49 +1061,6 @@ export default function TokenPurchaseNew({
         </div>
       )}
 
-      {/* Purchase Button */}
-      <div className="space-y-3">
-        {!isConnected ? (
-          <Button
-            onClick={() => setOpen(true)}
-            className="w-full text-white font-medium py-3"
-            style={{ backgroundColor: '#a57e24' }}
-          >
-            Connect Wallet
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              console.log('Button clicked:', {
-                needsApproval,
-                amountInSmallestUnits: amountInSmallestUnits?.toString(),
-                currency
-              })
-              if (needsApproval) {
-                approveTokens()
-              } else {
-                handlePurchase()
-              }
-            }}
-            disabled={!amount || !contractData.saleActive || isPurchasing || localIsApproving || (!needsApproval && !simulationData) || !isCorrectNetwork}
-            className="w-full text-white font-medium py-3"
-            style={{ backgroundColor: needsApproval ? '#3b82f6' : '#a57e24' }}
-            title={`Debug: amount=${!!amount}, saleActive=${contractData.saleActive}, isPurchasing=${isPurchasing}, needsApproval=${needsApproval}, simulationData=${!!simulationData}, isCorrectNetwork=${isCorrectNetwork}`}
-          >
-            {(isPurchasing || localIsApproving) ? (
-              <div className="flex items-center gap-2">
-                <LoadingSpinner size="sm" />
-                {localIsApproving ? "Approving..." : (isPurchasePending ? "Sending..." : isConfirming ? "Confirming..." : "Processing...")}
-              </div>
-            ) : !isCorrectNetwork ? (
-              "Switch to Sepolia"
-            ) : needsApproval ? (
-              `Approve ${currency}`
-            ) : (
-              "Buy NWIS Tokens"
-            )}
-          </Button>
-        )}
 
 
 
@@ -1257,6 +1222,51 @@ export default function TokenPurchaseNew({
           )}
         </div>
       </div>
-    </div>
+      
+      {/* Purchase Button - Outside the frame */}
+      <div className="mt-6 space-y-3">
+        {!isConnected ? (
+          <Button
+            onClick={() => setOpen(true)}
+            className="w-full text-white font-medium py-3"
+            style={{ backgroundColor: '#a57e24' }}
+          >
+            Connect Wallet
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              console.log('Button clicked:', {
+                needsApproval,
+                amountInSmallestUnits: amountInSmallestUnits?.toString(),
+                currency
+              })
+              if (needsApproval) {
+                approveTokens()
+              } else {
+                handlePurchase()
+              }
+            }}
+            disabled={!amount || !contractData.saleActive || isPurchasing || localIsApproving || (!needsApproval && !simulationData) || !isCorrectNetwork}
+            className="w-full text-white font-medium py-3"
+            style={{ backgroundColor: '#a57e24' }}
+            title={`Debug: amount=${!!amount}, saleActive=${contractData.saleActive}, isPurchasing=${isPurchasing}, needsApproval=${needsApproval}, simulationData=${!!simulationData}, isCorrectNetwork=${isCorrectNetwork}`}
+          >
+            {(isPurchasing || localIsApproving) ? (
+              <div className="flex items-center gap-2">
+                <LoadingSpinner size="sm" />
+                {localIsApproving ? "Approving..." : (isPurchasePending ? "Sending..." : isConfirming ? "Confirming..." : "Processing...")}
+              </div>
+            ) : !isCorrectNetwork ? (
+              "Switch to Sepolia"
+            ) : needsApproval ? (
+              `Approve ${currency}`
+            ) : (
+              "Buy NWIS Tokens"
+            )}
+          </Button>
+        )}
+      </div>
+    </>
   )
 }

@@ -30,7 +30,7 @@ export async function GET() {
 
     return NextResponse.json({
       price: ethPrice,
-      timestamp: Date.now(),
+      timestamp: Math.floor(Date.now() / 1000), // Convert to seconds
       source: 'coingecko'
     });
 
@@ -43,7 +43,7 @@ export async function GET() {
     
     return NextResponse.json({
       price: fallbackPrice,
-      timestamp: Date.now(),
+      timestamp: Math.floor(Date.now() / 1000), // Convert to seconds
       source: 'fallback',
       error: error instanceof Error ? error.message : 'Unknown error'
     });
