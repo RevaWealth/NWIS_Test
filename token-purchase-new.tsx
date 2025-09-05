@@ -45,6 +45,19 @@ const PRESALE_ABI = [
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
+  },
+  // Get pay amount function
+  {
+    "inputs": [
+      {"name": "token", "type": "address"},
+      {"name": "amount", "type": "uint256"}
+    ],
+    "name": "getPayAmount",
+    "outputs": [
+      {"name": "", "type": "uint256"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
   }
 ] as const;
 
@@ -111,6 +124,8 @@ export default function TokenPurchaseNew({
   const [currency, setCurrency] = useState<keyof typeof currencyConfig>("ETH")
   const [debouncedAmount, setDebouncedAmount] = useState("")
   const [timestamp, setTimestamp] = useState(BigInt(Math.floor(Date.now() / 1000))) // Current timestamp in seconds
+  const [nwisTokenAmount, setNwisTokenAmount] = useState("") // For getPayAmount calculation
+  const [debouncedNwisTokenAmount, setDebouncedNwisTokenAmount] = useState("") // Debounced NWIS amount
   
   // Live ETH price from API
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
@@ -121,6 +136,15 @@ export default function TokenPurchaseNew({
       setTimestamp(BigInt(Math.floor(Date.now() / 1000)))
     }
   }, [ethPrice, isEthPriceLoading])
+
+  // Debounce NWIS amount input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedNwisTokenAmount(nwisTokenAmount)
+    }, 3000) // 3 second delay
+
+    return () => clearTimeout(timer)
+  }, [nwisTokenAmount])
   
   const [contractData, setContractData] = useState({
     totalTokensForSale: 0,
@@ -275,6 +299,24 @@ export default function TokenPurchaseNew({
     handleAmountSubmit()
   }
 
+  // Handle NWIS amount submission
+  const handleNwisAmountSubmit = () => {
+    if (nwisTokenAmount && nwisTokenAmount !== debouncedNwisTokenAmount) {
+      setDebouncedNwisTokenAmount(nwisTokenAmount)
+    }
+  }
+
+  const handleNwisKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleNwisAmountSubmit()
+    }
+  }
+
+  const handleNwisBlur = () => {
+    handleNwisAmountSubmit()
+  }
+
   // Convert amount to smallest units based on currency
   const amountInSmallestUnits = amount ? (() => {
     if (currency === "ETH") {
@@ -406,6 +448,80 @@ export default function TokenPurchaseNew({
   const simulationData = currency === "ETH" ? simulationDataETH : simulationDataERC20
   const simulateError = currency === "ETH" ? simulateErrorETH : simulateErrorERC20
   const isSimulating = currency === "ETH" ? isSimulatingETH : isSimulatingERC20
+
+  // Helper function to get token address (ETH uses zero address)
+  const getTokenAddressForPayAmount = (currency: keyof typeof currencyConfig) => {
+    if (currency === "ETH") {
+      return "0x0000000000000000000000000000000000000000" // Zero address for ETH
+    }
+    return getTokenAddress(currency)
+  }
+
+  // Get pay amount for token amount (ERC20 tokens only)
+  const { data: payAmountData, isLoading: isPayAmountLoading, error: payAmountError } = useReadContract({
+    address: PRESALE_CONTRACT_ADDRESS,
+    abi: PRESALE_ABI,
+    functionName: "getPayAmount",
+    args: debouncedNwisTokenAmount && currency !== "ETH" ? [getTokenAddressForPayAmount(currency), BigInt(Number.parseFloat(debouncedNwisTokenAmount) * 1e18)] : undefined,
+    query: {
+      enabled: Boolean(debouncedNwisTokenAmount && contractData.saleActive && currency !== "ETH"),
+    }
+  })
+
+  // Manual calculation for ETH (since getPayAmount doesn't support ETH)
+  const ethPayAmount = useMemo(() => {
+    if (currency === "ETH" && debouncedNwisTokenAmount && ethPrice && !isEthPriceLoading) {
+      // Calculate ETH amount needed based on current tier price
+      // This mimics the contract's calculation: (amount * currentPrice) / (10 ** saleTokenDec)
+      // For ETH, we need to convert NWIS tokens to USD value, then to ETH
+      const nwisAmountInWei = BigInt(Number.parseFloat(debouncedNwisTokenAmount) * 1e18)
+      const currentTierPrice = 0.001 // $0.001 per token (Tier 1 price)
+      const usdValue = Number(nwisAmountInWei) / 1e18 * currentTierPrice
+      const ethAmount = usdValue / ethPrice
+      return ethAmount
+    }
+    return null
+  }, [currency, debouncedNwisTokenAmount, ethPrice, isEthPriceLoading])
+
+  // Convert pay amount to readable format
+  const payAmount = useMemo(() => {
+    if (currency === "ETH") {
+      return ethPayAmount ? ethPayAmount.toFixed(6) : null
+    } else if (payAmountData) {
+      if (currency === "USDT" || currency === "USDC") {
+        return (Number(payAmountData) / 1e6).toFixed(2)
+      }
+      return payAmountData.toString()
+    }
+    return null
+  }, [currency, ethPayAmount, payAmountData])
+
+  // Auto-populate Amount to Purchase when payAmount is calculated
+  useEffect(() => {
+    if (payAmount && debouncedNwisTokenAmount && !amount) {
+      setAmount(payAmount)
+      setDebouncedAmount(payAmount)
+    }
+  }, [payAmount, debouncedNwisTokenAmount, amount])
+
+  // Debug pay amount calculation
+  useEffect(() => {
+    if (payAmountError) {
+      console.error('Pay Amount Error:', {
+        currency,
+        tokenAddress: getTokenAddressForPayAmount(currency),
+        debouncedNwisTokenAmount,
+        error: payAmountError
+      })
+    }
+    if (payAmountData) {
+      console.log('Pay Amount Data:', {
+        currency,
+        rawData: payAmountData,
+        convertedAmount: payAmount
+      })
+    }
+  }, [payAmountError, payAmountData, currency, debouncedNwisTokenAmount, payAmount])
 
   // Debug simulation state
   useEffect(() => {
@@ -843,8 +959,27 @@ export default function TokenPurchaseNew({
     // Note: Contract doesn't enforce min/max limits, so we removed those validations
 
     // Execute the purchase transaction
-    if (writePurchaseContract && simulationData?.request) {
-      writePurchaseContract(simulationData.request)
+    if (writePurchaseContract && simulationData) {
+      if (currency === "ETH") {
+        writePurchaseContract({
+          address: PRESALE_CONTRACT_ADDRESS,
+          abi: PRESALE_ABI,
+          functionName: "buyTokenWithEthPrice",
+          args: [
+            BigInt(Math.floor(ethPrice * 1e6)), // ETH price in smallest units (6 decimals)
+            timestamp, // Current timestamp
+            "0x" // Empty signature for now (backend verification disabled)
+          ],
+          value: amountInSmallestUnits,
+        })
+      } else {
+        writePurchaseContract({
+          address: PRESALE_CONTRACT_ADDRESS,
+          abi: PRESALE_ABI,
+          functionName: "buyToken",
+          args: [getTokenAddress(currency), amountInSmallestUnits || BigInt(0)],
+        })
+      }
     } else {
       toast({
         title: "Transaction Not Ready",
@@ -860,6 +995,8 @@ export default function TokenPurchaseNew({
   const resetComponentState = () => {
     setAmount("")
     setDebouncedAmount("")
+    setNwisTokenAmount("")
+    setDebouncedNwisTokenAmount("")
     setTokenAllowance(BigInt(0))
     setIsApproving(false)
     setIsCheckingAllowance(false)
@@ -871,6 +1008,8 @@ export default function TokenPurchaseNew({
     // Reset amount when changing currency
     setAmount("")
     setDebouncedAmount("")
+    setNwisTokenAmount("")
+    setDebouncedNwisTokenAmount("")
     // Reset allowance state when changing currency
     setTokenAllowance(BigInt(0))
     
@@ -983,6 +1122,24 @@ export default function TokenPurchaseNew({
         </div>
       </div>
 
+      {/* Live ETH Price Display - Only when ETH is selected */}
+      {currency === "ETH" && (
+        <div className="mb-4 text-center">
+          <div className="text-sm text-gray-400">
+            {isEthPriceLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-3 h-3 border border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                <span>Loading ETH price...</span>
+              </div>
+            ) : ethPriceError ? (
+              <span className="text-red-400">Error loading ETH price</span>
+            ) : (
+              <span>Current ETH Price: <span className="text-white font-medium">${ethPrice?.toFixed(2)}</span></span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Amount Input */}
       <div className="mb-4">
         <label htmlFor="amount" className="block text-sm font-medium text-gray-300 mb-2">
@@ -1024,6 +1181,57 @@ export default function TokenPurchaseNew({
         {amount === debouncedAmount && amount && (
           <div className="text-xs text-green-400 mt-1">
             ✅ Ready to simulate transaction
+          </div>
+        )}
+      </div>
+
+      {/* Pay Amount Calculation Field */}
+      <div className="mb-4">
+        <label htmlFor="tokenAmount" className="block text-sm font-medium text-gray-300 mb-2">
+          NWIS Amount
+        </label>
+        <div className="relative">
+          <Input
+            id="tokenAmount"
+            type="text"
+            placeholder="0"
+            value={nwisTokenAmount}
+            onChange={(e) => {
+              const value = e.target.value
+              if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                setNwisTokenAmount(value)
+              }
+            }}
+            onKeyDown={handleNwisKeyDown}
+            onBlur={handleNwisBlur}
+            className="w-full bg-gray-800 border-gray-600 text-white placeholder-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            disabled={!contractData.saleActive || isPurchasing}
+          />
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-400">
+            NWIS
+          </div>
+        </div>
+        <div className="text-xs text-gray-500 mt-1">
+          <span>Enter NWIS token amount to calculate required payment</span>
+        </div>
+        {nwisTokenAmount && nwisTokenAmount !== debouncedNwisTokenAmount && (
+          <div className="text-xs text-blue-400 mt-1">
+            ⏳ Ready to calculate - press Enter or click outside
+          </div>
+        )}
+        {nwisTokenAmount && (isPayAmountLoading || (currency === "ETH" && isEthPriceLoading)) && (
+          <div className="text-xs text-blue-400 mt-1">
+            ⏳ Calculating required payment...
+          </div>
+        )}
+        {nwisTokenAmount && payAmount && !(currency === "ETH" ? isEthPriceLoading : isPayAmountLoading) && (
+          <div className="text-xs text-green-400 mt-1">
+            💰 Required Payment: {payAmount} {currency}
+          </div>
+        )}
+        {nwisTokenAmount && payAmountError && (
+          <div className="text-xs text-red-400 mt-1">
+            ❌ Error: {payAmountError.message || 'Failed to calculate payment amount'}
           </div>
         )}
       </div>
@@ -1105,25 +1313,6 @@ export default function TokenPurchaseNew({
           </div>
         )}
 
-        {/* Reset Button for Stuck States */}
-        {(isSimulating || isApprovePending || isPurchasePending || isConfirming) && (
-          <div className="p-3 bg-yellow-900/20 border border-yellow-700 rounded-lg">
-            <p className="text-sm text-yellow-400 mb-2">
-              <strong>Processing...</strong> If this takes too long, you can reset:
-            </p>
-            <Button
-              onClick={() => {
-                setAmount("")
-                setDebouncedAmount("")
-              }}
-              variant="outline"
-              size="sm"
-              className="bg-yellow-800 hover:bg-yellow-700 text-yellow-200 border-yellow-600"
-            >
-              Reset Form
-            </Button>
-          </div>
-        )}
 
         {/* Debug Info - Button State */}
         <div className="mt-4 p-3 bg-gray-800 rounded text-xs text-gray-400">
@@ -1267,6 +1456,7 @@ export default function TokenPurchaseNew({
           </Button>
         )}
       </div>
+      
     </>
   )
 }
