@@ -498,11 +498,11 @@ export default function TokenPurchaseNew({
 
   // Auto-populate Amount to Purchase when payAmount is calculated
   useEffect(() => {
-    if (payAmount && debouncedNwisTokenAmount && !amount) {
+    if (payAmount && debouncedNwisTokenAmount) {
       setAmount(payAmount)
       setDebouncedAmount(payAmount)
     }
-  }, [payAmount, debouncedNwisTokenAmount, amount])
+  }, [payAmount, debouncedNwisTokenAmount])
 
   // Debug pay amount calculation
   useEffect(() => {
@@ -542,6 +542,8 @@ export default function TokenPurchaseNew({
       })
     }
   }, [simulateError, currency, amountInSmallestUnits, isConnected, contractData.saleActive, ethPrice, timestamp])
+
+
 
   // Additional debug logging for simulation state
   useEffect(() => {
@@ -774,6 +776,7 @@ export default function TokenPurchaseNew({
   })
 
   const isPurchasing = isPurchasePending || isCalculating || isSimulating || isConfirming
+
 
   // Effects
 
