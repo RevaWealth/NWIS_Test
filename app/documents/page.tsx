@@ -38,9 +38,9 @@ export default function DocumentsPage() {
       subTabs: [
         {
           id: 'terms-of-service',
-          name: 'Terms of Service',
-          description: 'User agreement and terms',
-          file: '/Whitepaper.pdf' // Placeholder
+          name: 'Token Buyer Disclaimer',
+          description: 'Token purchase terms and disclaimer',
+          file: '/TBD.pdf'
         },
         {
           id: 'privacy-policy',
