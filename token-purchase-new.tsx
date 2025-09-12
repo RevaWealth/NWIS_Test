@@ -1457,20 +1457,6 @@ export default function TokenPurchaseNew({
 
 
 
-        {/* Error Display */}
-        {simulateError && (
-          <div className="p-3 bg-red-900/20 border border-red-700 rounded-lg">
-            <p className="text-sm text-red-400">
-              <strong>Simulation Error:</strong> {simulateError.message}
-            </p>
-            <details className="mt-2">
-              <summary className="text-xs text-red-300 cursor-pointer">Show Details</summary>
-              <pre className="text-xs text-red-300 mt-1 overflow-auto">
-                {simulateError.message}
-              </pre>
-            </details>
-          </div>
-        )}
 
         {/* Write Contract Error */}
         {(approveError || purchaseError) && (
@@ -1521,77 +1507,8 @@ export default function TokenPurchaseNew({
           <div>Local Is Approving: {localIsApproving ? "🔄 Yes" : "⏸️ No"}</div>
           <div>Hook Is Approve Pending: {isApprovePending ? "🔄 Yes" : "⏸️ No"}</div>
           
-          {/* Allowance Debug Info */}
-          <div className="mt-2 p-2 bg-blue-900/20 border border-blue-700 rounded">
-            <div><strong>Allowance Debug:</strong></div>
-            <div>Blockchain Allowance: {allowanceData?.toString() || "undefined"}</div>
-            <div>Cached Allowance: {tokenAllowance.toString()}</div>
-            <div>Allowance Loading: {isAllowanceLoading ? "🔄" : "⏸️"}</div>
-            <div>Allowance Error: {allowanceError?.message || "none"}</div>
-            <div>Is Approve Pending: {isApprovePending ? "🔄" : "⏸️"}</div>
-          </div>
           
-          {simulateError && (
-            <div className="mt-2 p-2 bg-red-900/20 border border-red-700 rounded">
-              <div><strong>Simulation Error:</strong></div>
-              <div className="text-red-400">{simulateError.message}</div>
-            </div>
-          )}
           
-          {/* Manual Allowance Check Button */}
-          {currency !== "ETH" && (
-            <div className="mt-2">
-              <Button
-                onClick={() => {
-                  console.log('Manual allowance check triggered')
-                  refetchAllowance()
-                }}
-                variant="outline"
-                size="sm"
-                className="bg-blue-800 hover:bg-blue-700 text-blue-200 border-blue-600"
-                disabled={isAllowanceLoading}
-              >
-                {isAllowanceLoading ? "Checking..." : "Refresh Allowance"}
-              </Button>
-              
-              {/* Force Allowance Refresh Button */}
-              <Button
-                onClick={() => {
-                  console.log('Force allowance refresh triggered')
-                  refetchAllowance()
-                  setTimeout(() => refetchAllowance(), 500)
-                  setTimeout(() => refetchAllowance(), 1000)
-                  toast({
-                    title: "Allowance Refresh",
-                    description: "Forced multiple allowance refreshes",
-                  })
-                }}
-                variant="outline"
-                size="sm"
-                className="ml-2 bg-green-800 hover:bg-green-700 text-green-200 border-green-600"
-              >
-                Force Refresh
-              </Button>
-              
-              {/* Force Simulation Button */}
-              <Button
-                onClick={() => {
-                  console.log('Force simulation triggered')
-                  // Force a re-evaluation of simulation hooks
-                  setForceSimulation(prev => prev + 1)
-                  toast({
-                    title: "Simulation Triggered",
-                    description: "Forcing simulation re-evaluation",
-                  })
-                }}
-                variant="outline"
-                size="sm"
-                className="ml-2 bg-purple-800 hover:bg-purple-700 text-purple-200 border-purple-600"
-              >
-                Force Simulation
-              </Button>
-            </div>
-          )}
         </div>
       </div>
       
