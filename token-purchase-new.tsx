@@ -1249,7 +1249,7 @@ export default function TokenPurchaseNew({
         </div>
         <div className="flex justify-between text-xs text-gray-500 mt-1">
           <span>
-            Current Tier: {isLoadingContractData ? "Loading..." : `Tier ${contractData.currentTier.index} ($${contractData.currentTier.price.toFixed(4)})`}
+            Current Tier Price: {isLoadingContractData ? "Loading..." : `$${contractData.currentTier.price.toFixed(4)}`}
           </span>
           <span>
             Current Tier Progress: {isLoadingContractData ? "Loading..." : (() => {
