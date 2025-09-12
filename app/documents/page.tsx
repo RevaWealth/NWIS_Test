@@ -44,9 +44,9 @@ export default function DocumentsPage() {
         },
         {
           id: 'privacy-policy',
-          name: 'Privacy Policy',
-          description: 'Data protection and privacy',
-          file: '/Whitepaper.pdf' // Placeholder
+          name: 'Token Buyer Purchase Agreement',
+          description: 'Token purchase terms and conditions',
+          file: '/TPA.pdf'
         }
       ]
     },
