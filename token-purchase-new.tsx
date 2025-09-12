@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useChainId, useReadContract } from "wagmi" 
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useChainId, useReadContract, useSwitchChain } from "wagmi" 
 import { ConnectKitButton, useModal } from "connectkit"
 import { Button } from "@/component/UI/button"
 import { Input } from "@/component/UI/input"
@@ -11,6 +11,7 @@ import { EthIcon, UsdtIcon, UsdcIcon } from "./component/crypto-icons"
 import { useTokenCalculation } from "./hooks/use-token-calculation"
 import { useEthPrice } from "./hooks/use-eth-price"
 import { useToast } from "@/hooks/use-toast"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/component/UI/dialog"
 
 interface TokenPurchaseProps {
   currentPrice?: string
@@ -120,12 +121,25 @@ export default function TokenPurchaseNew({
   const [mounted, setMounted] = useState(false)
   const { isConnected, address } = useAccount()
   const chainId = useChainId()
+  const { switchChain } = useSwitchChain()
   const [amount, setAmount] = useState("")
   const [currency, setCurrency] = useState<keyof typeof currencyConfig>("ETH")
   const [debouncedAmount, setDebouncedAmount] = useState("")
   const [timestamp, setTimestamp] = useState(BigInt(Math.floor(Date.now() / 1000))) // Current timestamp in seconds
   const [nwisTokenAmount, setNwisTokenAmount] = useState("") // For getPayAmount calculation
   const [debouncedNwisTokenAmount, setDebouncedNwisTokenAmount] = useState("") // Debounced NWIS amount
+  const [showNetworkDialog, setShowNetworkDialog] = useState(false)
+  const [showTransactionDialog, setShowTransactionDialog] = useState(false)
+  const [transactionDetails, setTransactionDetails] = useState<{
+    amountPaid: string
+    gasEstimate: string
+    nwisAmount: string
+    contractAddress: string
+    buyerAddress: string
+    currency: string
+  } | null>(null)
+  const [transactionHash, setTransactionHash] = useState<string | null>(null)
+  const [isTransactionConfirmed, setIsTransactionConfirmed] = useState(false)
   
   // Live ETH price from API
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
@@ -183,6 +197,16 @@ export default function TokenPurchaseNew({
 
   // Check if wallet is on correct network (Sepolia)
   const isCorrectNetwork = chainId === 11155111 // Sepolia chain ID
+  
+  // Show network dialog when connected but on wrong network
+  useEffect(() => {
+    if (isConnected && !isCorrectNetwork && mounted) {
+      setShowNetworkDialog(true)
+    } else if (isCorrectNetwork) {
+      setShowNetworkDialog(false)
+    }
+  }, [isConnected, isCorrectNetwork, mounted])
+
 
   // Fetch contract data - memoized to prevent hydration issues
   const fetchContractData = useCallback(async () => {
@@ -286,6 +310,10 @@ export default function TokenPurchaseNew({
     if (amount && amount !== debouncedAmount) {
       setDebouncedAmount(amount)
     }
+    // Reset approval completed flag when amount changes to prevent premature "waiting for confirmation" state
+    setApprovalCompleted(false)
+    // Always sync to NWIS Amount field
+    handleSyncFromAmount()
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -304,6 +332,8 @@ export default function TokenPurchaseNew({
     if (nwisTokenAmount && nwisTokenAmount !== debouncedNwisTokenAmount) {
       setDebouncedNwisTokenAmount(nwisTokenAmount)
     }
+    // Also sync to Amount to Purchase field
+    handleSyncFromNwis()
   }
 
   const handleNwisKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -328,6 +358,7 @@ export default function TokenPurchaseNew({
   })() : undefined
 
   // Get token addresses for ERC20 tokens
+  // Note: USDT and USDC are treated identically as ERC20 tokens with 6 decimals
   const getTokenAddress = (currency: keyof typeof currencyConfig) => {
     switch (currency) {
       case "USDT":
@@ -498,11 +529,81 @@ export default function TokenPurchaseNew({
 
   // Auto-populate Amount to Purchase when payAmount is calculated
   useEffect(() => {
+    if (payAmount && debouncedNwisTokenAmount && !amount) {
+      // Only auto-populate if Amount to Purchase field is empty
+      setAmount(payAmount)
+      setDebouncedAmount(payAmount)
+    }
+  }, [payAmount, debouncedNwisTokenAmount, amount])
+
+  // Sync functions for explicit user control
+  const handleSyncFromAmount = () => {
+    console.log('handleSyncFromAmount called:', { tokenAmount, debouncedAmount, amount, currency, ethPrice })
+    
+    if (amount) {
+      // Ensure debouncedAmount is set to the current amount for useTokenCalculation
+      if (amount !== debouncedAmount) {
+        setDebouncedAmount(amount)
+      }
+      
+      // Calculate NWIS tokens directly from the amount
+      let calculatedNwisTokens = 0
+      
+      if (currency === "ETH") {
+        // For ETH: (ETH amount * ETH price in USD) / NWIS token price ($0.001)
+        const ethAmountUSD = Number.parseFloat(amount) * (ethPrice || 4000)
+        calculatedNwisTokens = ethAmountUSD / 0.001
+      } else if (currency === "USDT" || currency === "USDC") {
+        // For stablecoins: (amount * 1) / NWIS token price ($0.001)
+        calculatedNwisTokens = Number.parseFloat(amount) / 0.001
+      }
+      
+      if (calculatedNwisTokens > 0) {
+        const formattedTokens = calculatedNwisTokens.toLocaleString()
+        setNwisTokenAmount(formattedTokens)
+        setDebouncedNwisTokenAmount(formattedTokens)
+        console.log('NWIS Amount field populated with:', formattedTokens)
+      }
+    } else {
+      console.log('No amount to sync from')
+    }
+  }
+
+  const handleSyncFromNwis = () => {
     if (payAmount && debouncedNwisTokenAmount) {
       setAmount(payAmount)
       setDebouncedAmount(payAmount)
     }
-  }, [payAmount, debouncedNwisTokenAmount])
+  }
+
+  // Handle closing transaction dialog and refreshing page
+  const handleCloseTransactionDialog = () => {
+    console.log('Close button clicked - starting dialog close process')
+    setShowTransactionDialog(false)
+    setTransactionHash(null)
+    setIsTransactionConfirmed(false)
+    setTransactionDetails(null)
+    // Reset component state
+    resetComponentState()
+    // Refresh the page
+    console.log('About to refresh page...')
+    window.location.reload()
+  }
+
+  // Handle network switch
+  const handleSwitchNetwork = async () => {
+    try {
+      await switchChain({ chainId: 11155111 }) // Switch to Sepolia
+      setShowNetworkDialog(false)
+    } catch (error) {
+      console.error('Failed to switch network:', error)
+      toast({
+        title: "Network Switch Failed",
+        description: "Please switch to Sepolia Testnet manually in your wallet.",
+        variant: "destructive",
+      })
+    }
+  }
 
   // Debug pay amount calculation
   useEffect(() => {
@@ -599,6 +700,16 @@ export default function TokenPurchaseNew({
     error: purchaseError,
   } = useWriteContract()
 
+  // Monitor transaction confirmation
+  useEffect(() => {
+    if (purchaseHash && !transactionHash) {
+      // Transaction submitted, set the hash
+      setTransactionHash(purchaseHash)
+      console.log('Transaction submitted:', purchaseHash)
+    }
+  }, [purchaseHash, transactionHash])
+
+
   // Track what type of transaction we're executing
   const [isExecutingApproval, setIsExecutingApproval] = useState(false)
   
@@ -691,6 +802,8 @@ export default function TokenPurchaseNew({
       allowanceSufficient: allowanceData >= amountInSmallestUnits,
       result
     })
+    
+    
     return result
   }, [currency, amountInSmallestUnits, allowanceData, tokenAllowance, isApprovePending, approvalCompleted])
 
@@ -776,6 +889,21 @@ export default function TokenPurchaseNew({
   })
 
   const isPurchasing = isPurchasePending || isCalculating || isSimulating || isConfirming
+
+  // Monitor transaction confirmation
+  useEffect(() => {
+    if (transactionHash && isConfirming) {
+      // Transaction is being confirmed
+      console.log('Transaction confirming:', transactionHash)
+    } else if (transactionHash && !isConfirming && !isPurchasePending) {
+      // Transaction confirmed
+      setIsTransactionConfirmed(true)
+      console.log('Transaction confirmed:', transactionHash)
+      
+      // Dialog will stay open until user manually closes it
+      console.log('Transaction confirmed - dialog will stay open until manually closed')
+    }
+  }, [transactionHash, isConfirming, isPurchasePending])
 
 
   // Effects
@@ -958,11 +1086,49 @@ export default function TokenPurchaseNew({
       })
       return
     }
-    
-    // Note: Contract doesn't enforce min/max limits, so we removed those validations
 
-    // Execute the purchase transaction
-    if (writePurchaseContract && simulationData) {
+    if (!simulationData) {
+      toast({
+        title: "Transaction Not Ready",
+        description: "Please wait for transaction simulation to complete.",
+        variant: "destructive",
+      })
+      return
+    }
+    
+    // Calculate transaction details for confirmation dialog
+    const gasEstimate = simulationData.request.gas ? (Number(simulationData.request.gas) * 20e9 / 1e18).toFixed(6) : "0.001"
+    const nwisAmount = debouncedNwisTokenAmount || nwisTokenAmount || "0"
+    
+    // Debug logging
+    console.log('Transaction Dialog Debug:', {
+      nwisTokenAmount,
+      debouncedNwisTokenAmount,
+      nwisAmount,
+      amount,
+      currency,
+      nwisAmountType: typeof nwisAmount,
+      nwisAmountValue: JSON.stringify(nwisAmount)
+    })
+    
+    // Set transaction details for the dialog
+    setTransactionDetails({
+      amountPaid: amount,
+      gasEstimate: gasEstimate,
+      nwisAmount: nwisAmount,
+      contractAddress: PRESALE_CONTRACT_ADDRESS,
+      buyerAddress: address || "",
+      currency: currency
+    })
+    
+    // Show confirmation dialog
+    setShowTransactionDialog(true)
+  }
+
+  const handleConfirmTransaction = async () => {
+    if (!simulationData) return
+
+    try {
       if (currency === "ETH") {
         writePurchaseContract({
           address: PRESALE_CONTRACT_ADDRESS,
@@ -983,12 +1149,18 @@ export default function TokenPurchaseNew({
           args: [getTokenAddress(currency), amountInSmallestUnits || BigInt(0)],
         })
       }
-    } else {
+      
+      // The hash will be available in purchaseHash from the hook
+      // We'll set it in the useEffect that monitors purchaseHash
+    } catch (error) {
+      console.error("Purchase error:", error)
       toast({
-        title: "Transaction Not Ready",
-        description: "Please wait for transaction simulation to complete.",
+        title: "Purchase Failed",
+        description: "Transaction failed. Please try again.",
         variant: "destructive",
       })
+      // Close dialog on error
+      setShowTransactionDialog(false)
     }
   }
 
@@ -1444,7 +1616,7 @@ export default function TokenPurchaseNew({
             style={{ backgroundColor: '#a57e24' }}
             title={`Debug: amount=${!!amount}, saleActive=${contractData.saleActive}, isPurchasing=${isPurchasing}, needsApproval=${needsApproval}, simulationData=${!!simulationData}, isCorrectNetwork=${isCorrectNetwork}`}
           >
-            {(isPurchasing || localIsApproving) ? (
+            {(localIsApproving || (isPurchasing && !needsApproval)) ? (
               <div className="flex items-center gap-2">
                 <LoadingSpinner size="sm" />
                 {localIsApproving ? "Approving..." : (isPurchasePending ? "Sending..." : isConfirming ? "Confirming..." : "Processing...")}
@@ -1454,11 +1626,199 @@ export default function TokenPurchaseNew({
             ) : needsApproval ? (
               `Approve ${currency}`
             ) : (
-              "Buy NWIS Tokens"
+              "Review Transaction"
             )}
           </Button>
         )}
       </div>
+      
+      {/* Network Switch Dialog */}
+      <Dialog open={showNetworkDialog} onOpenChange={setShowNetworkDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">Wrong Network</DialogTitle>
+            <DialogDescription className="text-gray-300">
+              Your wallet is connected to the wrong network. Please switch to Sepolia Testnet to continue with the token purchase.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-4 bg-gray-800 rounded-lg border border-gray-600">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <span className="text-sm text-gray-300">Current Network: {getNetworkName(chainId)}</span>
+              </div>
+              <div className="flex items-center space-x-3 mt-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span className="text-sm text-gray-300">Required Network: Sepolia Testnet</span>
+              </div>
+            </div>
+            <div className="flex space-x-3">
+              <Button
+                onClick={handleSwitchNetwork}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Switch to Sepolia
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowNetworkDialog(false)}
+                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Transaction Confirmation Dialog */}
+      <Dialog open={showTransactionDialog} onOpenChange={(open) => {
+        if (!open) {
+          handleCloseTransactionDialog()
+        }
+      }}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">
+              {isTransactionConfirmed ? "Transaction Confirmed!" : transactionHash ? "Processing Transaction..." : "Confirm Transaction"}
+            </DialogTitle>
+            <DialogDescription className="text-gray-300">
+              {isTransactionConfirmed 
+                ? "Your transaction has been successfully confirmed on the blockchain."
+                : transactionHash 
+                  ? "Your transaction is being processed. Please wait for confirmation."
+                  : "Please review the transaction details before confirming your purchase."
+              }
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {transactionDetails && (
+              <>
+                {/* Transaction Summary */}
+                <div className="p-4 bg-gray-800 rounded-lg border border-gray-600">
+                  <h4 className="text-lg font-semibold text-white mb-3">Transaction Summary</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Amount to Pay:</span>
+                      <span className="text-white font-medium">{transactionDetails.amountPaid} {transactionDetails.currency}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">NWIS Tokens to Receive:</span>
+                      <span className="text-white font-medium">
+                        {(() => {
+                          const num = Number(transactionDetails.nwisAmount.replace(/,/g, ''))
+                          return isNaN(num) ? "0" : num.toLocaleString()
+                        })()} NWIS
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Estimated Gas Fee:</span>
+                      <span className="text-white font-medium">~{transactionDetails.gasEstimate} ETH</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contract Details */}
+                <div className="p-4 bg-gray-800 rounded-lg border border-gray-600">
+                  <h4 className="text-lg font-semibold text-white mb-3">Contract Details</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <span className="text-gray-300 text-sm">Contract Address:</span>
+                      <div className="text-white font-mono text-sm break-all mt-1">
+                        {transactionDetails.contractAddress}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-gray-300 text-sm">Your Address:</span>
+                      <div className="text-white font-mono text-sm break-all mt-1">
+                        {transactionDetails.buyerAddress}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Warning - only show before confirmation */}
+                {!transactionHash && (
+                  <div className="p-3 bg-yellow-900/20 border border-yellow-600 rounded-lg">
+                    <div className="flex items-start space-x-2">
+                      <div className="text-yellow-400 text-sm">⚠️</div>
+                      <div className="text-yellow-200 text-sm">
+                        <strong>Important:</strong> This transaction cannot be undone. Please ensure all details are correct before confirming.
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Transaction Hash - show after submission */}
+                {transactionHash && (
+                  <div className="p-4 bg-blue-900/20 border border-blue-600 rounded-lg">
+                    <h4 className="text-lg font-semibold text-white mb-3">Transaction Details</h4>
+                    <div className="space-y-2">
+                      <div>
+                        <span className="text-gray-300 text-sm">Transaction Hash:</span>
+                        <div className="text-white font-mono text-sm break-all mt-1">
+                          {transactionHash}
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <a
+                          href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                          View on Etherscan
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+            
+            {/* Action Buttons */}
+            <div className="flex space-x-3">
+              {!isTransactionConfirmed ? (
+                <>
+                  <Button
+                    onClick={handleConfirmTransaction}
+                    className="flex-1 text-white"
+                    style={{ backgroundColor: '#a57e24' }}
+                    disabled={isPurchasing || !!transactionHash}
+                  >
+                    {isPurchasing ? (
+                      <div className="flex items-center gap-2">
+                        <LoadingSpinner size="sm" />
+                        {transactionHash ? "Confirming..." : "Processing..."}
+                      </div>
+                    ) : (
+                      "Buy NWIS"
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowTransactionDialog(false)}
+                    className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+                    disabled={isPurchasing || !!transactionHash}
+                  >
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  onClick={handleCloseTransactionDialog}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Close
+                </Button>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
       
     </>
   )
