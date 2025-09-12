@@ -1250,7 +1250,15 @@ export default function TokenPurchaseNew({
             Current Tier: {isLoadingContractData ? "Loading..." : `Tier ${contractData.currentTier.index} ($${contractData.currentTier.price.toFixed(4)})`}
           </span>
           <span>
-            Remaining Tier Tokens: {isLoadingContractData ? "Loading..." : `${(contractData.currentTier.endAmount - contractData.totalTokensSold).toLocaleString()} NWIS`}
+            Current Tier Progress: {isLoadingContractData ? "Loading..." : (() => {
+              const currentTierStartAmount = parseFloat(contractData.currentTier.startAmount.toString());
+              const currentTierEndAmount = parseFloat(contractData.currentTier.endAmount.toString());
+              const currentTierRange = currentTierEndAmount - currentTierStartAmount;
+              const tokensSoldInCurrentTier = Math.max(0, parseFloat(contractData.totalTokensSold.toString()) - currentTierStartAmount);
+              const maxTokensInCurrentTier = Math.min(tokensSoldInCurrentTier, currentTierRange);
+              const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100).toFixed(2) : "0.00";
+              return `${tierProgress}%`;
+            })()}
           </span>
         </div>
 
