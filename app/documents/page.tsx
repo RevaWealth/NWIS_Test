@@ -110,35 +110,6 @@ export default function DocumentsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-300px)] min-h-[600px]">
           
-          {/* Document Content Area */}
-          <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden">
-            {isLoading && (
-              <div className="flex items-center justify-center h-full bg-gray-50">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
-                  <p className="text-base text-gray-600">Loading document...</p>
-                </div>
-              </div>
-            )}
-            
-            <div className="pdf-container relative w-full h-full overflow-hidden">
-              <iframe
-                src={`${getActiveDocument().file}#view=FitH&scrollbar=0&toolbar=0&navpanes=0&zoom=page-fit`}
-                className="h-full w-full"
-                onLoad={handleLoad}
-                title={getActiveDocument().name}
-                style={{ 
-                  border: 'none',
-                  transform: `scale(${pdfScale})`,
-                  transformOrigin: 'center top',
-                  width: `${100 / pdfScale}%`,
-                  height: `${100 / pdfScale}%`,
-                  maxWidth: '100%'
-                }}
-              />
-            </div>
-          </div>
-
           {/* Vertical Tab Bar */}
           <div className="w-full lg:w-80 bg-white rounded-lg shadow-lg p-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Available Documents</h2>
@@ -189,6 +160,35 @@ export default function DocumentsPage() {
                 <p><span className="font-medium">Format:</span> Interactive Viewer</p>
                 <p><span className="font-medium">Access:</span> Public</p>
               </div>
+            </div>
+          </div>
+
+          {/* Document Content Area */}
+          <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden">
+            {isLoading && (
+              <div className="flex items-center justify-center h-full bg-gray-50">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
+                  <p className="text-base text-gray-600">Loading document...</p>
+                </div>
+              </div>
+            )}
+            
+            <div className="pdf-container relative w-full h-full overflow-hidden">
+              <iframe
+                src={`${getActiveDocument().file}#view=FitH&scrollbar=0&toolbar=0&navpanes=0&zoom=page-fit`}
+                className="h-full w-full"
+                onLoad={handleLoad}
+                title={getActiveDocument().name}
+                style={{ 
+                  border: 'none',
+                  transform: `scale(${pdfScale})`,
+                  transformOrigin: 'center top',
+                  width: `${100 / pdfScale}%`,
+                  height: `${100 / pdfScale}%`,
+                  maxWidth: '100%'
+                }}
+              />
             </div>
           </div>
         </div>
