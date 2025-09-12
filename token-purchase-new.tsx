@@ -368,12 +368,19 @@ export default function TokenPurchaseNew({
 
   // Convert amount to smallest units based on currency
   const amountInSmallestUnits = amount ? (() => {
-    if (currency === "ETH") {
-      return BigInt(Number.parseFloat(amount) * 1e18) // ETH has 18 decimals
-    } else if (currency === "USDT" || currency === "USDC") {
-      return BigInt(Number.parseFloat(amount) * 1e6) // USDT/USDC have 6 decimals
+    const parsedAmount = Number.parseFloat(amount)
+    
+    // Check if the parsed amount is a valid number
+    if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) {
+      return undefined
     }
-    return BigInt(Number.parseFloat(amount) * 1e18) // Default fallback
+    
+    if (currency === "ETH") {
+      return BigInt(Math.floor(parsedAmount * 1e18)) // ETH has 18 decimals
+    } else if (currency === "USDT" || currency === "USDC") {
+      return BigInt(Math.floor(parsedAmount * 1e6)) // USDT/USDC have 6 decimals
+    }
+    return BigInt(Math.floor(parsedAmount * 1e18)) // Default fallback
   })() : undefined
 
   // Get token addresses for ERC20 tokens
@@ -512,7 +519,13 @@ export default function TokenPurchaseNew({
     address: PRESALE_CONTRACT_ADDRESS,
     abi: PRESALE_ABI,
     functionName: "getPayAmount",
-    args: debouncedNwisTokenAmount && currency !== "ETH" ? [getTokenAddressForPayAmount(currency), BigInt(Number.parseFloat(debouncedNwisTokenAmount) * 1e18)] : undefined,
+    args: debouncedNwisTokenAmount && currency !== "ETH" ? (() => {
+      const parsedAmount = Number.parseFloat(debouncedNwisTokenAmount)
+      if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) {
+        return undefined
+      }
+      return [getTokenAddressForPayAmount(currency) as `0x${string}`, BigInt(Math.floor(parsedAmount * 1e18))]
+    })() : undefined,
     query: {
       enabled: Boolean(debouncedNwisTokenAmount && contractData.saleActive && currency !== "ETH"),
     }
@@ -524,7 +537,11 @@ export default function TokenPurchaseNew({
       // Calculate ETH amount needed based on current tier price
       // This mimics the contract's calculation: (amount * currentPrice) / (10 ** saleTokenDec)
       // For ETH, we need to convert NWIS tokens to USD value, then to ETH
-      const nwisAmountInWei = BigInt(Number.parseFloat(debouncedNwisTokenAmount) * 1e18)
+      const parsedNwisAmount = Number.parseFloat(debouncedNwisTokenAmount)
+      if (isNaN(parsedNwisAmount) || !isFinite(parsedNwisAmount) || parsedNwisAmount <= 0) {
+        return null
+      }
+      const nwisAmountInWei = BigInt(Math.floor(parsedNwisAmount * 1e18))
       const currentTierPrice = 0.001 // $0.001 per token (Tier 1 price)
       const usdValue = Number(nwisAmountInWei) / 1e18 * currentTierPrice
       const ethAmount = usdValue / ethPrice
@@ -570,11 +587,17 @@ export default function TokenPurchaseNew({
       
       if (currency === "ETH") {
         // For ETH: (ETH amount * ETH price in USD) / NWIS token price ($0.001)
-        const ethAmountUSD = Number.parseFloat(amount) * (ethPrice || 4000)
-        calculatedNwisTokens = ethAmountUSD / 0.001
+        const parsedAmount = Number.parseFloat(amount)
+        if (!isNaN(parsedAmount) && isFinite(parsedAmount) && parsedAmount > 0) {
+          const ethAmountUSD = parsedAmount * (ethPrice || 4000)
+          calculatedNwisTokens = ethAmountUSD / 0.001
+        }
       } else if (currency === "USDT" || currency === "USDC") {
         // For stablecoins: (amount * 1) / NWIS token price ($0.001)
-        calculatedNwisTokens = Number.parseFloat(amount) / 0.001
+        const parsedAmount = Number.parseFloat(amount)
+        if (!isNaN(parsedAmount) && isFinite(parsedAmount) && parsedAmount > 0) {
+          calculatedNwisTokens = parsedAmount / 0.001
+        }
       }
       
       if (calculatedNwisTokens > 0) {
@@ -1088,7 +1111,8 @@ export default function TokenPurchaseNew({
       return
     }
     
-    if (!amount || Number.parseFloat(amount) <= 0) {
+    const parsedAmount = Number.parseFloat(amount || "0")
+    if (!amount || isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) {
       toast({
         title: "Invalid Amount",
         description: "Please enter a valid amount to purchase.",
@@ -1509,33 +1533,6 @@ export default function TokenPurchaseNew({
         )}
 
 
-        {/* Debug Info - Button State */}
-        <div className="mt-4 p-3 bg-gray-800 rounded text-xs text-gray-400">
-          <div><strong>Button State Debug:</strong></div>
-          <div>Amount: {amount ? "✅" : "❌"} ({amount || "empty"})</div>
-          <div>Sale Active: {contractData.saleActive ? "✅" : "❌"}</div>
-          <div>Is Purchasing: {isPurchasing ? "❌" : "✅"}</div>
-          <div>Needs Approval: {needsApproval ? "🔐" : "✅"}</div>
-          <div>Approval Completed: {approvalCompleted ? "✅" : "❌"}</div>
-          <div>Simulation Data: {simulationData ? "✅" : "❌"}</div>
-          <div>Correct Network: {isCorrectNetwork ? "✅" : "❌"}</div>
-          <div>Currency: {currency}</div>
-          <div>Debounced Amount: {debouncedAmount}</div>
-          <div>Should Simulate: {"✅"}</div>
-          <div>Amount In Smallest Units: {amountInSmallestUnits?.toString() || "undefined"}</div>
-          <div>Is Connected: {isConnected ? "✅" : "❌"}</div>
-          <div>Is Simulating: {isSimulating ? "🔄" : "⏸️"}</div>
-          <div>Force Simulation Counter: {forceSimulation}</div>
-          <div>Simulation Trigger Status: {forceSimulation > 0 ? "🔄 Active" : "⏸️ Inactive"}</div>
-          <div>Auto-Trigger Status: {isApproveSuccess && approveHash && !hasAutoTriggered && currency !== "ETH" ? "🎯 Ready" : "⏸️ Waiting"}</div>
-          <div>Approval Transaction Success: {isApproveSuccess ? "✅ Yes" : "❌ No"}</div>
-          <div>Has Auto-Triggered: {hasAutoTriggered ? "✅ Yes" : "❌ No"}</div>
-          <div>Local Is Approving: {localIsApproving ? "🔄 Yes" : "⏸️ No"}</div>
-          <div>Hook Is Approve Pending: {isApprovePending ? "🔄 Yes" : "⏸️ No"}</div>
-          
-          
-          
-        </div>
       </div>
       
       {/* Purchase Button - Outside the frame */}
