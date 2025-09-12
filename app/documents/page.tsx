@@ -11,6 +11,7 @@ export default function DocumentsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [pdfScale, setPdfScale] = useState(1)
   const [activeTab, setActiveTab] = useState('whitepaper')
+  const [activeSubTab, setActiveSubTab] = useState<string | null>(null)
 
   const documentTabs = [
     {
@@ -18,7 +19,7 @@ export default function DocumentsPage() {
       name: 'Whitepaper',
       icon: FileText,
       description: 'Complete project overview',
-      file: '/Whitepaper.pdf'
+      file: '/WPV4.pdf'
     },
     {
       id: 'tokenomics',
@@ -32,7 +33,22 @@ export default function DocumentsPage() {
       name: 'Legal Documents',
       icon: Scale,
       description: 'Terms & legal compliance',
-      file: '/Whitepaper.pdf' // Placeholder - will be updated with actual legal docs
+      file: '/Whitepaper.pdf', // Placeholder - will be updated with actual legal docs
+      hasSubTabs: true,
+      subTabs: [
+        {
+          id: 'terms-of-service',
+          name: 'Terms of Service',
+          description: 'User agreement and terms',
+          file: '/Whitepaper.pdf' // Placeholder
+        },
+        {
+          id: 'privacy-policy',
+          name: 'Privacy Policy',
+          description: 'Data protection and privacy',
+          file: '/Whitepaper.pdf' // Placeholder
+        }
+      ]
     },
     {
       id: 'security',
@@ -71,10 +87,36 @@ export default function DocumentsPage() {
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId)
+    setActiveSubTab(null) // Reset subtab when changing main tab
+    setIsLoading(true)
+  }
+
+  const handleSubTabChange = (subTabId: string) => {
+    setActiveSubTab(subTabId)
     setIsLoading(true)
   }
 
   const getActiveDocument = () => {
+    const mainTab = documentTabs.find(tab => tab.id === activeTab) || documentTabs[0]
+    
+    // If this tab has subtabs and a subtab is active, return the subtab
+    if (mainTab.hasSubTabs && activeSubTab && mainTab.subTabs) {
+      const subTab = mainTab.subTabs.find(sub => sub.id === activeSubTab)
+      if (subTab) {
+        return {
+          id: subTab.id,
+          name: subTab.name,
+          description: subTab.description,
+          file: subTab.file
+        }
+      }
+    }
+    
+    // Otherwise return the main tab
+    return mainTab
+  }
+
+  const getActiveMainTab = () => {
     return documentTabs.find(tab => tab.id === activeTab) || documentTabs[0]
   }
 
@@ -117,37 +159,77 @@ export default function DocumentsPage() {
             <div className="space-y-2">
               {documentTabs.map((tab) => {
                 const IconComponent = tab.icon
+                const isActive = activeTab === tab.id
+                const hasSubTabs = tab.hasSubTabs && tab.subTabs
+                
                 return (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`w-full p-3 rounded-lg text-left transition-all duration-200 ${
-                      activeTab === tab.id
-                        ? 'bg-sky-950 text-white shadow-md'
-                        : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <IconComponent className={`h-5 w-5 ${
-                        activeTab === tab.id ? 'text-white' : 'text-gray-500'
-                      }`} />
-                      <div className="flex-1 min-w-0">
-                        <p className={`font-medium text-sm ${
-                          activeTab === tab.id ? 'text-white' : 'text-gray-900'
-                        }`}>
-                          {tab.name}
-                        </p>
-                        <p className={`text-xs mt-1 ${
-                          activeTab === tab.id ? 'text-sky-200' : 'text-gray-500'
-                        }`}>
-                          {tab.description}
-                        </p>
+                  <div key={tab.id}>
+                    {/* Main Tab Button */}
+                    <button
+                      onClick={() => handleTabChange(tab.id)}
+                      className={`w-full p-3 rounded-lg text-left transition-all duration-200 ${
+                        isActive
+                          ? 'bg-sky-950 text-white shadow-md'
+                          : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <IconComponent className={`h-5 w-5 ${
+                          isActive ? 'text-white' : 'text-gray-500'
+                        }`} />
+                        <div className="flex-1 min-w-0">
+                          <p className={`font-medium text-sm ${
+                            isActive ? 'text-white' : 'text-gray-900'
+                          }`}>
+                            {tab.name}
+                          </p>
+                          <p className={`text-xs mt-1 ${
+                            isActive ? 'text-sky-200' : 'text-gray-500'
+                          }`}>
+                            {tab.description}
+                          </p>
+                        </div>
+                        {isActive && (
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        )}
                       </div>
-                      {activeTab === tab.id && (
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                      )}
-                    </div>
-                  </button>
+                    </button>
+
+                    {/* SubTabs for Legal Documents */}
+                    {isActive && hasSubTabs && (
+                      <div className="ml-6 mt-2 space-y-1 border-l-2 border-sky-200 pl-4">
+                        {tab.subTabs!.map((subTab) => (
+                          <button
+                            key={subTab.id}
+                            onClick={() => handleSubTabChange(subTab.id)}
+                            className={`w-full p-2 rounded-md text-left transition-all duration-200 ${
+                              activeSubTab === subTab.id
+                                ? 'bg-sky-800 text-white shadow-sm'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <div className={`w-1 h-1 rounded-full ${
+                                activeSubTab === subTab.id ? 'bg-white' : 'bg-gray-400'
+                              }`}></div>
+                              <div className="flex-1 min-w-0">
+                                <p className={`font-medium text-xs ${
+                                  activeSubTab === subTab.id ? 'text-white' : 'text-gray-900'
+                                }`}>
+                                  {subTab.name}
+                                </p>
+                                <p className={`text-xs mt-1 ${
+                                  activeSubTab === subTab.id ? 'text-sky-200' : 'text-gray-500'
+                                }`}>
+                                  {subTab.description}
+                                </p>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )
               })}
             </div>
