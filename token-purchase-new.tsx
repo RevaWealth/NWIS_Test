@@ -1257,57 +1257,40 @@ export default function TokenPurchaseNew({
       {/* Sale Progress */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-400">Sale Progress</span>
+          <span className="text-sm font-bold text-white">Sale Progress</span>
           <div className="flex items-center gap-2">
             <span className="text-sm text-white font-medium">
-              {isLoadingContractData ? (
-                <div className="flex items-center gap-1">
-                  <LoadingSpinner size="sm" />
-                  Loading...
-                </div>
-              ) : (
-                `${contractData.progressPercentage || "0"}%`
-              )}
+              Current Tier Progress: {isLoadingContractData ? "Loading..." : (() => {
+                const currentTierStartAmount = parseFloat(contractData.currentTier.startAmount.toString());
+                const currentTierEndAmount = parseFloat(contractData.currentTier.endAmount.toString());
+                const currentTierRange = currentTierEndAmount - currentTierStartAmount;
+                const tokensSoldInCurrentTier = Math.max(0, parseFloat(contractData.totalTokensSold.toString()) - currentTierStartAmount);
+                const maxTokensInCurrentTier = Math.min(tokensSoldInCurrentTier, currentTierRange);
+                const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100).toFixed(2) : "0.00";
+                return `${tierProgress}%`;
+              })()}
             </span>
-            <Button
-              onClick={fetchContractData}
-              disabled={isLoadingContractData}
-              variant="outline"
-              size="sm"
-              className="h-6 w-6 p-0 bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-600"
-            >
-              <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </Button>
           </div>
         </div>
         <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
           <div 
             className="h-full bg-gradient-to-r from-sky-500 to-blue-600 rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${contractData.progressPercentage || "0"}%` }}
-          ></div>
-        </div>
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
-          <span>
-            Current Tier Price: {isLoadingContractData ? "Loading..." : `$${contractData.currentTier.price.toFixed(4)}`}
-          </span>
-          <span>
-            Current Tier Progress: {isLoadingContractData ? "Loading..." : (() => {
+            style={{ width: `${isLoadingContractData ? "0" : (() => {
               const currentTierStartAmount = parseFloat(contractData.currentTier.startAmount.toString());
               const currentTierEndAmount = parseFloat(contractData.currentTier.endAmount.toString());
               const currentTierRange = currentTierEndAmount - currentTierStartAmount;
               const tokensSoldInCurrentTier = Math.max(0, parseFloat(contractData.totalTokensSold.toString()) - currentTierStartAmount);
               const maxTokensInCurrentTier = Math.min(tokensSoldInCurrentTier, currentTierRange);
-              const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100).toFixed(2) : "0.00";
-              return `${tierProgress}%`;
-            })()}
-          </span>
+              const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100) : 0;
+              return tierProgress.toFixed(2);
+            })()}%` }}
+          ></div>
         </div>
-        
-        {/* Next Tier Price */}
-        <div className="text-center mt-2">
-          <span className="text-sm font-bold text-white">
+        <div className="flex justify-between text-xs mt-1">
+          <span className="font-bold text-white">
+            Current Tier Price: {isLoadingContractData ? "Loading..." : `$${contractData.currentTier.price.toFixed(4)}`}
+          </span>
+          <span className="font-bold text-white">
             Next Tier Price: {isLoadingContractData ? "Loading..." : `$${contractData.nextTier.price.toFixed(4)}`}
           </span>
         </div>

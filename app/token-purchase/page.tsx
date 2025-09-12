@@ -55,7 +55,7 @@ export default function TokenPurchasePage() {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-sky-950 to-sky-900 py-16 px-4">
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="max-w-lg mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Buy NWIS Tokens</h1>
           <p className="text-xl text-[#a57e24] font-medium">Start on your path to financial freedom</p>
         </div>
@@ -63,7 +63,7 @@ export default function TokenPurchasePage() {
 
       {/* Main Content - Centered Token Sale Box */}
       <main className="flex-1 flex items-center justify-center py-16 px-4">
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-lg">
           {/* Token Sale Box */}
           <div className="bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
             {/* Header */}
