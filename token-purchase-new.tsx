@@ -146,19 +146,21 @@ export default function TokenPurchaseNew({
   
   // Update timestamp whenever ETH price is fetched to ensure it's current
   useEffect(() => {
-    if (ethPrice && !isEthPriceLoading) {
+    if (mounted && ethPrice && !isEthPriceLoading) {
       setTimestamp(BigInt(Math.floor(Date.now() / 1000)))
     }
-  }, [ethPrice, isEthPriceLoading])
+  }, [mounted, ethPrice, isEthPriceLoading])
 
   // Debounce NWIS amount input
   useEffect(() => {
+    if (!mounted) return
+    
     const timer = setTimeout(() => {
       setDebouncedNwisTokenAmount(nwisTokenAmount)
     }, 3000) // 3 second delay
 
     return () => clearTimeout(timer)
-  }, [nwisTokenAmount])
+  }, [mounted, nwisTokenAmount])
   
   const [contractData, setContractData] = useState({
     totalTokensForSale: 0,
@@ -529,12 +531,12 @@ export default function TokenPurchaseNew({
 
   // Auto-populate Amount to Purchase when payAmount is calculated
   useEffect(() => {
-    if (payAmount && debouncedNwisTokenAmount && !amount) {
+    if (mounted && payAmount && debouncedNwisTokenAmount && !amount) {
       // Only auto-populate if Amount to Purchase field is empty
       setAmount(payAmount)
       setDebouncedAmount(payAmount)
     }
-  }, [payAmount, debouncedNwisTokenAmount, amount])
+  }, [mounted, payAmount, debouncedNwisTokenAmount, amount])
 
   // Sync functions for explicit user control
   const handleSyncFromAmount = () => {
@@ -1044,14 +1046,14 @@ export default function TokenPurchaseNew({
   // Now we only auto-trigger when an actual approval transaction is successful
 
   useEffect(() => {
-    if (simulateError) {
+    if (mounted && simulateError) {
       toast({
         title: "Transaction Simulation Failed",
         description: simulateError?.message || "Could not estimate gas for this transaction.",
         variant: "destructive",
       })
     }
-  }, [simulateError, toast])
+  }, [mounted, simulateError, toast])
 
   // Early returns
   if (!mounted) {
