@@ -17,7 +17,7 @@ export default function Navbar() {
   const navItems = [
     { name: "Dashboard", href: "/token-purchase" },
     { name: "About", href: "#about", hasDropdown: true },
-    { name: "Documents", href: "/whitepaper" },
+    { name: "Documents", href: "/documents" },
     { name: "Tokenomics", href: "/tokenomics" },
     { name: "Roadmap", href: "/#roadmap" },
     { name: "FAQ", href: "/#faq" },
