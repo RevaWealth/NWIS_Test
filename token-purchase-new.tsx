@@ -172,6 +172,12 @@ export default function TokenPurchaseNew({
       startAmount: 0,
       endAmount: 0,
       price: 0
+    },
+    nextTier: {
+      index: 0,
+      startAmount: 0,
+      endAmount: 0,
+      price: 0
     }
   })
   const [isLoadingContractData, setIsLoadingContractData] = useState(false)
@@ -263,6 +269,17 @@ export default function TokenPurchaseNew({
             startAmount: tierStartTokens,
             endAmount: tierEndTokens,
             price: currentTier.price
+          },
+          nextTier: data.nextTier ? {
+            index: parseInt(data.nextTier.index),
+            startAmount: parseFloat(data.nextTier.startAmount),
+            endAmount: parseFloat(data.nextTier.endAmount),
+            price: data.nextTier.price
+          } : {
+            index: 0,
+            startAmount: 0,
+            endAmount: 0,
+            price: 0
           }
         })
       }
@@ -1261,6 +1278,13 @@ export default function TokenPurchaseNew({
               const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100).toFixed(2) : "0.00";
               return `${tierProgress}%`;
             })()}
+          </span>
+        </div>
+        
+        {/* Next Tier Price */}
+        <div className="text-center mt-2">
+          <span className="text-sm font-bold text-white">
+            Next Tier Price: {isLoadingContractData ? "Loading..." : `$${contractData.nextTier.price.toFixed(4)}`}
           </span>
         </div>
 
