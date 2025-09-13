@@ -7,27 +7,12 @@ import Navbar from '../../navbar'
 
 export default function TokenomicsPage() {
   const tokenomics = [
-    { label: "Total Supply", value: "50,000,000,000 NWIS", percentage: 100, color: "from-purple-600 to-pink-600" },
+    { label: "Total Supply", value: "50,000,000,000 NWIS", color: "from-purple-600 to-pink-600" },
     { label: "Presale", value: "30,000,000,000 NWIS", percentage: 60, color: "from-blue-500 to-cyan-500" },
-    { label: "Liquidity", value: "7,500,000,000 NWIS", percentage: 15, color: "from-green-500 to-emerald-500" },
-    { label: "Marketing", value: "5,000,000,000 NWIS", percentage: 10, color: "from-orange-500 to-red-500" },
-    { label: "Team", value: "7,500,000,000 NWIS", percentage: 15, color: "from-yellow-500 to-amber-500" },
+    { label: "Treasury", value: "10,000,000,000 NWIS", percentage: 20, color: "from-green-500 to-emerald-500" },
+    { label: "Team & Advisors", value: "7,500,000,000 NWIS", percentage: 15, color: "from-yellow-500 to-amber-500" },
+    { label: "Marketing", value: "2,500,000,000 NWIS", percentage: 5, color: "from-orange-500 to-red-500" }, 
   ]
-
-  // Calculate cumulative percentages for the pie chart
-  const segments = tokenomics.slice(1).map((item, index) => {
-    const previousTotal = tokenomics.slice(1, index + 1).reduce((sum, prev) => sum + prev.percentage, 0)
-    const startOffset =
-      index === 0
-        ? 0
-        : tokenomics.slice(1, index + 1).reduce((sum, prev, i) => sum + tokenomics.slice(1)[i].percentage, 0) -
-          item.percentage
-    return {
-      ...item,
-      startOffset: (startOffset / 100) * 251.2, // 251.2 is circumference of circle with radius 40
-      dashArray: `${(item.percentage / 100) * 251.2} 251.2`,
-    }
-  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -111,24 +96,11 @@ export default function TokenomicsPage() {
                   fill="none"
                   stroke="url(#liquidity-gradient)"
                   strokeWidth="8"
-                  strokeDasharray="37.68 251.2"
+                  strokeDasharray="47.68 251.2"
                   strokeDashoffset="-150.72"
                   strokeLinecap="round"
                 />
-                
-                {/* Marketing - 10% */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  fill="none"
-                  stroke="url(#marketing-gradient)"
-                  strokeWidth="8"
-                  strokeDasharray="25.12 251.2"
-                  strokeDashoffset="-188.4"
-                  strokeLinecap="round"
-                />
-                
+                            
                 {/* Team - 15% */}
                 <circle
                   cx="50"
@@ -138,7 +110,20 @@ export default function TokenomicsPage() {
                   stroke="url(#team-gradient)"
                   strokeWidth="8"
                   strokeDasharray="37.68 251.2"
-                  strokeDashoffset="-213.52"
+                  strokeDashoffset="-198.52"
+                  strokeLinecap="round"
+                />
+
+                {/* Marketing - 10% */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="40"
+                  fill="none"
+                  stroke="url(#marketing-gradient)"
+                  strokeWidth="8"
+                  strokeDasharray="12.12 251.2"
+                  strokeDashoffset="-236.4"
                   strokeLinecap="round"
                 />
               </svg>
