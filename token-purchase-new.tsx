@@ -1277,7 +1277,7 @@ export default function TokenPurchaseNew({
             </span>
           </div>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+        <div className="w-full bg-gray-700 rounded-full h-9 overflow-hidden">
           <div 
             className="h-full bg-gradient-to-r from-sky-500 to-blue-600 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${isLoadingContractData ? "0" : (() => {
