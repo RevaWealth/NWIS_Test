@@ -140,6 +140,9 @@ export default function TokenPurchaseNew({
   } | null>(null)
   const [transactionHash, setTransactionHash] = useState<string | null>(null)
   const [isTransactionConfirmed, setIsTransactionConfirmed] = useState(false)
+  const [showTPADialog, setShowTPADialog] = useState(false)
+  const [hasAgreedToTPA, setHasAgreedToTPA] = useState(false)
+  const [isTPAScrolledToBottom, setIsTPAScrolledToBottom] = useState(false)
   
   // Live ETH price from API
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
@@ -625,6 +628,8 @@ export default function TokenPurchaseNew({
     setTransactionHash(null)
     setIsTransactionConfirmed(false)
     setTransactionDetails(null)
+    setHasAgreedToTPA(false)
+    setIsTPAScrolledToBottom(false)
     // Reset component state
     resetComponentState()
     // Refresh the page
@@ -1649,6 +1654,24 @@ export default function TokenPurchaseNew({
                   </div>
                 </div>
 
+                {/* Token Purchase Agreement */}
+                <div className="p-4 bg-gray-800 rounded-lg border border-gray-600">
+                  <h4 className="text-lg font-semibold text-white mb-3 text-center">Token Purchase Agreement</h4>
+                  <div className="text-center">
+                    <button
+                      onClick={() => setShowTPADialog(true)}
+                      className="inline-flex items-center justify-center px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-lg transition-colors duration-200 text-sm"
+                    >
+                      View Token Purchase Agreement
+                    </button>
+                    {hasAgreedToTPA && (
+                      <div className="mt-2 flex items-center justify-center space-x-2 text-green-400">
+                        <span className="text-sm">✓</span>
+                        <span className="text-sm font-medium">Agreed to Terms</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
                 {/* Warning - only show before confirmation */}
                 {!transactionHash && (
@@ -1699,8 +1722,8 @@ export default function TokenPurchaseNew({
                   <Button
                     onClick={handleConfirmTransaction}
                     className="flex-1 text-white"
-                    style={{ backgroundColor: '#a57e24' }}
-                    disabled={isPurchasing || !!transactionHash}
+                    style={{ backgroundColor: hasAgreedToTPA ? '#a57e24' : '#6b7280' }}
+                    disabled={isPurchasing || !!transactionHash || !hasAgreedToTPA}
                   >
                     {isPurchasing ? (
                       <div className="flex items-center gap-2">
@@ -1729,6 +1752,46 @@ export default function TokenPurchaseNew({
                 </Button>
               )}
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* TPA Dialog */}
+      <Dialog open={showTPADialog} onOpenChange={setShowTPADialog}>
+        <DialogContent className="max-w-4xl max-h-[90vh] bg-sky-950 border-sky-800">
+          <DialogTitle className="text-xl font-bold text-white mb-4">
+            Token Purchase Agreement
+          </DialogTitle>
+          <DialogDescription className="text-gray-300 mb-4">
+            Please review the Token Purchase Agreement carefully before proceeding.
+          </DialogDescription>
+          
+          <div className="flex-1 bg-white rounded-lg overflow-hidden mb-4">
+            <div className="h-[60vh] overflow-auto" onScroll={(e) => {
+              const target = e.target as HTMLDivElement
+              const isAtBottom = target.scrollHeight - target.scrollTop <= target.clientHeight + 10
+              setIsTPAScrolledToBottom(isAtBottom)
+            }}>
+              <iframe
+                src="/TPA.pdf#view=FitH&scrollbar=1&toolbar=0&navpanes=0"
+                className="w-full h-full"
+                title="Token Purchase Agreement"
+                style={{ border: 'none', minHeight: '800px' }}
+              />
+            </div>
+          </div>
+          
+          <div className="flex justify-center">
+            <Button
+              onClick={() => {
+                setHasAgreedToTPA(true)
+                setShowTPADialog(false)
+              }}
+              disabled={!isTPAScrolledToBottom}
+              className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-200"
+            >
+              Agree
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
