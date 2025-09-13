@@ -1649,24 +1649,6 @@ export default function TokenPurchaseNew({
                   </div>
                 </div>
 
-                {/* Contract Details */}
-                <div className="p-4 bg-gray-800 rounded-lg border border-gray-600">
-                  <h4 className="text-lg font-semibold text-white mb-3">Contract Details</h4>
-                  <div className="space-y-2">
-                    <div>
-                      <span className="text-gray-300 text-sm">Contract Address:</span>
-                      <div className="text-white font-mono text-sm break-all mt-1">
-                        {transactionDetails.contractAddress}
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-gray-300 text-sm">Your Address:</span>
-                      <div className="text-white font-mono text-sm break-all mt-1">
-                        {transactionDetails.buyerAddress}
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
                 {/* Warning - only show before confirmation */}
                 {!transactionHash && (
