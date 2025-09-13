@@ -7,7 +7,6 @@ import Navbar from '../../navbar'
 
 export default function TokenomicsPage() {
   const tokenomics = [
-    { label: "Total Supply", value: "50,000,000,000 NWIS", color: "from-purple-600 to-pink-600" },
     { label: "Presale", value: "30,000,000,000 NWIS", percentage: 60, color: "from-blue-500 to-cyan-500" },
     { label: "Treasury", value: "10,000,000,000 NWIS", percentage: 20, color: "from-green-500 to-emerald-500" },
     { label: "Team & Advisors", value: "7,500,000,000 NWIS", percentage: 15, color: "from-yellow-500 to-amber-500" },
@@ -168,7 +167,7 @@ export default function TokenomicsPage() {
               </svg>
             </div>
             <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Community Driven</h3>
-            <p className="text-sm sm:text-base text-gray-600">Token holders participate in key decisions and benefit from platform success.</p>
+            <p className="text-sm sm:text-base text-gray-600">Token holders participate in key decisions on Treasury Management.</p>
           </div>
         </div>
 
@@ -198,7 +197,7 @@ export default function TokenomicsPage() {
                 Buy NWIS Tokens
               </Link>
               <Link 
-                href="/about/story" 
+                href="/documents" 
                 className="inline-flex items-center justify-center px-6 sm:px-8 py-2 sm:py-3 border-2 border-sky-300 text-sky-300 hover:bg-sky-300 hover:text-sky-950 font-semibold rounded-lg transition-colors duration-200 text-sm sm:text-base"
               >
                 Learn More
