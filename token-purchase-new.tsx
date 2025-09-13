@@ -1263,8 +1263,23 @@ export default function TokenPurchaseNew({
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-bold text-white">Sale Progress</span>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-white font-medium">
+        </div>
+        <div className="relative w-full bg-gray-700 rounded-full h-9 overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-violet-500 to-red-700 rounded-full transition-all duration-500 ease-out"
+            style={{ width: `${isLoadingContractData ? "0" : (() => {
+              const currentTierStartAmount = parseFloat(contractData.currentTier.startAmount.toString());
+              const currentTierEndAmount = parseFloat(contractData.currentTier.endAmount.toString());
+              const currentTierRange = currentTierEndAmount - currentTierStartAmount;
+              const tokensSoldInCurrentTier = Math.max(0, parseFloat(contractData.totalTokensSold.toString()) - currentTierStartAmount);
+              const maxTokensInCurrentTier = Math.min(tokensSoldInCurrentTier, currentTierRange);
+              const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100) : 0;
+              return tierProgress.toFixed(2);
+            })()}%` }}
+          ></div>
+          {/* Centered text overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-xs font-bold text-white drop-shadow-lg">
               Current Tier Progress: {isLoadingContractData ? "Loading..." : (() => {
                 const currentTierStartAmount = parseFloat(contractData.currentTier.startAmount.toString());
                 const currentTierEndAmount = parseFloat(contractData.currentTier.endAmount.toString());
@@ -1277,26 +1292,12 @@ export default function TokenPurchaseNew({
             </span>
           </div>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-9 overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-sky-500 to-blue-600 rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${isLoadingContractData ? "0" : (() => {
-              const currentTierStartAmount = parseFloat(contractData.currentTier.startAmount.toString());
-              const currentTierEndAmount = parseFloat(contractData.currentTier.endAmount.toString());
-              const currentTierRange = currentTierEndAmount - currentTierStartAmount;
-              const tokensSoldInCurrentTier = Math.max(0, parseFloat(contractData.totalTokensSold.toString()) - currentTierStartAmount);
-              const maxTokensInCurrentTier = Math.min(tokensSoldInCurrentTier, currentTierRange);
-              const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100) : 0;
-              return tierProgress.toFixed(2);
-            })()}%` }}
-          ></div>
-        </div>
-        <div className="flex justify-between text-xs mt-1">
+        <div className="flex justify-between text-sm mt-1">
           <span className="font-bold text-white">
-            Current Tier Price: {isLoadingContractData ? "Loading..." : `$${contractData.currentTier.price.toFixed(4)}`}
+            Current Tier Price: <span className="text-violet-400">{isLoadingContractData ? "Loading..." : `$${contractData.currentTier.price.toFixed(4)}`}</span>
           </span>
           <span className="font-bold text-white">
-            Next Tier Price: {isLoadingContractData ? "Loading..." : `$${contractData.nextTier.price.toFixed(4)}`}
+            Next Tier Price: <span className="text-red-700">{isLoadingContractData ? "Loading..." : `$${contractData.nextTier.price.toFixed(4)}`}</span>
           </span>
         </div>
 
