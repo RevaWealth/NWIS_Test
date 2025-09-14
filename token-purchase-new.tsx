@@ -644,11 +644,23 @@ export default function TokenPurchaseNew({
       setShowNetworkDialog(false)
     } catch (error) {
       console.error('Failed to switch network:', error)
-      toast({
-        title: "Network Switch Failed",
-        description: "Please switch to Sepolia Testnet manually in your wallet.",
-        variant: "destructive",
-      })
+      
+      // Check if it's a mobile device
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      
+      if (isMobile) {
+        toast({
+          title: "Manual Network Switch Required",
+          description: "Please manually switch to Sepolia Testnet in your wallet app. Look for 'Networks' or 'Settings' in your wallet.",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Network Switch Failed",
+          description: "Please switch to Sepolia Testnet manually in your wallet.",
+          variant: "destructive",
+        })
+      }
     }
   }
 
@@ -671,48 +683,9 @@ export default function TokenPurchaseNew({
     }
   }, [payAmountError, payAmountData, currency, debouncedNwisTokenAmount, payAmount])
 
-  // Debug simulation state
-  useEffect(() => {
-    if (simulateError) {
-      console.error('Simulation Error Details:', {
-        currency,
-        error: simulateError,
-        errorType: typeof simulateError,
-        errorKeys: simulateError ? Object.keys(simulateError) : 'no keys',
-        errorString: simulateError ? simulateError.toString() : 'no toString',
-        amountInSmallestUnits: amountInSmallestUnits?.toString(),
-        isConnected,
-        contractData: contractData.saleActive,
-        // Add more debugging info
-        ethPrice,
-        timestamp: timestamp?.toString(),
-        tokenAddress: getTokenAddress(currency)
-      })
-    }
-  }, [simulateError, currency, amountInSmallestUnits, isConnected, contractData.saleActive, ethPrice, timestamp])
 
 
 
-  // Additional debug logging for simulation state
-  useEffect(() => {
-    console.log('Simulation Debug:', {
-      currency,
-      amountInSmallestUnits: amountInSmallestUnits?.toString(),
-      isConnected,
-      contractData: contractData.saleActive,
-      debouncedAmount,
-      amount,
-      ethPrice,
-      timestamp: timestamp?.toString(),
-      // Simulation states
-      isSimulatingERC20,
-      isSimulatingETH,
-      simulationDataERC20: !!simulationDataERC20,
-      simulationDataETH: !!simulationDataETH,
-      simulateErrorERC20: !!simulateErrorERC20,
-      simulateErrorETH: !!simulateErrorETH
-    })
-  }, [currency, amountInSmallestUnits, isConnected, contractData.saleActive, debouncedAmount, amount, ethPrice, timestamp, isSimulatingERC20, isSimulatingETH, simulationDataERC20, simulationDataETH, simulateErrorERC20, simulateErrorETH])
 
   // Type-safe simulation data for the current currency
   const currentSimulationData = currency === "ETH" ? simulationDataETH : simulationDataERC20
@@ -751,6 +724,69 @@ export default function TokenPurchaseNew({
       timestamp: new Date().toISOString()
     })
   }, [isApprovePending, isApproveSuccess, isApproveError, approveHash])
+
+  // Handle approval errors (user rejection, cancellation, etc.)
+  useEffect(() => {
+    if (isApproveError && approveError) {
+      console.log('Approval error detected:', approveError)
+      
+      // Reset all approval states
+      setIsApproving(false)
+      setLocalIsApproving(false)
+      
+      // Show user-friendly error message
+      const errorMessage = approveError.message || 'Unknown approval error'
+      let userMessage = 'Approval failed. Please try again.'
+      
+      if (errorMessage.includes('User rejected') || errorMessage.includes('User denied')) {
+        userMessage = 'Approval was cancelled. You can try again when ready.'
+      } else if (errorMessage.includes('User rejected the request')) {
+        userMessage = 'Approval was rejected. Please try again if you want to proceed.'
+      }
+      
+      toast({
+        title: "Approval Cancelled",
+        description: userMessage,
+        variant: "destructive",
+      })
+    }
+  }, [isApproveError, approveError, toast])
+
+  // Handle approval confirmation errors
+  useEffect(() => {
+    if (isApprovalConfirmationError && approvalConfirmationError) {
+      console.log('Approval confirmation error detected:', approvalConfirmationError)
+      
+      // Reset all approval states
+      setIsApproving(false)
+      setLocalIsApproving(false)
+      
+      toast({
+        title: "Approval Failed",
+        description: "Approval transaction failed. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }, [isApprovalConfirmationError, approvalConfirmationError, toast])
+
+  // Safety timeout to reset approval state if it gets stuck
+  useEffect(() => {
+    if (localIsApproving || isApproving) {
+      const timeout = setTimeout(() => {
+        console.log('Approval timeout - resetting states')
+        setIsApproving(false)
+        setLocalIsApproving(false)
+        
+        toast({
+          title: "Approval Timeout",
+          description: "Approval request timed out. Please try again.",
+          variant: "destructive",
+        })
+      }, 30000) // 30 second timeout
+
+      return () => clearTimeout(timeout)
+    }
+  }, [localIsApproving, isApproving, toast])
 
   const {
     data: purchaseHash,
@@ -1086,15 +1122,11 @@ export default function TokenPurchaseNew({
     
     // Only trigger when we have a confirmed approval transaction AND haven't triggered yet
     if (isApprovalConfirmed && approveHash && !hasAutoTriggered && amountInSmallestUnits) {
-      console.log('🎯 Auto-triggering simulation - approval transaction successful!')
-      
       // Set flag to prevent multiple triggers
       setHasAutoTriggered(true)
       
       // Trigger simulation by incrementing forceSimulation
       setForceSimulation(prev => prev + 1)
-      
-      // Simulation auto-triggered - removed toast notification
     }
   }, [isApprovalConfirmed, approveHash, currency, amountInSmallestUnits, toast, hasAutoTriggered])
 
@@ -1103,8 +1135,7 @@ export default function TokenPurchaseNew({
 
   useEffect(() => {
     if (mounted && simulateError) {
-      // Simulation failed - removed toast notification to reduce popup noise
-      console.log('Simulation failed:', simulateError?.message || "Could not estimate gas for this transaction.")
+      // Simulation failed - silent handling
     }
   }, [mounted, simulateError, toast])
 
@@ -1144,8 +1175,7 @@ export default function TokenPurchaseNew({
     }
 
     if (!simulationData) {
-      // Transaction not ready - removed toast notification to reduce popup noise
-      console.log('Transaction not ready: Please wait for transaction simulation to complete.')
+      // Transaction not ready - silent handling
       return
     }
     
@@ -1408,11 +1438,6 @@ export default function TokenPurchaseNew({
             ⏳ Ready to calculate - press Enter or click outside
           </div>
         )}
-        {amount === debouncedAmount && amount && (
-          <div className="text-xs text-green-400 mt-1">
-            ✅ Ready to simulate transaction
-          </div>
-        )}
       </div>
 
       {/* Pay Amount Calculation Field */}
@@ -1454,11 +1479,6 @@ export default function TokenPurchaseNew({
             ⏳ Calculating required payment...
           </div>
         )}
-        {nwisTokenAmount && payAmount && !(currency === "ETH" ? isEthPriceLoading : isPayAmountLoading) && (
-          <div className="text-xs text-green-400 mt-1">
-            💰 Required Payment: {payAmount} {currency}
-          </div>
-        )}
         {nwisTokenAmount && payAmountError && (
           <div className="text-xs text-red-400 mt-1">
             ❌ Error: {payAmountError.message || 'Failed to calculate payment amount'}
@@ -1467,25 +1487,6 @@ export default function TokenPurchaseNew({
       </div>
 
       {/* Token Calculation */}
-      {amount && (
-        <div className="mb-4 p-3 bg-gray-800 rounded-lg">
-          {isCalculating ? (
-            <div className="flex items-center gap-2 text-sm text-gray-300">
-              <LoadingSpinner size="sm" />
-              Calculating NWIS tokens...
-            </div>
-          ) : (
-            <>
-              <div className="text-sm text-gray-300">
-                You will receive: <span className="text-white font-medium">{tokenAmount}</span> NWIS tokens
-              </div>
-              <div className="text-xs text-gray-400 mt-1">
-                Price: {currentPrice} per token
-              </div>
-            </>
-          )}
-        </div>
-      )}
 
       {/* Network Warning */}
       {isConnected && !isCorrectNetwork && (
@@ -1496,6 +1497,11 @@ export default function TokenPurchaseNew({
           <p className="text-xs text-red-300 mt-1">
             Current network: {getNetworkName(chainId)} | Required: Sepolia Testnet
           </p>
+          {typeof navigator !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && (
+            <p className="text-xs text-yellow-300 mt-2">
+              📱 <strong>Mobile:</strong> Switch networks in your wallet app settings, then refresh this page.
+            </p>
+          )}
         </div>
       )}
 
@@ -1509,10 +1515,14 @@ export default function TokenPurchaseNew({
         {(approveError || purchaseError) && (
           <div className="p-3 bg-red-900/20 border border-red-700 rounded-lg">
             <p className="text-sm text-red-400">
-              <strong>Transaction Error:</strong> {approveError?.message || purchaseError?.message}
+              <strong>Transaction Error:</strong> {
+                approveError?.message?.includes('User rejected') || approveError?.message?.includes('User denied') 
+                  ? 'Approval was cancelled by user' 
+                  : approveError?.message || purchaseError?.message
+              }
             </p>
             <details className="mt-2">
-              <summary className="text-xs text-red-300 cursor-pointer">Show Details</summary>
+              <summary className="text-xs text-red-300 cursor-pointer">Show Technical Details</summary>
               <pre className="text-xs text-red-300 mt-1 overflow-auto">
                 {approveError?.message || purchaseError?.message}
               </pre>
@@ -1597,6 +1607,20 @@ export default function TokenPurchaseNew({
                 <span className="text-sm text-gray-300">Required Network: Sepolia Testnet</span>
               </div>
             </div>
+            
+            {/* Mobile-specific instructions */}
+            {typeof navigator !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && (
+              <div className="p-4 bg-yellow-900/20 border border-yellow-600 rounded-lg">
+                <h4 className="text-sm font-semibold text-yellow-400 mb-2">📱 Mobile Wallet Instructions:</h4>
+                <div className="text-xs text-yellow-200 space-y-1">
+                  <p>• Open your wallet app (MetaMask, Trust Wallet, etc.)</p>
+                  <p>• Go to Settings → Networks or Network Settings</p>
+                  <p>• Add or select "Sepolia Testnet"</p>
+                  <p>• Return to this page and refresh</p>
+                </div>
+              </div>
+            )}
+            
             <div className="flex space-x-3">
               <Button
                 onClick={handleSwitchNetwork}
