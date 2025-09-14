@@ -137,11 +137,18 @@ export default function DocumentsPage() {
               <Button
                 onClick={handleOpenInNewTab}
                 variant="outline"
-                className="flex items-center space-x-2 border-sky-950 text-sky-950 hover:bg-sky-900 hover:text-white text-xs sm:text-sm px-3 sm:px-4 py-2"
+                disabled={activeTab === 'security'}
+                className={`flex items-center space-x-2 border-sky-950 text-sky-950 hover:bg-sky-900 hover:text-white text-xs sm:text-sm px-3 sm:px-4 py-2 ${
+                  activeTab === 'security' ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
                 <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Open in New Tab</span>
-                <span className="sm:hidden">Open</span>
+                <span className="hidden sm:inline">
+                  {activeTab === 'security' ? 'Not Available' : 'Open in New Tab'}
+                </span>
+                <span className="sm:hidden">
+                  {activeTab === 'security' ? 'N/A' : 'Open'}
+                </span>
               </Button>
             </div>
           </div>
@@ -247,31 +254,57 @@ export default function DocumentsPage() {
 
           {/* Document Content Area */}
           <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden">
-            {isLoading && (
-              <div className="flex items-center justify-center h-full bg-gray-50">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
-                  <p className="text-base text-gray-600">Loading document...</p>
+            {/* Security Audit Banner */}
+            {activeTab === 'security' ? (
+              <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
+                <div className="text-center max-w-md mx-auto p-8">
+                  <div className="mb-6">
+                    <Shield className="h-16 w-16 text-sky-600 mx-auto mb-4" />
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Security Audit</h2>
+                    <p className="text-gray-600 mb-6">Smart contract audit reports and security assessments</p>
+                  </div>
+                  
+                  <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 shadow-sm">
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="bg-yellow-100 rounded-full p-3">
+                        <Shield className="h-8 w-8 text-yellow-600" />
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-yellow-800 mb-2">Coming Soon</h3>
+                    <p className="text-yellow-700 font-medium text-lg">Will be Available Q4 of 2026</p>
+                    <p className="text-yellow-600 text-sm mt-2">Our comprehensive security audit reports are currently in development and will be published in Q4 2026.</p>
+                  </div>
                 </div>
               </div>
+            ) : (
+              <>
+                {isLoading && (
+                  <div className="flex items-center justify-center h-full bg-gray-50">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
+                      <p className="text-base text-gray-600">Loading document...</p>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="pdf-container relative w-full h-full overflow-hidden">
+                  <iframe
+                    src={`${getActiveDocument().file}#view=FitH&scrollbar=0&toolbar=0&navpanes=0&zoom=page-fit`}
+                    className="h-full w-full"
+                    onLoad={handleLoad}
+                    title={getActiveDocument().name}
+                    style={{ 
+                      border: 'none',
+                      transform: `scale(${pdfScale})`,
+                      transformOrigin: 'center top',
+                      width: `${100 / pdfScale}%`,
+                      height: `${100 / pdfScale}%`,
+                      maxWidth: '100%'
+                    }}
+                  />
+                </div>
+              </>
             )}
-            
-            <div className="pdf-container relative w-full h-full overflow-hidden">
-              <iframe
-                src={`${getActiveDocument().file}#view=FitH&scrollbar=0&toolbar=0&navpanes=0&zoom=page-fit`}
-                className="h-full w-full"
-                onLoad={handleLoad}
-                title={getActiveDocument().name}
-                style={{ 
-                  border: 'none',
-                  transform: `scale(${pdfScale})`,
-                  transformOrigin: 'center top',
-                  width: `${100 / pdfScale}%`,
-                  height: `${100 / pdfScale}%`,
-                  maxWidth: '100%'
-                }}
-              />
-            </div>
           </div>
         </div>
       </div>
