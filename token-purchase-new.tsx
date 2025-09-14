@@ -734,21 +734,7 @@ export default function TokenPurchaseNew({
       setIsApproving(false)
       setLocalIsApproving(false)
       
-      // Show user-friendly error message
-      const errorMessage = approveError.message || 'Unknown approval error'
-      let userMessage = 'Approval failed. Please try again.'
-      
-      if (errorMessage.includes('User rejected') || errorMessage.includes('User denied')) {
-        userMessage = 'Approval was cancelled. You can try again when ready.'
-      } else if (errorMessage.includes('User rejected the request')) {
-        userMessage = 'Approval was rejected. Please try again if you want to proceed.'
-      }
-      
-      toast({
-        title: "Approval Cancelled",
-        description: userMessage,
-        variant: "destructive",
-      })
+      // Silent handling - no error messages displayed
     }
   }, [isApproveError, approveError, toast])
 
@@ -1511,24 +1497,6 @@ export default function TokenPurchaseNew({
 
 
 
-        {/* Write Contract Error */}
-        {(approveError || purchaseError) && (
-          <div className="p-3 bg-red-900/20 border border-red-700 rounded-lg">
-            <p className="text-sm text-red-400">
-              <strong>Transaction Error:</strong> {
-                approveError?.message?.includes('User rejected') || approveError?.message?.includes('User denied') 
-                  ? 'Approval was cancelled by user' 
-                  : approveError?.message || purchaseError?.message
-              }
-            </p>
-            <details className="mt-2">
-              <summary className="text-xs text-red-300 cursor-pointer">Show Technical Details</summary>
-              <pre className="text-xs text-red-300 mt-1 overflow-auto">
-                {approveError?.message || purchaseError?.message}
-              </pre>
-            </details>
-          </div>
-        )}
 
         {/* Success Display */}
         {isConfirmed && (
