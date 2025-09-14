@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ExternalLink, FileText, Calculator, Scale, Shield, TrendingUp } from 'lucide-react'
+import { ExternalLink, FileText, Calculator, Scale, Shield } from 'lucide-react'
 import { Button } from '../../component/UI/button'
 import Navbar from '../../navbar'
 
@@ -56,13 +56,6 @@ export default function DocumentsPage() {
       icon: Shield,
       description: 'Smart contract audit reports',
       file: '/Whitepaper.pdf' // Placeholder - will be updated with actual audit docs
-    },
-    {
-      id: 'roadmap',
-      name: 'Roadmap',
-      icon: TrendingUp,
-      description: 'Project timeline & milestones',
-      file: '/Whitepaper.pdf' // Placeholder - will be updated with actual roadmap doc
     }
   ]
 

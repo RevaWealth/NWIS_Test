@@ -19,7 +19,6 @@ export default function Navbar() {
     { name: "About", href: "#about", hasDropdown: true },
     { name: "Documents", href: "/documents" },
     { name: "Tokenomics", href: "/tokenomics" },
-    { name: "Roadmap", href: "/#roadmap" },
     { name: "FAQ", href: "/#faq" },
   ]
 
