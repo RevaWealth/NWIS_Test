@@ -1305,7 +1305,7 @@ export default function TokenPurchaseNew({
             Current Tier Price: <span className="text-violet-400">{isLoadingContractData ? "Loading..." : `$${contractData.currentTier.price.toFixed(4)}`}</span>
           </span>
           <span className="font-bold text-white">
-            Next Tier Price: <span className="text-red-700">{isLoadingContractData ? "Loading..." : `$${contractData.nextTier.price.toFixed(4)}`}</span>
+            Next Tier Price: <span className="text-red-600">{isLoadingContractData ? "Loading..." : `$${contractData.nextTier.price.toFixed(4)}`}</span>
           </span>
         </div>
 
