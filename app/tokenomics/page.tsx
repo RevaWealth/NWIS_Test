@@ -192,7 +192,10 @@ export default function TokenomicsPage() {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
               <Link 
                 href="/token-purchase" 
-                className="inline-flex items-center justify-center px-6 sm:px-8 py-2 sm:py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                className="inline-flex items-center justify-center px-6 sm:px-8 py-2 sm:py-3 text-white font-semibold rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                style={{ backgroundColor: '#a57e24' }}
+                onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = '#8a6919'}
+                onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = '#a57e24'}
               >
                 Buy NWIS Tokens
               </Link>

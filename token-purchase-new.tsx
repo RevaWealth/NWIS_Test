@@ -727,6 +727,20 @@ export default function TokenPurchaseNew({
     error: approveError,
   } = useWriteContract()
 
+  // Wait for approval transaction confirmation
+  const {
+    isLoading: isApprovalConfirming,
+    isSuccess: isApprovalConfirmed,
+    isError: isApprovalConfirmationError,
+    error: approvalConfirmationError,
+  } = useWaitForTransactionReceipt({
+    hash: approveHash,
+    query: { enabled: !!approveHash }, // Only wait for approval transactions
+  })
+
+  // Combined approval pending state - includes both submission and confirmation
+  const isApprovalPending = isApprovePending || isApprovalConfirming
+
   // Debug logging for approval state changes
   useEffect(() => {
     console.log('🔍 Approval State Debug:', {
@@ -821,12 +835,12 @@ export default function TokenPurchaseNew({
     if (!allowanceData) {
       const cachedAllowance = tokenAllowance
       if (cachedAllowance > BigInt(0)) {
-        const result = cachedAllowance < amountInSmallestUnits || isApprovePending
+        const result = cachedAllowance < amountInSmallestUnits || isApprovalPending
         console.log('needsApproval calculation (using cached):', {
           currency,
           amountInSmallestUnits: amountInSmallestUnits?.toString(),
           cachedAllowance: cachedAllowance.toString(),
-          isApprovePending,
+          isApprovalPending,
           allowanceSufficient: cachedAllowance >= amountInSmallestUnits,
           result
         })
@@ -836,23 +850,23 @@ export default function TokenPurchaseNew({
     }
     
     // Check if blockchain allowance is sufficient for the current amount
-    // If approval was completed locally, don't check isApprovePending
-    const effectiveIsApprovePending = approvalCompleted ? false : isApprovePending
-    const result = allowanceData < amountInSmallestUnits || effectiveIsApprovePending
+    // If approval was completed locally, don't check isApprovalPending
+    const effectiveIsApprovalPending = approvalCompleted ? false : isApprovalPending
+    const result = allowanceData < amountInSmallestUnits || effectiveIsApprovalPending
     console.log('needsApproval calculation (using blockchain):', {
       currency,
       amountInSmallestUnits: amountInSmallestUnits?.toString(),
       blockchainAllowance: allowanceData?.toString(),
-      isApprovePending,
+      isApprovalPending,
       approvalCompleted,
-      effectiveIsApprovePending,
+      effectiveIsApprovalPending,
       allowanceSufficient: allowanceData >= amountInSmallestUnits,
       result
     })
     
     
     return result
-  }, [currency, amountInSmallestUnits, allowanceData, tokenAllowance, isApprovePending, approvalCompleted])
+  }, [currency, amountInSmallestUnits, allowanceData, tokenAllowance, isApprovalPending, approvalCompleted])
 
   // Enhanced simulation enabled state - includes approval checking
   const shouldSimulate = useMemo(() => {
@@ -889,9 +903,9 @@ export default function TokenPurchaseNew({
     }
     
     // Check if approval is pending
-    if (isApprovePending) {
+    if (isApprovalPending) {
       console.log('shouldSimulate calculation (ERC20 - approval pending):', {
-        isApprovePending,
+        isApprovalPending,
         result: false
       })
       return false
@@ -914,7 +928,7 @@ export default function TokenPurchaseNew({
       result
     })
     return result
-  }, [amountInSmallestUnits, isConnected, contractData.saleActive, debouncedAmount, amount, currency, isApprovePending, allowanceData, tokenAllowance])
+  }, [amountInSmallestUnits, isConnected, contractData.saleActive, debouncedAmount, amount, currency, isApprovalPending, allowanceData, tokenAllowance])
 
   // Debug state changes
   useEffect(() => {
@@ -1008,12 +1022,12 @@ export default function TokenPurchaseNew({
   // Handle approval transaction success
   useEffect(() => {
     console.log('Approval success handler triggered:', {
-      isApproveSuccess,
+      isApprovalConfirmed,
       approveHash,
       amountInSmallestUnits: amountInSmallestUnits?.toString()
     })
     
-    if (isApproveSuccess && approveHash) {
+    if (isApprovalConfirmed && approveHash) {
       // This was an approval transaction
       console.log('Processing approval success...')
       
@@ -1063,15 +1077,15 @@ export default function TokenPurchaseNew({
         clearTimeout(aggressiveRefreshTimer)
       }
     }
-  }, [isApproveSuccess, approveHash, amountInSmallestUnits, toast, refetchAllowance])
+  }, [isApprovalConfirmed, approveHash, amountInSmallestUnits, toast, refetchAllowance])
 
   // Auto-trigger simulation ONLY when approval transaction is actually successful
   useEffect(() => {
     // Only trigger for ERC20 tokens
     if (currency === "ETH") return
     
-    // Only trigger when we have a successful approval transaction AND haven't triggered yet
-    if (isApproveSuccess && approveHash && !hasAutoTriggered && amountInSmallestUnits) {
+    // Only trigger when we have a confirmed approval transaction AND haven't triggered yet
+    if (isApprovalConfirmed && approveHash && !hasAutoTriggered && amountInSmallestUnits) {
       console.log('🎯 Auto-triggering simulation - approval transaction successful!')
       
       // Set flag to prevent multiple triggers
@@ -1085,7 +1099,7 @@ export default function TokenPurchaseNew({
         description: "Approval confirmed! Automatically triggering transaction simulation...",
       })
     }
-  }, [isApproveSuccess, approveHash, currency, amountInSmallestUnits, toast, hasAutoTriggered])
+  }, [isApprovalConfirmed, approveHash, currency, amountInSmallestUnits, toast, hasAutoTriggered])
 
   // Removed the second auto-trigger that was causing early simulation triggering
   // Now we only auto-trigger when an actual approval transaction is successful
@@ -1548,15 +1562,15 @@ export default function TokenPurchaseNew({
                 handlePurchase()
               }
             }}
-            disabled={!amount || !contractData.saleActive || isPurchasing || localIsApproving || (!needsApproval && !simulationData) || !isCorrectNetwork}
+            disabled={!amount || !contractData.saleActive || isPurchasing || localIsApproving || isApprovalPending || (!needsApproval && !simulationData) || !isCorrectNetwork}
             className="w-full text-white font-medium py-3"
             style={{ backgroundColor: '#a57e24' }}
             title={`Debug: amount=${!!amount}, saleActive=${contractData.saleActive}, isPurchasing=${isPurchasing}, needsApproval=${needsApproval}, simulationData=${!!simulationData}, isCorrectNetwork=${isCorrectNetwork}`}
           >
-            {(localIsApproving || (isPurchasing && !needsApproval)) ? (
+            {(localIsApproving || isApprovalPending || (isPurchasing && !needsApproval)) ? (
               <div className="flex items-center gap-2">
                 <LoadingSpinner size="sm" />
-                {localIsApproving ? "Approving..." : (isPurchasePending ? "Sending..." : isConfirming ? "Confirming..." : "Processing...")}
+                {isApprovalPending ? "Processing..." : localIsApproving ? "Approving..." : (isPurchasePending ? "Sending..." : isConfirming ? "Confirming..." : "Processing...")}
               </div>
             ) : !isCorrectNetwork ? (
               "Switch to Sepolia"
@@ -1614,7 +1628,7 @@ export default function TokenPurchaseNew({
           handleCloseTransactionDialog()
         }
       }}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg border-2 border-sky-950 rounded-xl bg-sky-950">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-white">
               {isTransactionConfirmed ? "Transaction Confirmed!" : transactionHash ? "Processing Transaction..." : "Confirm Transaction"}
@@ -1624,7 +1638,7 @@ export default function TokenPurchaseNew({
                 ? "Your transaction has been successfully confirmed on the blockchain."
                 : transactionHash 
                   ? "Your transaction is being processed. Please wait for confirmation."
-                  : "Please review the transaction details before confirming your purchase."
+                  : "Please review the transaction details and the Token Purchase Agreement before confirming your purchase."
               }
             </DialogDescription>
           </DialogHeader>
@@ -1632,7 +1646,7 @@ export default function TokenPurchaseNew({
             {transactionDetails && (
               <>
                 {/* Transaction Summary */}
-                <div className="p-4 bg-gray-800 rounded-lg border border-gray-600">
+                <div className="p-4 bg-gray-800 rounded-xl border border-gray-600">
                   <h4 className="text-lg font-semibold text-white mb-3">Transaction Summary</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -1656,12 +1670,12 @@ export default function TokenPurchaseNew({
                 </div>
 
                 {/* Token Purchase Agreement */}
-                <div className="p-4 bg-gray-800 rounded-lg border border-gray-600">
+                <div className={`p-4 bg-gray-800 rounded-xl border-2 transition-colors duration-300 ${hasAgreedToTPA ? 'border-green-500' : 'border-red-500'}`}>
                   <h4 className="text-lg font-semibold text-white mb-3 text-center">Token Purchase Agreement</h4>
                   <div className="text-center">
                     <button
                       onClick={() => setShowTPADialog(true)}
-                      className="inline-flex items-center justify-center px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-lg transition-colors duration-200 text-sm"
+                      className="inline-flex items-center justify-center px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl transition-colors duration-200 text-sm"
                     >
                       View Token Purchase Agreement
                     </button>
@@ -1676,7 +1690,7 @@ export default function TokenPurchaseNew({
 
                 {/* Warning - only show before confirmation */}
                 {!transactionHash && (
-                  <div className="p-3 bg-yellow-900/20 border border-yellow-600 rounded-lg">
+                  <div className="p-3 bg-yellow-900/20 border border-yellow-600 rounded-xl">
                     <div className="flex items-start space-x-2">
                       <div className="text-yellow-400 text-sm">⚠️</div>
                       <div className="text-yellow-200 text-sm">
@@ -1688,7 +1702,7 @@ export default function TokenPurchaseNew({
 
                 {/* Transaction Hash - show after submission */}
                 {transactionHash && (
-                  <div className="p-4 bg-blue-900/20 border border-blue-600 rounded-lg">
+                  <div className="p-4 bg-blue-900/20 border border-blue-600 rounded-xl">
                     <h4 className="text-lg font-semibold text-white mb-3">Transaction Details</h4>
                     <div className="space-y-2">
                       <div>
@@ -1722,7 +1736,7 @@ export default function TokenPurchaseNew({
                 <>
                   <Button
                     onClick={handleConfirmTransaction}
-                    className="flex-1 text-white"
+                    className="flex-1 text-white rounded-xl"
                     style={{ backgroundColor: hasAgreedToTPA ? '#a57e24' : '#6b7280' }}
                     disabled={isPurchasing || !!transactionHash || !hasAgreedToTPA}
                   >
@@ -1738,7 +1752,7 @@ export default function TokenPurchaseNew({
                   <Button
                     variant="outline"
                     onClick={() => setShowTransactionDialog(false)}
-                    className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+                    className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800 rounded-xl"
                     disabled={isPurchasing || !!transactionHash}
                   >
                     Cancel
@@ -1747,7 +1761,7 @@ export default function TokenPurchaseNew({
               ) : (
                 <Button
                   onClick={handleCloseTransactionDialog}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
                 >
                   Close
                 </Button>
