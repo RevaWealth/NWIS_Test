@@ -144,3 +144,17 @@ body {
     @apply bg-white text-neutral-900;
   }
 }
+
+/* Custom sliding pulse animation for progress bars */
+@keyframes pulse-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-pulse-slide {
+  animation: pulse-slide 2s ease-in-out infinite;
+}

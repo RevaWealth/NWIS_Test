@@ -1271,7 +1271,7 @@ export default function TokenPurchaseNew({
         </div>
         <div className="relative w-full bg-gray-700 rounded-full h-9 overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-violet-500 to-red-700 rounded-full transition-all duration-500 ease-out"
+            className="h-full bg-gradient-to-r from-violet-500 to-red-700 rounded-full transition-all duration-500 ease-out relative"
             style={{ width: `${isLoadingContractData ? "0" : (() => {
               const currentTierStartAmount = parseFloat(contractData.currentTier.startAmount.toString());
               const currentTierEndAmount = parseFloat(contractData.currentTier.endAmount.toString());
@@ -1281,7 +1281,10 @@ export default function TokenPurchaseNew({
               const tierProgress = currentTierRange > 0 ? ((maxTokensInCurrentTier / currentTierRange) * 100) : 0;
               return tierProgress.toFixed(2);
             })()}%` }}
-          ></div>
+          >
+            {/* Sliding pulse effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse-slide rounded-full"></div>
+          </div>
           {/* Centered text overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-xs font-bold text-white drop-shadow-lg">
