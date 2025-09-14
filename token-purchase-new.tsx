@@ -1094,10 +1094,7 @@ export default function TokenPurchaseNew({
       // Trigger simulation by incrementing forceSimulation
       setForceSimulation(prev => prev + 1)
       
-      toast({
-        title: "Simulation Auto-Triggered",
-        description: "Approval confirmed! Automatically triggering transaction simulation...",
-      })
+      // Simulation auto-triggered - removed toast notification
     }
   }, [isApprovalConfirmed, approveHash, currency, amountInSmallestUnits, toast, hasAutoTriggered])
 
@@ -1106,11 +1103,8 @@ export default function TokenPurchaseNew({
 
   useEffect(() => {
     if (mounted && simulateError) {
-      toast({
-        title: "Transaction Simulation Failed",
-        description: simulateError?.message || "Could not estimate gas for this transaction.",
-        variant: "destructive",
-      })
+      // Simulation failed - removed toast notification to reduce popup noise
+      console.log('Simulation failed:', simulateError?.message || "Could not estimate gas for this transaction.")
     }
   }, [mounted, simulateError, toast])
 
@@ -1150,11 +1144,8 @@ export default function TokenPurchaseNew({
     }
 
     if (!simulationData) {
-      toast({
-        title: "Transaction Not Ready",
-        description: "Please wait for transaction simulation to complete.",
-        variant: "destructive",
-      })
+      // Transaction not ready - removed toast notification to reduce popup noise
+      console.log('Transaction not ready: Please wait for transaction simulation to complete.')
       return
     }
     
