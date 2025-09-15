@@ -142,10 +142,10 @@ export default function Navbar() {
 
           {/* Wallet Buttons */}
           <div className="flex items-center space-x-3">
-            <div className="hidden md:flex">
+            <div className="flex">
               <WalletButton />
             </div>
-            <div className="md:hidden">
+            <div className="hidden md:flex">
               <MobileWalletButton />
             </div>
             

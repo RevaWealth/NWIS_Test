@@ -637,6 +637,16 @@ export default function TokenPurchaseNew({
     window.location.reload()
   }
 
+  // Handle closing TPA dialog without refreshing page
+  const handleCloseTPADialog = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    console.log('TPA Dialog closed - no page refresh')
+    setShowTPADialog(false)
+  }
+
   // Handle network switch
   const handleSwitchNetwork = async () => {
     try {
@@ -1758,7 +1768,11 @@ export default function TokenPurchaseNew({
       </Dialog>
 
       {/* TPA Dialog */}
-      <Dialog open={showTPADialog} onOpenChange={setShowTPADialog}>
+      <Dialog open={showTPADialog} onOpenChange={(open) => {
+        if (!open) {
+          handleCloseTPADialog()
+        }
+      }}>
         <DialogContent className="max-w-4xl max-h-[90vh] bg-sky-950 border-sky-800">
           <DialogTitle className="text-xl font-bold text-white mb-4">
             Token Purchase Agreement
@@ -1782,9 +1796,17 @@ export default function TokenPurchaseNew({
             </div>
           </div>
           
-          <div className="flex justify-center">
+          <div className="flex justify-center space-x-4">
             <Button
-              onClick={() => {
+              onClick={handleCloseTPADialog}
+              className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
                 setHasAgreedToTPA(true)
                 setShowTPADialog(false)
               }}
