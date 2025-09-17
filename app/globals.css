@@ -153,8 +153,10 @@ body {
   100% {
     transform: translateX(100%);
   }
+
 }
 
 .animate-pulse-slide {
   animation: pulse-slide 2s ease-in-out infinite;
 }
+

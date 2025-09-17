@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approval Fix Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Approval Fix Applied</h1>
+        
+        <div class="success">
+            ✅ Fixed the "Review Transaction" button staying inactive after token approval
+        </div>
+        
+        <h2>🐛 Problem Identified</h2>
+        <p>The issue was in the approval state management logic. After token approval was confirmed on the blockchain, the "Review Transaction" button remained inactive because:</p>
+        
+        <ol>
+            <li><strong>Approval State Logic:</strong> The <code>needsApproval</code> calculation wasn't properly handling the <code>approvalCompleted</code> flag</li>
+            <li><strong>Simulation Dependencies:</strong> The transaction simulation was disabled when approval was needed, but wasn't re-enabled after approval completion</li>
+            <li><strong>State Synchronization:</strong> There was a race condition between blockchain state updates and local state management</li>
+        </ol>
+        
+        <h2>🔧 Fixes Applied</h2>
+        
+        <h3>1. Improved Approval State Logic</h3>
+        <div class="code">
+// If approval was just completed, don't require approval anymore
+if (approvalCompleted) {
+  return false
+}
+        </div>
+        
+        <h3>2. Enhanced Simulation Dependencies</h3>
+        <div class="code">
+enabled: Boolean(
+  amountInSmallestUnits && 
+  isConnected && 
+  contractData.saleActive && 
+  debouncedAmount === amount &&
+  currency !== "ETH" &&
+  !needsApproval  // ← Added this condition
+)
+        </div>
+        
+        <h3>3. Better State Synchronization</h3>
+        <div class="code">
+// Set approval completed flag to bypass blockchain checks temporarily
+setApprovalCompleted(true)
+
+// Immediately refresh allowance from blockchain
+refetchAllowance()
+
+// Force multiple allowance checks to ensure state sync
+setTimeout(() => checkTokenAllowance(), 1000)
+setTimeout(() => refetchAllowance(), 3000)
+setTimeout(() => refetchAllowance(), 5000)
+        </div>
+        
+        <h3>4. Smart Amount Change Handling</h3>
+        <div class="code">
+// Reset approval completed flag when amount changes beyond current allowance
+useEffect(() => {
+  if (amountInSmallestUnits && approvalCompleted) {
+    const currentAllowance = allowanceData || tokenAllowance
+    if (currentAllowance > BigInt(0) && amountInSmallestUnits > currentAllowance) {
+      setApprovalCompleted(false)
+    }
+  }
+}, [amountInSmallestUnits, approvalCompleted, allowanceData, tokenAllowance])
+        </div>
+        
+        <h2>🎯 Expected Behavior Now</h2>
+        <ol>
+            <li><strong>Before Approval:</strong> Button shows "Approve [TOKEN]" and is active</li>
+            <li><strong>During Approval:</strong> Button shows "Processing..." and is disabled</li>
+            <li><strong>After Approval:</strong> Button shows "Review Transaction" and is immediately active</li>
+            <li><strong>Amount Changes:</strong> If new amount exceeds allowance, approval is required again</li>
+        </ol>
+        
+        <h2>🔍 Debug Information Added</h2>
+        <p>Added comprehensive console logging to help debug approval and simulation states:</p>
+        <div class="code">
+console.log('needsApproval calculation:', {
+  currency,
+  amountInSmallestUnits,
+  approvalCompleted,
+  result
+})
+
+console.log('Simulation Debug:', {
+  currency,
+  needsApproval,
+  simulationData: !!simulationData,
+  isSimulating
+})
+        </div>
+        
+        <div class="success">
+            <p><strong>Status:</strong> The approval flow should now work correctly! The "Review Transaction" button will become active immediately after token approval is confirmed.</p>
+        </div>
+        
+        <h2>🧪 Testing Instructions</h2>
+        <ol>
+            <li>Connect your wallet to Sepolia testnet</li>
+            <li>Select USDT or USDC as payment currency</li>
+            <li>Enter an amount to purchase</li>
+            <li>Click "Approve [TOKEN]" and confirm in wallet</li>
+            <li>Wait for approval confirmation</li>
+            <li>Verify "Review Transaction" button becomes active</li>
+        </ol>
+    </div>
+</body>
+</html>
