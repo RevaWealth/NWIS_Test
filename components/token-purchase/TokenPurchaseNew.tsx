@@ -488,6 +488,7 @@ function TokenPurchaseNew({
           isEthPriceLoading={isEthPriceLoading}
           payAmountError={payAmountError}
           currency={currency}
+          isConnected={isConnected}
         />
 
         {/* Network Warning */}

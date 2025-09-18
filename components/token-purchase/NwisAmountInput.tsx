@@ -12,6 +12,7 @@ interface NwisAmountInputProps {
   isEthPriceLoading: boolean
   payAmountError: Error | null
   currency: string
+  isConnected: boolean
 }
 
 export const NwisAmountInput = ({
@@ -25,7 +26,8 @@ export const NwisAmountInput = ({
   isPayAmountLoading,
   isEthPriceLoading,
   payAmountError,
-  currency
+  currency,
+  isConnected
 }: NwisAmountInputProps) => {
   return (
     <div className="mb-4">
@@ -66,7 +68,7 @@ export const NwisAmountInput = ({
           ⏳ Calculating required payment...
         </div>
       )}
-      {nwisTokenAmount && payAmountError && (
+      {nwisTokenAmount && payAmountError && isConnected && (
         <div className="text-xs text-red-400 mt-1">
           ❌ Error: {payAmountError.message || 'Failed to calculate payment amount'}
         </div>
