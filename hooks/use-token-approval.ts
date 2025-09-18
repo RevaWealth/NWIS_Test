@@ -174,10 +174,11 @@ export const useTokenApproval = (currency: Currency, amount: string) => {
     if (isApprovalConfirmed && approveHash) {
       console.log('Processing approval success...')
       
-      toast({
-        title: "Approval Success",
-        description: "Tokens approved! You can now purchase.",
-      })
+      // Toast notification disabled as requested
+      // toast({
+      //   title: "Approval Success",
+      //   description: "Tokens approved! You can now purchase.",
+      // })
       
       // Reset all approval states
       setIsApproving(false)
@@ -235,10 +236,11 @@ export const useTokenApproval = (currency: Currency, amount: string) => {
         args: [PRESALE_CONTRACT_ADDRESS, amountInSmallestUnits]
       })
       
-      toast({
-        title: "Approval Transaction Sent",
-        description: "Approval transaction sent! Please confirm in your wallet.",
-      })
+      // Toast notification disabled as requested
+      // toast({
+      //   title: "Approval Transaction Sent",
+      //   description: "Approval transaction sent! Please confirm in your wallet.",
+      // })
       
     } catch (error) {
       console.error('Error approving tokens:', error)
