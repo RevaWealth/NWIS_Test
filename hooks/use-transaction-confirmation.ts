@@ -79,10 +79,11 @@ export const useTransactionConfirmation = ({
   // Handle purchase success
   useEffect(() => {
     if (isPurchaseSuccess) {
-      toast({
-        title: "Transaction Sent",
-        description: `Transaction sent! Waiting for confirmation... Hash: ${purchaseHash?.slice(0, 6)}...`,
-      })
+      // Toast notification disabled as requested
+      // toast({
+      //   title: "Transaction Sent",
+      //   description: `Transaction sent! Waiting for confirmation... Hash: ${purchaseHash?.slice(0, 6)}...`,
+      // })
     }
     if (isPurchaseError) {
       toast({
@@ -96,10 +97,11 @@ export const useTransactionConfirmation = ({
   // Handle transaction confirmation
   useEffect(() => {
     if (isConfirmed) {
-      toast({
-        title: "Purchase Confirmed",
-        description: `Your purchase of ${tokenAmount} NWIS tokens is confirmed!`,
-      })
+      // Toast notification disabled as requested
+      // toast({
+      //   title: "Purchase Confirmed",
+      //   description: `Your purchase of ${tokenAmount} NWIS tokens is confirmed!`,
+      // })
       
       console.log('Purchase confirmed - reset all states and refreshed data')
     }
