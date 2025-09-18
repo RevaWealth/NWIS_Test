@@ -1,17 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ExternalLink, FileText, Calculator, Scale, Shield } from 'lucide-react'
 import { Button } from '../../component/UI/button'
 import Navbar from '../../navbar'
+import dynamic from 'next/dynamic'
+import { pdfjs } from 'react-pdf'
+
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
+
+// Disable SSR for PDF components
+const MobilePdfViewer = dynamic(() => import('../../components/MobilePdfViewer'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full bg-gray-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
+        <p className="text-base text-gray-600">Loading document...</p>
+      </div>
+    </div>
+  )
+})
 
 export default function DocumentsPage() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [pdfScale, setPdfScale] = useState(1)
-  const [activeTab, setActiveTab] = useState('whitepaper')
+  const [activeTab, setActiveTab] = useState<string | null>(null)
   const [activeSubTab, setActiveSubTab] = useState<string | null>(null)
+  const [scale, setScale] = useState(1)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                            window.innerWidth <= 768
+      console.log('Mobile detection:', {
+        userAgent: navigator.userAgent,
+        windowWidth: window.innerWidth,
+        isMobile: isMobileDevice
+      })
+      setIsMobile(isMobileDevice)
+      
+      // Set default tab for desktop users only
+      if (!isMobileDevice && !activeTab) {
+        setActiveTab('whitepaper')
+      }
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [activeTab])
 
   const documentTabs = [
     {
@@ -19,34 +59,34 @@ export default function DocumentsPage() {
       name: 'Whitepaper',
       icon: FileText,
       description: 'Complete project overview',
-      file: '/WPV4.pdf'
+      file: '/api/pdf?file=WPV4.pdf'
     },
     {
       id: 'tokenomics',
       name: 'Tokenomics',
       icon: Calculator,
       description: 'Token distribution & economics',
-      file: '/Whitepaper.pdf' // Placeholder - will be updated with actual tokenomics doc
+      file: '/api/pdf?file=Whitepaper.pdf' // Placeholder - will be updated with actual tokenomics doc
     },
     {
       id: 'legal',
       name: 'Legal Documents',
       icon: Scale,
       description: 'Terms & legal compliance',
-      file: '/Whitepaper.pdf', // Placeholder - will be updated with actual legal docs
+      file: '/api/pdf?file=Whitepaper.pdf', // Placeholder - will be updated with actual legal docs
       hasSubTabs: true,
       subTabs: [
         {
           id: 'terms-of-service',
           name: 'Token Buyer Disclaimer',
           description: 'Token purchase terms and disclaimer',
-          file: '/TBD.pdf'
+          file: '/api/pdf?file=TBD.pdf'
         },
         {
           id: 'privacy-policy',
           name: 'Token Buyer Purchase Agreement',
           description: 'Token purchase terms and conditions',
-          file: '/TPA.pdf'
+          file: '/api/pdf?file=TPA.pdf'
         }
       ]
     },
@@ -55,42 +95,107 @@ export default function DocumentsPage() {
       name: 'Security Audit',
       icon: Shield,
       description: 'Smart contract audit reports',
-      file: '/Whitepaper.pdf' // Placeholder - will be updated with actual audit docs
+      file: '/api/pdf?file=Whitepaper.pdf' // Placeholder - will be updated with actual audit docs
     }
   ]
 
-  const handleLoad = () => {
-    setIsLoading(false)
-    // Set appropriate scale based on screen size
-    if (window.innerWidth <= 480) {
-      setPdfScale(0.8)
-    } else if (window.innerWidth <= 640) {
-      setPdfScale(0.9)
-    } else {
-      setPdfScale(1)
+  // Memoize the active document (string URL) so <Document file=...> is stable
+  const activeDocUrl = useMemo(() => {
+    if (!activeTab) return null;
+    
+    const mainTab = documentTabs.find(t => t.id === activeTab);
+    if (!mainTab) return null;
+    
+    if (mainTab.hasSubTabs && activeSubTab && mainTab.subTabs) {
+      const sub = mainTab.subTabs.find(s => s.id === activeSubTab);
+      if (sub) {
+        console.log('Using sub-tab file:', sub.file, 'for sub-tab:', activeSubTab)
+        return sub.file;
+      }
     }
-  }
+    console.log('Using main tab file:', mainTab.file, 'for tab:', activeTab)
+    return mainTab.file;
+  }, [activeTab, activeSubTab, documentTabs]);
+
+
 
   const handleOpenInNewTab = () => {
     const activeDocument = documentTabs.find(tab => tab.id === activeTab)
     if (activeDocument) {
-      window.open(activeDocument.file, '_blank')
+      // Extract filename from API route for direct download
+      const filename = activeDocument.file.split('file=')[1]
+      window.open(`/${filename}`, '_blank')
     }
   }
 
   const handleTabChange = (tabId: string) => {
+    console.log('Tab changed to:', tabId, 'isMobile:', isMobile)
+    
+    const tab = documentTabs.find(t => t.id === tabId)
+    
+    // Always update the active tab state first
     setActiveTab(tabId)
     setActiveSubTab(null) // Reset subtab when changing main tab
-    setIsLoading(true)
+    
+    if (isMobile) {
+      // On mobile, only open PDF in new tab if the tab has no sub-tabs
+      if (tab && !tab.hasSubTabs && tab.id !== 'security') {
+        const filename = tab.file.split('file=')[1]
+        console.log('Opening PDF in new tab:', filename)
+        window.open(`/${filename}`, '_blank')
+        return
+      }
+      // If tab has sub-tabs, let it show the sub-tabs menu instead
+    } else {
+      // On desktop, only open PDF directly if the tab has no sub-tabs
+      if (tab && !tab.hasSubTabs && tab.id !== 'security') {
+        // Let it proceed to show the PDF in embedded viewer
+      } else if (tab && tab.hasSubTabs) {
+        // If tab has sub-tabs, just select the tab and let user choose sub-tab
+        return
+      }
+    }
   }
 
   const handleSubTabChange = (subTabId: string) => {
+    console.log('Sub-tab changed to:', subTabId, 'isMobile:', isMobile)
+    
+    if (isMobile) {
+      // On mobile, open PDF in new tab
+      const mainTab = documentTabs.find(t => t.id === activeTab)
+      if (mainTab?.hasSubTabs && mainTab.subTabs) {
+        const subTab = mainTab.subTabs.find(s => s.id === subTabId)
+        if (subTab) {
+          const filename = subTab.file.split('file=')[1]
+          console.log('Opening sub-tab PDF in new tab:', filename)
+          window.open(`/${filename}`, '_blank')
+          return
+        }
+      }
+    }
+    
     setActiveSubTab(subTabId)
-    setIsLoading(true)
   }
 
   const getActiveDocument = () => {
-    const mainTab = documentTabs.find(tab => tab.id === activeTab) || documentTabs[0]
+    if (!activeTab) {
+      return {
+        id: 'none',
+        name: 'Select a Document',
+        description: 'Choose a document to view',
+        file: ''
+      }
+    }
+    
+    const mainTab = documentTabs.find(tab => tab.id === activeTab)
+    if (!mainTab) {
+      return {
+        id: 'none',
+        name: 'Select a Document',
+        description: 'Choose a document to view',
+        file: ''
+      }
+    }
     
     // If this tab has subtabs and a subtab is active, return the subtab
     if (mainTab.hasSubTabs && activeSubTab && mainTab.subTabs) {
@@ -150,7 +255,7 @@ export default function DocumentsPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-300px)] min-h-[600px]">
+        <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-200px)] min-h-[500px]">
           
           {/* Vertical Tab Bar */}
           <div className="w-full lg:w-80 bg-white rounded-lg shadow-lg p-4">
@@ -247,8 +352,118 @@ export default function DocumentsPage() {
 
           {/* Document Content Area */}
           <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden">
-            {/* Security Audit Banner */}
-            {activeTab === 'security' ? (
+            {/* No document selected - show default message for desktop only */}
+            {!activeTab ? (
+              !isMobile ? (
+                /* Desktop - No document selected */
+                <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
+                  <div className="text-center max-w-md mx-auto p-8">
+                    <div className="mb-6">
+                      <div className="text-6xl mb-4">📄</div>
+                      <h2 className="text-2xl font-bold text-gray-800 mb-2">Select a Document</h2>
+                      <p className="text-gray-600 mb-6">Choose a document from the left panel to view it here.</p>
+                    </div>
+                    
+                    <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-6 shadow-sm">
+                      <div className="flex items-center justify-center mb-4">
+                        <div className="bg-gray-100 rounded-full p-3">
+                          <FileText className="h-8 w-8 text-gray-600" />
+                        </div>
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">Available Documents</h3>
+                      <p className="text-gray-700 font-medium text-lg">Whitepaper, Tokenomics, Legal Documents</p>
+                      <p className="text-gray-600 text-sm mt-2">Click on any document tab to get started.</p>
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            ) : isMobile && activeTab === 'legal' ? (
+              /* Mobile Legal Documents - Show sub-tabs */
+              <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
+                <div className="text-center max-w-md mx-auto p-8">
+                  <div className="mb-6">
+                    <div className="text-6xl mb-4">📋</div>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Legal Documents</h2>
+                    <p className="text-gray-600 mb-6">Choose a specific legal document to view:</p>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <button
+                      onClick={() => {
+                        const filename = 'TBD.pdf'
+                        console.log('Opening TBD in new tab:', filename)
+                        window.open(`/${filename}`, '_blank')
+                      }}
+                      className="w-full px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    >
+                      <div className="text-left">
+                        <div className="font-semibold">Token Buyer Disclaimer</div>
+                        <div className="text-sm text-blue-100">Token purchase terms and disclaimer</div>
+                      </div>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        const filename = 'TPA.pdf'
+                        console.log('Opening TPA in new tab:', filename)
+                        window.open(`/${filename}`, '_blank')
+                      }}
+                      className="w-full px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                    >
+                      <div className="text-left">
+                        <div className="font-semibold">Token Buyer Purchase Agreement</div>
+                        <div className="text-sm text-green-100">Token purchase terms and conditions</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : activeTab === 'legal' && !activeSubTab ? (
+              /* Desktop Legal Documents - Show sub-tabs selection */
+              <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
+                <div className="text-center max-w-2xl mx-auto p-8">
+                  <div className="mb-8">
+                    <div className="text-6xl mb-4">📋</div>
+                    <h2 className="text-3xl font-bold text-gray-800 mb-2">Legal Documents</h2>
+                    <p className="text-gray-600 text-lg">Choose a specific legal document to view:</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
+                    <button
+                      onClick={() => {
+                        console.log('Opening TBD sub-tab')
+                        setActiveSubTab('terms-of-service')
+                      }}
+                      className="p-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-lg hover:shadow-xl"
+                    >
+                      <div className="text-left">
+                        <div className="text-2xl mb-2">📄</div>
+                        <div className="text-xl font-semibold mb-2">Token Buyer Disclaimer</div>
+                        <div className="text-blue-100">Token purchase terms and disclaimer</div>
+                      </div>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        console.log('Opening TPA sub-tab')
+                        setActiveSubTab('privacy-policy')
+                      }}
+                      className="p-6 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors shadow-lg hover:shadow-xl"
+                    >
+                      <div className="text-left">
+                        <div className="text-2xl mb-2">📋</div>
+                        <div className="text-xl font-semibold mb-2">Token Buyer Purchase Agreement</div>
+                        <div className="text-green-100">Token purchase terms and conditions</div>
+                      </div>
+                    </button>
+                  </div>
+                  
+                  <div className="mt-8 text-sm text-gray-500">
+                    <p>Click on any document above to view it in the embedded PDF viewer.</p>
+                  </div>
+                </div>
+              </div>
+            ) : activeTab === 'security' ? (
               <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
                 <div className="text-center max-w-md mx-auto p-8">
                   <div className="mb-6">
@@ -269,41 +484,26 @@ export default function DocumentsPage() {
                   </div>
                 </div>
               </div>
+            ) : activeDocUrl ? (
+              <MobilePdfViewer
+                fileUrl={activeDocUrl}
+                initialScale={scale}
+                enableTextLayer={false}
+              />
             ) : (
-              <>
-                {isLoading && (
                   <div className="flex items-center justify-center h-full bg-gray-50">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
                       <p className="text-base text-gray-600">Loading document...</p>
                     </div>
                   </div>
-                )}
-                
-                <div className="pdf-container relative w-full h-full overflow-hidden">
-                  <iframe
-                    src={`${getActiveDocument().file}#view=FitH&scrollbar=0&toolbar=0&navpanes=0&zoom=page-fit`}
-                    className="h-full w-full"
-                    onLoad={handleLoad}
-                    title={getActiveDocument().name}
-                    style={{ 
-                      border: 'none',
-                      transform: `scale(${pdfScale})`,
-                      transformOrigin: 'center top',
-                      width: `${100 / pdfScale}%`,
-                      height: `${100 / pdfScale}%`,
-                      maxWidth: '100%'
-                    }}
-                  />
-                </div>
-              </>
             )}
           </div>
         </div>
       </div>
 
       {/* Footer Info */}
-      <div className="bg-white border-t mt-4 sm:mt-8">
+      <div className="bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="text-center text-gray-600">
             <p className="mb-2 text-sm sm:text-base">
