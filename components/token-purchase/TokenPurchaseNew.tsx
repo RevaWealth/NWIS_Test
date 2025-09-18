@@ -75,7 +75,6 @@ function TokenPurchaseNew({
     needsApproval,
     isApprovalPending,
     localIsApproving,
-    isApprovalConfirmed,
     approveTokens,
     refetchAllowance
   } = useTokenApproval(currency, amount)
@@ -287,16 +286,6 @@ function TokenPurchaseNew({
     }
   }, [mounted, payAmount, debouncedNwisTokenAmount, amount])
 
-  // Auto-hide mobile approval banner when approval is confirmed
-  useEffect(() => {
-    if (isApprovalConfirmed && showMobileApprovalBanner) {
-      // Auto-hide after a short delay to show success state
-      const timer = setTimeout(() => {
-        setShowMobileApprovalBanner(false)
-      }, 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [isApprovalConfirmed, showMobileApprovalBanner])
 
   // Event handlers
   const handleAmountSubmit = () => {
@@ -447,14 +436,14 @@ function TokenPurchaseNew({
   }
 
   // Handle approval with mobile banner
-  const handleApprove = async () => {
+  const handleApprove = () => {
     // Show mobile banner if on mobile device
     if (isMobileDevice()) {
       setShowMobileApprovalBanner(true)
     }
     
     // Call the original approval function
-    await approveTokens()
+    approveTokens()
   }
 
   const handleCloseTPADialog = () => {
@@ -601,8 +590,6 @@ function TokenPurchaseNew({
       <MobileApprovalBanner
         isVisible={showMobileApprovalBanner}
         onClose={() => setShowMobileApprovalBanner(false)}
-        isApprovalPending={isApprovalPending}
-        isApprovalConfirmed={isApprovalConfirmed}
       />
     </>
   )

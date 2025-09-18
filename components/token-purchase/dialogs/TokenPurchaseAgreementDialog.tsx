@@ -42,7 +42,7 @@ export const TokenPurchaseAgreementDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] bg-sky-950 border-sky-800">
+      <DialogContent className="max-w-4xl max-h-[95vh] sm:max-h-[90vh] bg-sky-950 border-sky-800 mx-2 sm:mx-0">
         <DialogTitle className="text-xl font-bold text-white mb-4">
           Token Purchase Agreement
         </DialogTitle>
@@ -50,10 +50,10 @@ export const TokenPurchaseAgreementDialog = ({
           Please review the Token Purchase Agreement carefully before proceeding. You must scroll to the bottom to enable the Agree button.
         </DialogDescription>
         
-        <div className="flex-1 bg-white rounded-lg overflow-hidden mb-4">
+        <div className="flex-1 bg-white rounded-lg overflow-hidden mb-4 flex flex-col">
           <div 
             ref={scrollRef}
-            className="h-[60vh] overflow-auto p-6" 
+            className="flex-1 min-h-0 overflow-auto p-4 sm:p-6" 
             onScroll={handleScroll}
           >
             <div className="prose prose-sm max-w-none">
@@ -336,10 +336,10 @@ export const TokenPurchaseAgreementDialog = ({
           </div>
         </div>
         
-        <div className="flex justify-center space-x-4">
+        <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 px-2 sm:px-0">
           <Button
             onClick={handleClose}
-            className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
+            className="w-full sm:w-auto px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
           >
             Close
           </Button>
@@ -351,7 +351,7 @@ export const TokenPurchaseAgreementDialog = ({
               onOpenChange(false)
             }}
             disabled={!isScrolledToBottom}
-            className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
+            className={`w-full sm:w-auto px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
               isScrolledToBottom 
                 ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
                 : 'bg-gray-400 text-gray-200 cursor-not-allowed'
