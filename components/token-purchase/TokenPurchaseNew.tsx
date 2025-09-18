@@ -147,7 +147,7 @@ function TokenPurchaseNew({
         amountInSmallestUnits && 
         isConnected && 
         contractData.saleActive && 
-        debouncedAmount === amount &&
+        amount && // Changed from debouncedAmount === amount to just amount
         currency === "ETH"
       )
     },
@@ -164,15 +164,23 @@ function TokenPurchaseNew({
       currency,
       needsApproval,
       simulationData: !!simulationData,
+      simulationDataETH: !!simulationDataETH,
+      simulationDataERC20: !!simulationDataERC20,
       isSimulating,
+      isSimulatingETH,
+      isSimulatingERC20,
       simulateError: !!simulateError,
+      simulateErrorETH: !!simulateErrorETH,
+      simulateErrorERC20: !!simulateErrorERC20,
       amountInSmallestUnits: amountInSmallestUnits?.toString(),
       isConnected,
       saleActive: contractData.saleActive,
       debouncedAmount,
-      amount
+      amount,
+      ethPrice,
+      timestamp: timestamp.toString()
     })
-  }, [currency, needsApproval, simulationData, isSimulating, simulateError, amountInSmallestUnits, isConnected, contractData.saleActive, debouncedAmount, amount])
+  }, [currency, needsApproval, simulationData, simulationDataETH, simulationDataERC20, isSimulating, isSimulatingETH, isSimulatingERC20, simulateError, simulateErrorETH, simulateErrorERC20, amountInSmallestUnits, isConnected, contractData.saleActive, debouncedAmount, amount, ethPrice, timestamp])
 
   // Get pay amount for ERC20 tokens
   const { data: payAmountData, isLoading: isPayAmountLoading, error: payAmountError } = useReadContract({
