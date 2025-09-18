@@ -20,6 +20,7 @@ import { NetworkWarning } from "./NetworkWarning"
 import { NetworkSwitchDialog } from "./dialogs/NetworkSwitchDialog"
 import { TransactionConfirmationDialog } from "./dialogs/TransactionConfirmationDialog"
 import { TokenPurchaseAgreementDialog } from "./dialogs/TokenPurchaseAgreementDialog"
+import { MobileApprovalBanner } from "../MobileApprovalBanner"
 import { TokenPurchaseSkeleton } from "@/component/loading-skeleton"
 
 // Constants and types
@@ -55,6 +56,9 @@ function TokenPurchaseNew({
   const [showNetworkDialog, setShowNetworkDialog] = useState(false)
   const [showTPADialog, setShowTPADialog] = useState(false)
   const [hasAgreedToTPA, setHasAgreedToTPA] = useState(false)
+  
+  // Mobile approval banner state
+  const [showMobileApprovalBanner, setShowMobileApprovalBanner] = useState(false)
 
   // Custom hooks
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
@@ -71,6 +75,7 @@ function TokenPurchaseNew({
     needsApproval,
     isApprovalPending,
     localIsApproving,
+    isApprovalConfirmed,
     approveTokens,
     refetchAllowance
   } = useTokenApproval(currency, amount)
@@ -282,6 +287,17 @@ function TokenPurchaseNew({
     }
   }, [mounted, payAmount, debouncedNwisTokenAmount, amount])
 
+  // Auto-hide mobile approval banner when approval is confirmed
+  useEffect(() => {
+    if (isApprovalConfirmed && showMobileApprovalBanner) {
+      // Auto-hide after a short delay to show success state
+      const timer = setTimeout(() => {
+        setShowMobileApprovalBanner(false)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [isApprovalConfirmed, showMobileApprovalBanner])
+
   // Event handlers
   const handleAmountSubmit = () => {
     if (amount && amount !== debouncedAmount) {
@@ -430,6 +446,17 @@ function TokenPurchaseNew({
     setShowTransactionDialog(true)
   }
 
+  // Handle approval with mobile banner
+  const handleApprove = async () => {
+    // Show mobile banner if on mobile device
+    if (isMobileDevice()) {
+      setShowMobileApprovalBanner(true)
+    }
+    
+    // Call the original approval function
+    await approveTokens()
+  }
+
   const handleCloseTPADialog = () => {
     setShowTPADialog(false)
   }
@@ -530,7 +557,7 @@ function TokenPurchaseNew({
           isConnected={isConnected}
           onConnect={() => setOpen(true)}
           onPurchase={handlePurchase}
-          onApprove={approveTokens}
+          onApprove={handleApprove}
           needsApproval={needsApproval}
           currency={currency}
           amount={amount}
@@ -568,6 +595,14 @@ function TokenPurchaseNew({
         open={showTPADialog}
         onOpenChange={setShowTPADialog}
         onAgree={handleAgreeToTPA}
+      />
+      
+      {/* Mobile Approval Banner */}
+      <MobileApprovalBanner
+        isVisible={showMobileApprovalBanner}
+        onClose={() => setShowMobileApprovalBanner(false)}
+        isApprovalPending={isApprovalPending}
+        isApprovalConfirmed={isApprovalConfirmed}
       />
     </>
   )

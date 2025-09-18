@@ -310,6 +310,7 @@ export const useTokenApproval = (currency: Currency, amount: string) => {
     isApprovalPending,
     localIsApproving,
     needsApproval,
+    isApprovalConfirmed,
     checkTokenAllowance,
     approveTokens,
     refetchAllowance
