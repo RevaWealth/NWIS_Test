@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react"
 import { useAccount, useSimulateContract, useChainId, useReadContract, useSwitchChain } from "wagmi" 
 import { useModal } from "connectkit"
 import { useToast } from "@/hooks/use-toast"
@@ -229,14 +229,18 @@ function TokenPurchaseNew({
   }, [currency, ethPayAmount, payAmountData])
 
   // Effects
-  useEffect(() => {
+  useLayoutEffect(() => {
     setMounted(true)
     setTimestamp(BigInt(Math.floor(Date.now() / 1000)))
   }, [])
 
   useEffect(() => {
     if (mounted && ethPrice && !isEthPriceLoading) {
-      setTimestamp(BigInt(Math.floor(Date.now() / 1000)))
+      // Use setTimeout to defer the state update to avoid hydration issues
+      const timer = setTimeout(() => {
+        setTimestamp(BigInt(Math.floor(Date.now() / 1000)))
+      }, 0)
+      return () => clearTimeout(timer)
     }
   }, [mounted, ethPrice, isEthPriceLoading])
 
@@ -269,8 +273,12 @@ function TokenPurchaseNew({
 
   useEffect(() => {
     if (mounted && payAmount && debouncedNwisTokenAmount && !amount) {
-      setAmount(payAmount)
-      setDebouncedAmount(payAmount)
+      // Use setTimeout to defer the state update to avoid hydration issues
+      const timer = setTimeout(() => {
+        setAmount(payAmount)
+        setDebouncedAmount(payAmount)
+      }, 0)
+      return () => clearTimeout(timer)
     }
   }, [mounted, payAmount, debouncedNwisTokenAmount, amount])
 
