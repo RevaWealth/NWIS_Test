@@ -33,7 +33,7 @@ export const MobileApprovalBanner = ({
   if (!shouldShow) return null
 
   return (
-    <div className="fixed inset-0 z-[60] pointer-events-none">
+    <div className="fixed inset-0 z-[70] pointer-events-none">
       {/* Backdrop */}
       <div 
         className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${
@@ -46,10 +46,37 @@ export const MobileApprovalBanner = ({
         className={`absolute bottom-20 left-0 right-0 pointer-events-auto transform transition-transform duration-300 ease-out ${
           isAnimating ? 'translate-y-0' : 'translate-y-full'
         }`}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+        }}
+        onMouseDown={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+        }}
       >
-        <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-2xl">
-          <div className="px-4 py-4 sm:px-6">
+        <div 
+          className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-2xl"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+        >
+          <div 
+            className="px-4 py-4 sm:px-6"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+            onMouseDown={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="flex-shrink-0">
@@ -70,7 +97,18 @@ export const MobileApprovalBanner = ({
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
+                  ;(e.nativeEvent as any).stopImmediatePropagation?.()
                   onClose()
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  ;(e.nativeEvent as any).stopImmediatePropagation?.()
+                }}
+                onTouchStart={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  ;(e.nativeEvent as any).stopImmediatePropagation?.()
                 }}
                 className="flex-shrink-0 ml-3 p-1 rounded-full hover:bg-yellow-400 transition-colors"
               >
