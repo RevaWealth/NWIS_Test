@@ -1,8 +1,9 @@
 'use client'
 
-'use client'
-
 import { useEffect, useState } from "react"
+
+// Force dynamic rendering to prevent SSR issues with wallet connections
+export const dynamic = 'force-dynamic'
 import Image from "next/image"
 import Link from "next/link"
 import CountdownTimer from "../../countdown-timer"

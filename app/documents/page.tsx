@@ -9,6 +9,9 @@ import Navbar from '../../navbar'
 import dynamic from 'next/dynamic'
 import { pdfjs } from 'react-pdf'
 
+// Force dynamic rendering to prevent SSR issues with PDF.js
+export const dynamic = 'force-dynamic'
+
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
 
 // Disable SSR for PDF components
