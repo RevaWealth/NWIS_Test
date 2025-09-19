@@ -42,18 +42,18 @@ export const TokenPurchaseAgreementDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[85vh] bg-sky-950 border-sky-800 mx-2 sm:mx-0">
-        <DialogTitle className="text-xl font-bold text-white mb-4">
+      <DialogContent className="max-w-4xl h-[95vh] sm:h-[85vh] bg-sky-950 border-sky-800 mx-1 sm:mx-0 flex flex-col">
+        <DialogTitle className="text-xl font-bold text-white mb-4 flex-shrink-0">
           Token Purchase Agreement
         </DialogTitle>
-        <DialogDescription className="text-gray-300 mb-4">
+        <DialogDescription className="text-gray-300 mb-4 flex-shrink-0">
           Please review the Token Purchase Agreement carefully before proceeding. You must scroll to the bottom to enable the Agree button.
         </DialogDescription>
         
-        <div className="flex-1 bg-white rounded-lg overflow-hidden mb-4">
+        <div className="flex-1 bg-white rounded-lg overflow-hidden mb-4 min-h-0">
           <div 
             ref={scrollRef}
-            className="h-[50vh] sm:h-[60vh] overflow-auto p-4 sm:p-6" 
+            className="h-full overflow-auto p-4 sm:p-6" 
             onScroll={handleScroll}
           >
             <div className="prose prose-sm max-w-none">
@@ -336,7 +336,7 @@ export const TokenPurchaseAgreementDialog = ({
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 flex-shrink-0 mt-auto">
           <Button
             onClick={handleClose}
             className="w-full sm:w-auto px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
