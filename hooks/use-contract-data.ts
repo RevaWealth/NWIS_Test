@@ -11,7 +11,7 @@ export const useContractData = () => {
       index: 0,
       startAmount: 0,
       endAmount: 0,
-      price: 0
+      price: 0.001 // Use a reasonable default instead of 0
     },
     nextTier: {
       index: 0,
@@ -40,7 +40,7 @@ export const useContractData = () => {
           index: "0",
           startAmount: "0",
           endAmount: "0",
-          price: 0
+          price: 0.001
         }
         
         // Convert tier amounts from wei to tokens
@@ -64,7 +64,7 @@ export const useContractData = () => {
           }
         })
         
-        setContractData({
+        const newContractData = {
           totalTokensForSale: forSaleTokens,
           totalTokensSold: soldTokens,
           progressPercentage: percentage,
@@ -86,7 +86,10 @@ export const useContractData = () => {
             endAmount: 0,
             price: 0
           }
-        })
+        }
+        
+        
+        setContractData(newContractData)
       }
     } catch (error) {
       console.error('Error fetching contract data:', error)

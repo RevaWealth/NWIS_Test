@@ -34,10 +34,11 @@ interface UseTokenCalculationProps {
   amount: string
   currency: string
   ethPrice?: number
+  currentTierPrice?: number
   enabled?: boolean
 }
 
-export function useTokenCalculation({ amount, currency, ethPrice = 2500, enabled = true }: UseTokenCalculationProps) {
+export function useTokenCalculation({ amount, currency, ethPrice = 2500, currentTierPrice = 0.001, enabled = true }: UseTokenCalculationProps) {
   const { isConnected } = useAccount()
   const [isCalculating, setIsCalculating] = useState(false)
   const [tokenAmount, setTokenAmount] = useState<string>("")
@@ -71,17 +72,23 @@ export function useTokenCalculation({ amount, currency, ethPrice = 2500, enabled
       // Calculate based on currency rates with live ETH price
       let calculatedTokens = 0
       
-      if (currency === "ETH") {
-        // For ETH: (ETH amount * ETH price in USD) / NWIS token price ($0.001)
-        const ethAmountUSD = Number.parseFloat(amount) * ethPrice
-        calculatedTokens = ethAmountUSD / 0.001
+      // Parse amount with safety checks
+      const parsedAmount = Number.parseFloat(amount)
+      
+      // Safety check: ensure we have valid numbers
+      if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0 || currentTierPrice <= 0) {
+        calculatedTokens = 0
+      } else if (currency === "ETH") {
+        // For ETH: (ETH amount * ETH price in USD) / current tier price
+        const ethAmountUSD = parsedAmount * ethPrice
+        calculatedTokens = ethAmountUSD / currentTierPrice
       } else if (currency === "USDT" || currency === "USDC") {
-        // For stablecoins: (amount * 1) / NWIS token price ($0.001)
+        // For stablecoins: (amount * 1) / current tier price
         // Note: USDT/USDC have 6 decimals, but we're calculating based on USD value
-        calculatedTokens = Number.parseFloat(amount) / 0.001
+        calculatedTokens = parsedAmount / currentTierPrice
       } else {
         // Fallback for other currencies
-        calculatedTokens = Number.parseFloat(amount) / 0.001
+        calculatedTokens = parsedAmount / currentTierPrice
       }
 
       setTokenAmount(calculatedTokens.toLocaleString())
@@ -89,7 +96,7 @@ export function useTokenCalculation({ amount, currency, ethPrice = 2500, enabled
     }, 300)
 
     return () => clearTimeout(timer)
-  }, [amount, currency, isConnected, enabled, ethPrice])
+  }, [amount, currency, isConnected, enabled, ethPrice, currentTierPrice])
 
   return {
     tokenAmount,

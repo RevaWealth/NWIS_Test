@@ -34,9 +34,13 @@ export const AmountInput = ({
           placeholder="0.00"
           value={amount}
           onChange={(e) => {
-            // Only allow numbers and decimal points
+            // Only allow numbers and decimal points, but prevent invalid cases
             const value = e.target.value
-            if (value === "" || /^\d*\.?\d*$/.test(value)) {
+            if (value === "" || 
+                /^\d+$/.test(value) || // Just digits
+                /^\d+\.$/.test(value) || // Digits followed by decimal point
+                /^\d+\.\d+$/.test(value) || // Valid decimal number
+                /^\.\d+$/.test(value)) { // Decimal point followed by digits (like .5)
               onAmountChange(value)
             }
           }}

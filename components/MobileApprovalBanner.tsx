@@ -43,22 +43,22 @@ export const MobileApprovalBanner = ({
       
       {/* Banner */}
       <div 
-        className={`absolute bottom-0 left-0 right-0 pointer-events-auto transform transition-transform duration-300 ease-out ${
+        className={`absolute bottom-20 left-0 right-0 pointer-events-auto transform transition-transform duration-300 ease-out ${
           isAnimating ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-2xl">
+        <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-2xl">
           <div className="px-4 py-4 sm:px-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="flex-shrink-0">
-                  <Wallet className="h-6 w-6 text-blue-200" />
+                  <Wallet className="h-6 w-6 text-yellow-900" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-semibold text-white">
+                  <h3 className="text-sm font-semibold text-black">
                     Open Your Wallet
                   </h3>
-                  <p className="text-xs text-blue-100 mt-1">
+                  <p className="text-xs text-yellow-900 mt-1">
                     Please open your wallet app and approve the token transaction.
                   </p>
                 </div>
@@ -67,9 +67,9 @@ export const MobileApprovalBanner = ({
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="flex-shrink-0 ml-3 p-1 rounded-full hover:bg-blue-500 transition-colors"
+                className="flex-shrink-0 ml-3 p-1 rounded-full hover:bg-yellow-400 transition-colors"
               >
-                <X className="h-4 w-4 text-blue-200" />
+                <X className="h-4 w-4 text-yellow-900" />
               </button>
             </div>
           </div>

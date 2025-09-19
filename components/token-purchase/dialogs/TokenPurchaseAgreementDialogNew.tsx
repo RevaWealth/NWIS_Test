@@ -42,7 +42,7 @@ export const TokenPurchaseAgreementDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[85vh] bg-sky-950 border-sky-800 mx-2 sm:mx-0">
+      <DialogContent className="max-w-4xl max-h-[90vh] bg-sky-950 border-sky-800">
         <DialogTitle className="text-xl font-bold text-white mb-4">
           Token Purchase Agreement
         </DialogTitle>
@@ -53,7 +53,7 @@ export const TokenPurchaseAgreementDialog = ({
         <div className="flex-1 bg-white rounded-lg overflow-hidden mb-4">
           <div 
             ref={scrollRef}
-            className="h-[50vh] sm:h-[60vh] overflow-auto p-4 sm:p-6" 
+            className="h-[60vh] overflow-auto p-6" 
             onScroll={handleScroll}
           >
             <div className="prose prose-sm max-w-none">
@@ -199,7 +199,7 @@ export const TokenPurchaseAgreementDialog = ({
                   <h4 className="text-md font-semibold text-gray-900 mb-2">3.3 Quorum & Approval</h4>
                   <ul className="list-disc list-inside text-gray-700 mb-2 ml-4">
                     <li>Votes require at least X% quorum of total circulating tokens.</li>
-                    <li>A simple majority (&gt;50%) or supermajority (e.g., 67%) may be required depending on proposal type.</li>
+                    <li>A simple majority (>50%) or supermajority (e.g., 67%) may be required depending on proposal type.</li>
                   </ul>
                 </div>
 
@@ -336,10 +336,10 @@ export const TokenPurchaseAgreementDialog = ({
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+        <div className="flex justify-center space-x-4">
           <Button
             onClick={handleClose}
-            className="w-full sm:w-auto px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
+            className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
           >
             Close
           </Button>
@@ -351,7 +351,7 @@ export const TokenPurchaseAgreementDialog = ({
               onOpenChange(false)
             }}
             disabled={!isScrolledToBottom}
-            className={`w-full sm:w-auto px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
+            className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
               isScrolledToBottom 
                 ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
                 : 'bg-gray-400 text-gray-200 cursor-not-allowed'

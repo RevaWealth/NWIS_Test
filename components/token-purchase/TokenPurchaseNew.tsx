@@ -64,11 +64,26 @@ function TokenPurchaseNew({
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
   const { contractData, isLoadingContractData, fetchContractData } = useContractData()
   const { tokenAmount, isCalculating } = useTokenCalculation({ 
-    amount: debouncedAmount, 
+    amount: amount, 
     currency,
     ethPrice: ethPrice,
-    enabled: debouncedAmount !== "" && debouncedAmount === amount && contractData.saleActive
+    currentTierPrice: contractData.currentTier?.price || 0.001,
+    enabled: amount !== "" && contractData.saleActive && !isLoadingContractData
   })
+
+
+  // Sync NWIS amount when tokenAmount changes
+  useEffect(() => {
+    if (amount && tokenAmount) {
+      handleSyncFromAmount()
+    }
+  }, [tokenAmount, amount])
+
+  // Fetch contract data on mount
+  useEffect(() => {
+    fetchContractData()
+  }, [fetchContractData])
+
 
   // Token approval hook
   const {
@@ -161,6 +176,7 @@ function TokenPurchaseNew({
   const simulationData = currency === "ETH" ? simulationDataETH : simulationDataERC20
   const simulateError = currency === "ETH" ? simulateErrorETH : simulateErrorERC20
   const isSimulating = currency === "ETH" ? isSimulatingETH : isSimulatingERC20
+
 
   // Debug simulation state
   useEffect(() => {
@@ -327,19 +343,15 @@ function TokenPurchaseNew({
   const handleSyncFromAmount = () => {
     console.log('handleSyncFromAmount called:', { tokenAmount, debouncedAmount, amount, currency, ethPrice })
     
-    if (amount) {
+    if (amount && tokenAmount) {
       if (amount !== debouncedAmount) {
         setDebouncedAmount(amount)
       }
       
-      const calculatedNwisTokens = calculateNwisFromAmount(amount, currency, ethPrice || 0)
-      
-      if (calculatedNwisTokens > 0) {
-        const formattedTokens = formatNumber(calculatedNwisTokens)
-        setNwisTokenAmount(formattedTokens)
-        setDebouncedNwisTokenAmount(formattedTokens)
-        console.log('NWIS Amount field populated with:', formattedTokens)
-      }
+      // Use the tokenAmount from useTokenCalculation hook instead of calculateNwisFromAmount
+      setNwisTokenAmount(tokenAmount)
+      setDebouncedNwisTokenAmount(tokenAmount)
+      console.log('NWIS Amount field populated with:', tokenAmount)
     }
   }
 
@@ -419,6 +431,11 @@ function TokenPurchaseNew({
     if (!simulationData) {
       return
     }
+
+    // Show mobile banner if on mobile device
+    if (isMobileDevice()) {
+      setShowMobileApprovalBanner(true)
+    }
     
     const gasEstimate = simulationData.request.gas ? (Number(simulationData.request.gas) * 20e9 / 1e18).toFixed(6) : "0.001"
     const nwisAmount = debouncedNwisTokenAmount || nwisTokenAmount || "0"
@@ -435,7 +452,7 @@ function TokenPurchaseNew({
     setShowTransactionDialog(true)
   }
 
-  // Handle approval with mobile banner
+  // Handle approval
   const handleApprove = () => {
     // Show mobile banner if on mobile device
     if (isMobileDevice()) {
