@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useToast } from '@/hooks/use-toast'
 import { PRESALE_CONTRACT_ADDRESS, PRESALE_ABI } from '@/lib/constants'
-import { getTokenAddress, convertToSmallestUnits } from '@/lib/token-purchase-utils'
+import { getTokenAddress, convertToSmallestUnits, isMobileDevice } from '@/lib/token-purchase-utils'
 import { Currency, TransactionDetails } from '@/lib/types'
 
 interface UseTransactionConfirmationProps {
@@ -14,6 +14,7 @@ interface UseTransactionConfirmationProps {
     saleActive: boolean
   }
   tokenAmount: string
+  onShowMobileBanner?: () => void
 }
 
 export const useTransactionConfirmation = ({
@@ -22,7 +23,8 @@ export const useTransactionConfirmation = ({
   ethPrice,
   timestamp,
   contractData,
-  tokenAmount
+  tokenAmount,
+  onShowMobileBanner
 }: UseTransactionConfirmationProps) => {
   const { toast } = useToast()
   
@@ -163,6 +165,11 @@ export const useTransactionConfirmation = ({
   // Confirm transaction
   const handleConfirmTransaction = async () => {
     if (!amountInSmallestUnits) return
+
+    // Show mobile banner if on mobile device when Buy NWIS button is pressed
+    if (isMobileDevice() && onShowMobileBanner) {
+      onShowMobileBanner()
+    }
 
     try {
       if (currency === "ETH") {

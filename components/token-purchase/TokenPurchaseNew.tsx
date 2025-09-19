@@ -113,7 +113,8 @@ function TokenPurchaseNew({
     ethPrice: ethPrice || 0,
     timestamp,
     contractData,
-    tokenAmount: tokenAmount || "0"
+    tokenAmount: tokenAmount || "0",
+    onShowMobileBanner: () => setShowMobileApprovalBanner(true)
   })
 
   // Network validation
@@ -429,11 +430,6 @@ function TokenPurchaseNew({
 
     if (!simulationData) {
       return
-    }
-    
-    // Show mobile banner if on mobile device when Buy NWIS button is pressed
-    if (isMobileDevice()) {
-      setShowMobileApprovalBanner(true)
     }
     
     const gasEstimate = simulationData.request.gas ? (Number(simulationData.request.gas) * 20e9 / 1e18).toFixed(6) : "0.001"
