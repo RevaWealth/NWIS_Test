@@ -431,6 +431,11 @@ function TokenPurchaseNew({
       return
     }
     
+    // Show mobile banner if on mobile device when Buy NWIS button is pressed
+    if (isMobileDevice()) {
+      setShowMobileApprovalBanner(true)
+    }
+    
     const gasEstimate = simulationData.request.gas ? (Number(simulationData.request.gas) * 20e9 / 1e18).toFixed(6) : "0.001"
     const nwisAmount = debouncedNwisTokenAmount || nwisTokenAmount || "0"
     
@@ -464,11 +469,7 @@ function TokenPurchaseNew({
   const handleAgreeToTPA = () => {
     setHasAgreedToTPA(true)
     setShowTPADialog(false)
-    
-    // Show mobile banner if on mobile device after agreeing to TPA
-    if (isMobileDevice()) {
-      setShowMobileApprovalBanner(true)
-    }
+    // Banner will be triggered by handlePurchase when Buy NWIS button is pressed
   }
 
   // Early returns

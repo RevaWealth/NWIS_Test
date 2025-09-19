@@ -46,6 +46,7 @@ export const MobileApprovalBanner = ({
         className={`absolute bottom-20 left-0 right-0 pointer-events-auto transform transition-transform duration-300 ease-out ${
           isAnimating ? 'translate-y-0' : 'translate-y-full'
         }`}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-2xl">
           <div className="px-4 py-4 sm:px-6">
@@ -66,7 +67,11 @@ export const MobileApprovalBanner = ({
               
               {/* Close button */}
               <button
-                onClick={onClose}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onClose()
+                }}
                 className="flex-shrink-0 ml-3 p-1 rounded-full hover:bg-yellow-400 transition-colors"
               >
                 <X className="h-4 w-4 text-yellow-900" />
