@@ -57,7 +57,21 @@ export const PurchaseButton = ({
     }
   }
 
-  const isDisabled = !amount || !saleActive || isPurchasing || localIsApproving || isApprovalPending || (!needsApproval && !simulationData) || !isCorrectNetwork
+  const isDisabled = !amount || !saleActive || isPurchasing || localIsApproving || isApprovalPending || !isCorrectNetwork
+
+  // Debug logging for production issues
+  console.log('PurchaseButton state:', {
+    amount: !!amount,
+    saleActive,
+    isPurchasing,
+    localIsApproving,
+    isApprovalPending,
+    needsApproval,
+    simulationData: !!simulationData,
+    isCorrectNetwork,
+    isDisabled,
+    currency
+  })
 
   return (
     <Button

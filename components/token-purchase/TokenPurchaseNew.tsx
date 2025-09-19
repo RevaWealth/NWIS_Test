@@ -140,8 +140,7 @@ function TokenPurchaseNew({
         isConnected && 
         contractData.saleActive && 
         debouncedAmount === amount &&
-        currency !== "ETH" &&
-        !needsApproval
+        currency !== "ETH"
       ),
     },
   })
