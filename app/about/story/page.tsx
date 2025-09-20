@@ -19,8 +19,8 @@ function AboutContent() {
   }, [searchParams])
 
   const companyStats = [
-    { label: "Assets Under Management", value: "Coming Soon", description: "Total NWIS token market cap" },
-    { label: "Global Reach", value: "Coming Soon", description: "Countries with NWIS holders" },
+    { label: "Assets Under Management", value: "Coming Soon", description: "Total value of Real-World assets under management" },
+    { label: "Global Reach", value: "Coming Soon", description: "Countries with NWIS Real-World assets under management" },
     { label: "Investment Sectors", value: "Coming Soon", description: "Agriculture, Infrastructure, Energy, Real Estate" },
     { label: "Community Members", value: "Coming Soon", description: "Active NWIS token holders" },
   ]
@@ -56,7 +56,7 @@ function AboutContent() {
     },
     {
       name: "Jonathan Goebel",
-      title: "Co-Founder & CFO",
+      title: "CFO",
       bio: "Financial strategist with deep expertise in corporate finance and investment management, ensuring sustainable growth and financial excellence.",
       image: "/images/Jon2.jpg"
     },
@@ -68,7 +68,7 @@ function AboutContent() {
     },
     {
       name: "Pari Mah",
-      title: "VP of Marketing",
+      title: "Co-Founder & CMO",
       bio: "Marketing strategist with proven track record in building brand awareness and driving community engagement in the E-commerce and fintech space.",
       image: "/images/Pari.jpg"
     }
@@ -91,7 +91,7 @@ function AboutContent() {
       </div>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-slate-800 to-slate-700 py-8 sm:py-12 md:py-16 lg:py-20">
+      <section className="bg-gradient-to-br from-sky-950 to-slate-900 py-8 sm:py-12 md:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">
@@ -117,7 +117,7 @@ function AboutContent() {
       </section>
 
       {/* Navigation Tabs */}
-      <section className="bg-slate-800 border-b border-slate-700">
+      <section className="bg-black border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex flex-wrap justify-center sm:justify-start space-x-2 sm:space-x-4 md:space-x-8 overflow-x-auto">
             {[

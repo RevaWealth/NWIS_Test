@@ -15,7 +15,7 @@ export default function Navbar() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const navItems = [
-    { name: "Dashboard", href: "/token-purchase" },
+    { name: "Buy NWIS Tokens", href: "/token-purchase" },
     { name: "About", href: "#about", hasDropdown: true },
     { name: "Documents", href: "/documents" },
     { name: "Tokenomics", href: "/tokenomics" },
@@ -131,7 +131,11 @@ export default function Navbar() {
                 ) : (
                   <Link 
                     href={item.href} 
-                    className="text-white hover:text-sky-200 transition-colors duration-200 font-medium px-3 py-2 block"
+                    className={`transition-colors duration-200 font-medium px-3 py-2 block ${
+                      item.name === "Buy NWIS Tokens" 
+                        ? "text-[#a57e24] hover:text-[#8a6919]" 
+                        : "text-white hover:text-sky-200"
+                    }`}
                   >
                     {item.name}
                   </Link>
@@ -196,7 +200,11 @@ export default function Navbar() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="text-sky-200 hover:text-white block px-3 py-3 text-base font-medium transition-colors"
+                      className={`block px-3 py-3 text-base font-medium transition-colors ${
+                        item.name === "Buy NWIS Tokens" 
+                          ? "text-[#a57e24] hover:text-[#8a6919]" 
+                          : "text-sky-200 hover:text-white"
+                      }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
