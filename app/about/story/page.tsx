@@ -70,7 +70,7 @@ function AboutContent() {
       name: "Pari Mah",
       title: "Co-Founder & CMO",
       bio: "Marketing strategist with proven track record in building brand awareness and driving community engagement in the E-commerce and fintech space.",
-      image: "/images/Pari.jpg"
+      image: "/images/Pari2.jpg"
     }
   ]
   return (

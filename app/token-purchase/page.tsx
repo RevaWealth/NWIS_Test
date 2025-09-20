@@ -38,17 +38,14 @@ export default function TokenPurchasePage() {
 
   if (!tokenSaleData) {
     return (
-      <div 
-        className="min-h-screen bg-white !bg-white flex items-center justify-center" 
-        style={{backgroundColor: 'white'}}
-      >
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-sky-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-sky-400"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
       {/* Header */}
       <Navbar />
 
@@ -95,20 +92,20 @@ export default function TokenPurchasePage() {
 
           {/* Additional Information */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-300 mb-4">
               Ready to start building your generational wealth?
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/about/story"
-                className="text-sky-600 hover:text-sky-700 font-medium transition-colors"
+                className="text-sky-400 hover:text-sky-300 font-medium transition-colors"
               >
                 Learn More About NexusWealth
               </Link>
-              <span className="text-xs text-gray-400">•</span>
+              <span className="text-xs text-gray-500">•</span>
               <Link
                 href="/tokenomics"
-                className="text-sky-600 hover:text-sky-700 font-medium transition-colors"
+                className="text-sky-400 hover:text-sky-300 font-medium transition-colors"
               >
                 View Tokenomics
               </Link>

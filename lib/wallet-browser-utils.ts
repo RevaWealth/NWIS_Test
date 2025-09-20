@@ -50,7 +50,11 @@ export function isWalletBrowser(): boolean {
                              typeof window.localStorage.setItem !== 'function' ||
                              typeof window.IndexedDB === 'undefined'
 
-  return isWalletUserAgent || (hasWeb3Provider && (hasWalletProperties || isWebView || hasReducedFeatures))
+  // Only consider it a wallet browser if it's a mobile device OR has wallet user agent OR is a WebView
+  // Desktop browsers with wallet extensions should not be considered wallet browsers
+  const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase())
+  
+  return isWalletUserAgent || (isMobile && hasWeb3Provider && (hasWalletProperties || isWebView || hasReducedFeatures))
 }
 
 /**

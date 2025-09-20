@@ -431,11 +431,8 @@ function TokenPurchaseNew({
       return
     }
 
-    if (!simulationData) {
-      return
-    }
-    
-    const gasEstimate = simulationData.request.gas ? (Number(simulationData.request.gas) * 20e9 / 1e18).toFixed(6) : "0.001"
+    // Use simulation data for gas estimate if available, otherwise use default
+    const gasEstimate = simulationData?.request?.gas ? (Number(simulationData.request.gas) * 20e9 / 1e18).toFixed(6) : "0.001"
     const nwisAmount = debouncedNwisTokenAmount || nwisTokenAmount || "0"
     
     setTransactionDetails({

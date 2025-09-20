@@ -46,7 +46,7 @@ export const TokenPurchaseAgreementDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className={`max-w-${dialogConfig.maxWidth} h-[${dialogConfig.maxHeight}] bg-sky-950 border-sky-800 mx-${dialogConfig.margin} flex flex-col`}
+        className={`${isWallet ? 'max-w-[95vw]' : 'sm:max-w-4xl'} bg-sky-950 border-sky-800 flex flex-col`}
         style={{
           zIndex: dialogConfig.zIndex,
           maxWidth: isWallet ? '95vw' : undefined,
@@ -61,13 +61,14 @@ export const TokenPurchaseAgreementDialog = ({
           Please review the Token Purchase Agreement carefully before proceeding. You must scroll to the bottom to enable the Agree button.
         </DialogDescription>
         
-        <div className={`flex-1 bg-white rounded-lg overflow-hidden mb-4 ${isWallet ? 'min-h-[60vh]' : 'min-h-0'}`}>
+        <div className={`flex-1 bg-white rounded-lg overflow-hidden mb-4`}>
           <div 
             ref={scrollRef}
-            className={`h-full overflow-auto ${isWallet ? 'p-2' : 'p-4 sm:p-6'}`}
+            className={`h-full overflow-y-auto ${isWallet ? 'p-2' : 'p-4 sm:p-6'}`}
             onScroll={handleScroll}
             style={{
-              maxHeight: isWallet ? '60vh' : '100%',
+              maxHeight: '60vh',
+              minHeight: '400px',
             }}
           >
             <div className="prose prose-sm max-w-none">
