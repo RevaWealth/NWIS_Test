@@ -14,17 +14,17 @@ export default function TokenomicsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
       {/* Navbar */}
       <Navbar />
 
       {/* Tokenomics Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-900">
-            <span className="text-sky-600">NWIS</span> Tokenomics
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-white">
+            <span className="text-sky-400">NWIS</span> Tokenomics
           </h2>
-          <p className="max-w-3xl mx-auto text-base sm:text-lg text-gray-600 px-4">
+          <p className="max-w-3xl mx-auto text-base sm:text-lg text-gray-300 px-4">
             Transparent and sustainable token distribution designed for long-term growth and investors benefit.
           </p>
         </div>
@@ -34,15 +34,15 @@ export default function TokenomicsPage() {
             {tokenomics.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 sm:p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+                className="flex items-center justify-between p-4 sm:p-6 bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center">
                   <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gradient-to-r ${item.color} mr-3 sm:mr-4`}></div>
-                  <span className="font-medium text-gray-900 text-sm sm:text-base">{item.label}</span>
+                  <span className="font-medium text-white text-sm sm:text-base">{item.label}</span>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-gray-900 text-sm sm:text-base">{item.value}</div>
-                  <div className="text-xs sm:text-sm text-slate-500">{item.percentage}%</div>
+                  <div className="font-bold text-white text-sm sm:text-base">{item.value}</div>
+                  <div className="text-xs sm:text-sm text-slate-400">{item.percentage}%</div>
                 </div>
               </div>
             ))}
@@ -130,8 +130,8 @@ export default function TokenomicsPage() {
               {/* Center text */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-gray-900">50B</div>
-                  <div className="text-xs sm:text-sm text-gray-600">Total Supply</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">50B</div>
+                  <div className="text-xs sm:text-sm text-gray-300">Total Supply</div>
                 </div>
               </div>
             </div>
@@ -140,34 +140,34 @@ export default function TokenomicsPage() {
 
         {/* Additional Tokenomics Info */}
         <div className="mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          <div className="text-center p-4 sm:p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-4 sm:p-6 bg-slate-800 rounded-lg border border-slate-700 shadow-sm">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-sky-900 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Growth Potential</h3>
-            <p className="text-sm sm:text-base text-gray-600">Strategic allocation designed for sustainable long-term growth and value appreciation.</p>
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">Growth Potential</h3>
+            <p className="text-sm sm:text-base text-gray-300">Strategic allocation designed for sustainable long-term growth and value appreciation.</p>
           </div>
 
-          <div className="text-center p-4 sm:p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-4 sm:p-6 bg-slate-800 rounded-lg border border-slate-700 shadow-sm">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-900 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Transparency</h3>
-            <p className="text-sm sm:text-base text-gray-600">Clear and verifiable token distribution with community governance and oversight.</p>
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">Transparency</h3>
+            <p className="text-sm sm:text-base text-gray-300">Clear and verifiable token distribution with community governance and oversight.</p>
           </div>
 
-          <div className="text-center p-4 sm:p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-4 sm:p-6 bg-slate-800 rounded-lg border border-slate-700 shadow-sm">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Community Driven</h3>
-            <p className="text-sm sm:text-base text-gray-600">Token holders participate in key decisions on Treasury Management.</p>
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">Community Driven</h3>
+            <p className="text-sm sm:text-base text-gray-300">Token holders participate in key decisions on Treasury Management.</p>
           </div>
         </div>
 

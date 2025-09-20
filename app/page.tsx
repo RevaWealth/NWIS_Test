@@ -104,12 +104,12 @@ export default function Home() {
           {/* Background video */}
           <div className="absolute inset-0 z-0">
             <MobileVideo
-              src="/images/ST4.mp4"
+              src="/images/SS6.mp4"
               poster=""
-              alt="Family flying a kite on the beach with ocean waves in the background"
-              className="w-full h-full object-cover object-[70%_center] sm:object-center pointer-events-none select-none"
+              alt="Background video for hero section"
+              className="w-full h-full object-cover object-center sm:object-[center_top] pointer-events-none select-none"
               fallbackImage="/images/NWIS.png"
-              fallbackAlt="Family flying a kite on the beach with ocean waves in the background"
+              fallbackAlt="Background video for hero section"
               width={1920}
               height={1080}
             />

@@ -11,14 +11,14 @@ export default function TeamSection() {
     {
       name: "Michael Sarabian",
       role: "Co-Founder & CEO",
-      image: "/images/Michael.JPEG",
+      image: "/images/Mike.jpg",
       linkedin: "http://linkedin.com/in/michael-sarabian-17a306371",
       twitter: "#",
     },
     {
       name: "Jonathan Goebel",
       role: "Co-Founder & CFO",
-      image: "/images/Jon.jpg",
+      image: "/images/Jon2.jpg",
       linkedin: "http://linkedin.com/in/jonathan-goebel-4131726a",
       twitter: "#",
     },
