@@ -98,7 +98,7 @@ export default function Home() {
       <AnnouncementBar />
       <Navbar />
 
-      <main className="flex-1 relative overflow-hidden bg-white text-center">
+      <main className="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 text-center">
         {/* Hero Section */}
         <section className="relative w-full overflow-hidden py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
           {/* Background video */}
@@ -113,19 +113,19 @@ export default function Home() {
               width={1920}
               height={1080}
             />
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-white/40 via-white/20 to-transparent" />
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-slate-900/60 via-slate-800/40 to-transparent" />
           </div>
 
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl text-center">
-              <h1 className="font-bold mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-sky-900 leading-tight">
+              <h1 className="font-bold mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-white leading-tight">
                 NexusWealth Investment Solutions
               </h1>
-              <h2 className="font-bold mb-4 sm:mb-6 py-2 sm:py-3 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-[rgba(165,126,36,1)] leading-tight">
+              <h2 className="font-bold mb-4 sm:mb-6 py-2 sm:py-3 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-[#a57e24] leading-tight">
                 Empowering Individuals to Build Generational Wealth through Blockchain Tokenization
               </h2>
-              <p className="max-w-2xl mx-auto text-sky-800 text-sm sm:text-base px-2">
+              <p className="max-w-2xl mx-auto text-gray-300 text-sm sm:text-base px-2">
                 Revolutionizing real-world investment through Tokenized innovation.
               </p>
               

@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/component/UI/dialog"
 import { Button } from "@/component/UI/button"
 import { useState, useRef, useEffect } from "react"
+import { getDialogConfig, isWalletBrowser } from "@/lib/wallet-browser-utils"
 
 interface TokenPurchaseAgreementDialogProps {
   open: boolean
@@ -15,6 +16,8 @@ export const TokenPurchaseAgreementDialog = ({
 }: TokenPurchaseAgreementDialogProps) => {
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const isWallet = isWalletBrowser()
+  const dialogConfig = getDialogConfig()
 
   const handleClose = (e?: React.MouseEvent) => {
     if (e) {
@@ -42,7 +45,15 @@ export const TokenPurchaseAgreementDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl h-[95vh] sm:h-[85vh] bg-sky-950 border-sky-800 mx-1 sm:mx-0 flex flex-col">
+      <DialogContent 
+        className={`max-w-${dialogConfig.maxWidth} h-[${dialogConfig.maxHeight}] bg-sky-950 border-sky-800 mx-${dialogConfig.margin} flex flex-col`}
+        style={{
+          zIndex: dialogConfig.zIndex,
+          maxWidth: isWallet ? '95vw' : undefined,
+          maxHeight: dialogConfig.maxHeight,
+          margin: dialogConfig.margin,
+        }}
+      >
         <DialogTitle className="text-xl font-bold text-white mb-4 flex-shrink-0">
           Token Purchase Agreement
         </DialogTitle>
@@ -50,11 +61,14 @@ export const TokenPurchaseAgreementDialog = ({
           Please review the Token Purchase Agreement carefully before proceeding. You must scroll to the bottom to enable the Agree button.
         </DialogDescription>
         
-        <div className="flex-1 bg-white rounded-lg overflow-hidden mb-4 min-h-0">
+        <div className={`flex-1 bg-white rounded-lg overflow-hidden mb-4 ${isWallet ? 'min-h-[60vh]' : 'min-h-0'}`}>
           <div 
             ref={scrollRef}
-            className="h-full overflow-auto p-4 sm:p-6" 
+            className={`h-full overflow-auto ${isWallet ? 'p-2' : 'p-4 sm:p-6'}`}
             onScroll={handleScroll}
+            style={{
+              maxHeight: isWallet ? '60vh' : '100%',
+            }}
           >
             <div className="prose prose-sm max-w-none">
               <h1 className="text-2xl font-bold text-gray-900 mb-6">Token Purchase Agreement (TPA)</h1>
@@ -336,10 +350,10 @@ export const TokenPurchaseAgreementDialog = ({
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 flex-shrink-0 mt-auto">
+        <div className={`flex ${isWallet ? 'flex-col gap-2' : 'flex-col sm:flex-row justify-center gap-2 sm:gap-4'} flex-shrink-0 mt-auto`}>
           <Button
             onClick={handleClose}
-            className="w-full sm:w-auto px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
+            className={`${isWallet ? 'w-full' : 'w-full sm:w-auto'} px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200`}
           >
             Close
           </Button>
@@ -351,7 +365,7 @@ export const TokenPurchaseAgreementDialog = ({
               onOpenChange(false)
             }}
             disabled={!isScrolledToBottom}
-            className={`w-full sm:w-auto px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
+            className={`${isWallet ? 'w-full' : 'w-full sm:w-auto'} px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
               isScrolledToBottom 
                 ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
                 : 'bg-gray-400 text-gray-200 cursor-not-allowed'

@@ -11,14 +11,14 @@ export default function PartnersSection() {
   ]
 
   return (
-    <section id="partners" className="py-20 bg-[#070b14] bg-white">
+    <section id="partners" className="py-20 bg-gradient-to-br from-slate-900 to-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold text-center text-white mb-12">Our Valued Partners</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-center">
           {partners.map((partner, index) => (
             <div
               key={index}
-              className="flex justify-center items-center p-4 bg-[#0c1220] rounded-lg border border-gray-800"
+              className="flex justify-center items-center p-4 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-colors duration-200"
             >
               <Image
                 src={partner.logo || "/placeholder.svg"}

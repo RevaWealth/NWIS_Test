@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/component/UI/button"
 import { LoadingSpinner } from "@/component/loading-spinner"
 import { TransactionDetails } from "@/lib/types"
+import { getDialogConfig, isWalletBrowser } from "@/lib/wallet-browser-utils"
 
 interface TransactionConfirmationDialogProps {
   open: boolean
@@ -28,9 +29,19 @@ export const TransactionConfirmationDialog = ({
   onClose,
   onShowTPA
 }: TransactionConfirmationDialogProps) => {
+  const isWallet = isWalletBrowser()
+  const dialogConfig = getDialogConfig()
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg border-2 border-sky-950 rounded-xl bg-sky-950">
+      <DialogContent 
+        className={`${isWallet ? 'max-w-[95vw]' : 'sm:max-w-lg'} border-2 border-sky-950 rounded-xl bg-sky-950`}
+        style={{
+          zIndex: dialogConfig.zIndex,
+          maxWidth: isWallet ? '95vw' : undefined,
+          margin: dialogConfig.margin,
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-white">
             {isTransactionConfirmed ? "Transaction Confirmed!" : transactionHash ? "Processing Transaction..." : "Confirm Transaction"}
@@ -72,14 +83,14 @@ export const TransactionConfirmationDialog = ({
               </div>
 
               {/* Token Purchase Agreement */}
-              <div className={`p-4 bg-gray-800 rounded-xl border-2 transition-colors duration-300 ${hasAgreedToTPA ? 'border-green-500' : 'border-red-500'}`}>
-                <h4 className="text-lg font-semibold text-white mb-3 text-center">Token Purchase Agreement</h4>
+              <div className={`${isWallet ? 'p-3' : 'p-4'} bg-gray-800 rounded-xl border-2 transition-colors duration-300 ${hasAgreedToTPA ? 'border-green-500' : 'border-red-500'}`}>
+                <h4 className={`${isWallet ? 'text-base' : 'text-lg'} font-semibold text-white mb-3 text-center`}>Token Purchase Agreement</h4>
                 <div className="text-center">
                   <button
                     onClick={onShowTPA}
-                    className="inline-flex items-center justify-center px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl transition-colors duration-200 text-sm"
+                    className={`inline-flex items-center justify-center ${isWallet ? 'px-3 py-2 text-xs' : 'px-4 py-2 text-sm'} bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl transition-colors duration-200`}
                   >
-                    View Token Purchase Agreement
+                    {isWallet ? 'View TPA' : 'View Token Purchase Agreement'}
                   </button>
                   {hasAgreedToTPA && (
                     <div className="mt-2 flex items-center justify-center space-x-2 text-green-400">
@@ -104,8 +115,8 @@ export const TransactionConfirmationDialog = ({
 
               {/* Transaction Hash - show after submission */}
               {transactionHash && (
-                <div className="p-4 bg-blue-900/20 border border-blue-600 rounded-xl">
-                  <h4 className="text-lg font-semibold text-white mb-3">Transaction Details</h4>
+                <div className={`${isWallet ? 'p-3' : 'p-4'} bg-blue-900/20 border border-blue-600 rounded-xl`}>
+                  <h4 className={`${isWallet ? 'text-base' : 'text-lg'} font-semibold text-white mb-3`}>Transaction Details</h4>
                   <div className="space-y-2">
                     <div>
                       <span className="text-gray-300 text-sm">Transaction Hash:</span>
@@ -133,7 +144,7 @@ export const TransactionConfirmationDialog = ({
           )}
           
           {/* Action Buttons */}
-          <div className="flex space-x-3">
+          <div className={`flex ${isWallet ? 'flex-col space-y-2' : 'space-x-3'}`}>
             {!isTransactionConfirmed ? (
               <>
                 <Button

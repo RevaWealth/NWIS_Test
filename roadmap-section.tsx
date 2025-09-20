@@ -62,15 +62,15 @@ export default function RoadmapSection() {
           {/* Vertical timeline line - hidden on mobile, visible on desktop */}
           <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-700 hidden md:block"></div>
 
-          <div className="space-y-8 md:space-y-16">
+          <div className="space-y-12 md:space-y-16">
             {roadmapPhases.map((phase, index) => (
               <div
                 key={index}
-                className="relative flex flex-col md:flex-row items-center"
+                className="relative flex flex-col md:flex-row items-center mb-8 md:mb-0"
               >
                 {/* Phase content - alternates left and right */}
                 <div 
-                  className={`w-full md:w-1/2 p-4 text-center ${
+                  className={`w-full md:w-1/2 p-6 md:p-4 text-center bg-slate-800/50 md:bg-transparent rounded-lg md:rounded-none ${
                     index % 2 === 0 
                       ? 'md:text-left md:pl-16' 
                       : 'md:order-2 md:text-left md:pl-16'
@@ -96,21 +96,13 @@ export default function RoadmapSection() {
                   </h3>
                   <ul className="space-y-2 text-gray-300 text-sm md:text-base">
                     {phase.items.map((item, itemIndex) => (
-                      <li key={itemIndex} className={`flex items-start ${
-                        index % 2 === 0 
-                          ? 'justify-center md:justify-start' 
-                          : 'justify-center md:justify-start'
-                      }`}>
+                      <li key={itemIndex} className="flex items-start justify-center md:justify-start">
                         <CheckCircle
                           className={`h-4 w-4 md:h-5 md:w-5 mr-2 mt-0.5 flex-shrink-0 ${
                             phase.completed ? "text-green-500" : "text-gray-500"
                           }`}
                         />
-                        <span className={`${
-                          index % 2 === 0 
-                            ? 'text-center md:text-left' 
-                            : 'text-center md:text-left'
-                        }`}>{item}</span>
+                        <span className="text-center md:text-left">{item}</span>
                       </li>
                     ))}
                   </ul>

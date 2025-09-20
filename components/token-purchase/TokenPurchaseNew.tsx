@@ -26,6 +26,7 @@ import { TokenPurchaseSkeleton } from "@/component/loading-skeleton"
 // Constants and types
 import { PRESALE_CONTRACT_ADDRESS, PRESALE_ABI, REQUIRED_NETWORK } from "@/lib/constants"
 import { getTokenAddress, convertToSmallestUnits, calculateNwisFromAmount, formatNumber, isMobileDevice } from "@/lib/token-purchase-utils"
+import { isWalletBrowser, isMobileWalletBrowser } from "@/lib/wallet-browser-utils"
 import { TokenPurchaseProps, Currency, ContractData } from "@/lib/types"
 
 function TokenPurchaseNew({ 
@@ -59,6 +60,8 @@ function TokenPurchaseNew({
   
   // Mobile approval banner state
   const [showMobileApprovalBanner, setShowMobileApprovalBanner] = useState(false)
+  const isWallet = isWalletBrowser()
+  const isMobileWallet = isMobileWalletBrowser()
 
   // Custom hooks
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
@@ -449,8 +452,8 @@ function TokenPurchaseNew({
 
   // Handle approval
   const handleApprove = () => {
-    // Show mobile banner if on mobile device
-    if (isMobileDevice()) {
+    // Show mobile banner if on mobile device or mobile wallet browser
+    if (isMobileDevice() || isMobileWallet) {
       setShowMobileApprovalBanner(true)
     }
     
@@ -475,7 +478,7 @@ function TokenPurchaseNew({
 
   return (
     <>
-      <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4 sm:p-6">
+      <div className={`bg-gray-900/50 border border-gray-700 rounded-lg ${isWallet ? 'p-3' : 'p-4 sm:p-6'}`}>
         {/* Sale Progress */}
         <ProgressBar 
           contractData={contractData} 
