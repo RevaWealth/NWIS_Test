@@ -28,15 +28,27 @@ export default function CountdownTimer() {
     return timeLeft
   }
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft())
+  // Initialize with default values to prevent hydration mismatch
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  })
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Set client flag and initial time calculation
+    setIsClient(true)
+    setTimeLeft(calculateTimeLeft())
+
+    // Set up timer interval
+    const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft())
     }, 1000)
 
-    return () => clearTimeout(timer)
-  })
+    return () => clearInterval(timer)
+  }, [])
 
   const timerComponents: JSX.Element[] = []
 
@@ -44,11 +56,35 @@ export default function CountdownTimer() {
     const value = timeLeft[interval as keyof typeof timeLeft]
     timerComponents.push(
       <div key={interval} className="flex flex-col items-center">
-        <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#a57e24]">{String(value).padStart(2, "0")}</span>
-        <span className="text-xs sm:text-sm text-[#a57e24]">{interval.charAt(0).toUpperCase() + interval.slice(1)}</span>
+        <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{String(value).padStart(2, "0")}</span>
+        <span className="text-xs sm:text-sm text-white">{interval.charAt(0).toUpperCase() + interval.slice(1)}</span>
       </div>,
     )
   })
+
+  // Show loading state during hydration to prevent mismatch
+  if (!isClient) {
+    return (
+      <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6">
+        <div className="flex flex-col items-center">
+          <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">--</span>
+          <span className="text-xs sm:text-sm text-white">Days</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">--</span>
+          <span className="text-xs sm:text-sm text-white">Hours</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">--</span>
+          <span className="text-xs sm:text-sm text-white">Minutes</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">--</span>
+          <span className="text-xs sm:text-sm text-white">Seconds</span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6">
