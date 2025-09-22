@@ -3,6 +3,7 @@ import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useToast } from '@/hooks/use-toast'
 import { PRESALE_CONTRACT_ADDRESS, PRESALE_ABI } from '@/lib/constants'
 import { getTokenAddress, convertToSmallestUnits, isMobileDevice } from '@/lib/token-purchase-utils'
+import { isWalletBrowser } from '@/lib/wallet-browser-utils'
 import { Currency, TransactionDetails } from '@/lib/types'
 
 interface UseTransactionConfirmationProps {
@@ -166,8 +167,8 @@ export const useTransactionConfirmation = ({
   const handleConfirmTransaction = async () => {
     if (!amountInSmallestUnits) return
 
-    // Show mobile banner if on mobile device when Buy NWIS button is pressed
-    if (isMobileDevice() && onShowMobileBanner) {
+    // Show mobile banner if on mobile device but NOT in wallet browser when Buy NWIS button is pressed
+    if (isMobileDevice() && !isWalletBrowser() && onShowMobileBanner) {
       onShowMobileBanner()
     }
 

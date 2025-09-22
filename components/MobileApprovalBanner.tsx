@@ -20,7 +20,8 @@ export const MobileApprovalBanner = ({
 
   // Handle banner visibility with animation
   useEffect(() => {
-    if (isVisible) {
+    // Don't show banner if running inside a wallet browser
+    if (isVisible && !isWallet) {
       setShouldShow(true)
       // Small delay to ensure DOM is ready for animation
       setTimeout(() => setIsAnimating(true), 10)
@@ -29,7 +30,7 @@ export const MobileApprovalBanner = ({
       // Wait for animation to complete before hiding
       setTimeout(() => setShouldShow(false), 300)
     }
-  }, [isVisible])
+  }, [isVisible, isWallet])
 
   // No auto-dismiss - user must close manually with X button
 
