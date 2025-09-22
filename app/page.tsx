@@ -56,7 +56,7 @@ export default function Home() {
           {/* Background video */}
           <div className="absolute inset-0 z-0">
             <MobileVideo
-              src="/images/Far.MP4"
+              src="/images/Far1.MP4"
               poster=""
               alt="Background video for hero section"
               className="w-full h-full object-fill pointer-events-none select-none"
@@ -69,7 +69,7 @@ export default function Home() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 h-full flex items-end justify-center w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 pb-4 sm:pb-8 md:pb-24">
+          <div className="relative z-10 h-full flex items-end justify-center w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 pb-4 sm:pb-8 md:pb-12">
             <div className="w-full max-w-4xl text-center">
               {/* ICO Launch Countdown Timer */}
               <div className="mt-4 sm:mt-6 md:mt-8 flex justify-center">
