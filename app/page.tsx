@@ -100,14 +100,14 @@ export default function Home() {
 
       <main className="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 text-center">
         {/* Hero Section */}
-        <section className="relative w-full overflow-hidden py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
+        <section className="relative w-full max-w-[65%] mx-auto overflow-hidden aspect-video">
           {/* Background video */}
           <div className="absolute inset-0 z-0">
             <MobileVideo
-              src="/images/SS6.mp4"
+              src="/images/Far.MP4"
               poster=""
               alt="Background video for hero section"
-              className="w-full h-full object-cover object-center sm:object-[center_top] pointer-events-none select-none"
+              className="w-full h-full object-fill pointer-events-none select-none"
               fallbackImage="/images/NWIS.png"
               fallbackAlt="Background video for hero section"
               width={1920}
@@ -117,7 +117,7 @@ export default function Home() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative z-10 h-full flex items-center justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl text-center">
               <h1 className="font-bold mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-white leading-tight">
                 NexusWealth Investment Solutions

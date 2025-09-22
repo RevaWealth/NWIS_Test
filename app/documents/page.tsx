@@ -9,11 +9,25 @@ import Navbar from '../../navbar'
 import dynamic from 'next/dynamic'
 import { pdfjs } from 'react-pdf'
 
-
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
+// Only initialize PDF.js on client-side to avoid SSR issues
+if (typeof window !== 'undefined') {
+  pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
+}
 
 // Disable SSR for PDF components
 const MobilePdfViewer = dynamic(() => import('../../components/MobilePdfViewer'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full bg-gray-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
+        <p className="text-base text-gray-600">Loading document...</p>
+      </div>
+    </div>
+  )
+})
+
+const DesktopPdfViewer = dynamic(() => import('../../components/DesktopPdfViewer'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-full bg-gray-50">
@@ -486,11 +500,17 @@ export default function DocumentsPage() {
                 </div>
               </div>
             ) : activeDocUrl ? (
-              <MobilePdfViewer
-                fileUrl={activeDocUrl}
-                initialScale={scale}
-                enableTextLayer={false}
-              />
+              isMobile ? (
+                <MobilePdfViewer
+                  fileUrl={activeDocUrl}
+                  initialScale={scale}
+                  enableTextLayer={false}
+                />
+              ) : (
+                <DesktopPdfViewer
+                  fileUrl={activeDocUrl}
+                />
+              )
             ) : (
                   <div className="flex items-center justify-center h-full bg-gray-50">
                     <div className="text-center">

@@ -2,8 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
-// Use local worker file
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+// Use local worker file - only on client-side
+if (typeof window !== 'undefined') {
+  pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+}
 
 type Props = {
   /** Your PDF URL (can be /api/proxy?cid=... if token-gated) */
@@ -36,6 +38,12 @@ export default function MobilePdfViewer({
   const pages = rowVirtualizer.getVirtualItems();
 
   const onLoadSuccess = ({ numPages: n }: { numPages: number }) => setNumPages(n);
+
+  const onLoadError = (error: Error) => {
+    console.error('PDF load error:', error);
+    console.error('PDF file URL:', fileUrl);
+    console.error('User agent:', navigator.userAgent);
+  };
 
   // Calculate optimal scale to fit container width
   const calculateOptimalScale = useCallback(() => {
@@ -78,7 +86,12 @@ export default function MobilePdfViewer({
 
   // Memoize options to prevent unnecessary reloads
   const pdfOptions = useMemo(() => ({
-    standardFontDataUrl: undefined
+    standardFontDataUrl: undefined,
+    disableFontFace: false,
+    disableRange: false,
+    disableStream: false,
+    disableAutoFetch: false,
+    disableCreateObjectURL: false
   }), []);
 
   // Keep canvas crisp without blowing up iOS memory
