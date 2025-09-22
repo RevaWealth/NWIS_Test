@@ -46,8 +46,18 @@ export default function MobileVideo({
         // Set video to load immediately
         video.load()
         
-        video.addEventListener('error', () => {
+        video.addEventListener('error', (e) => {
+          console.error('Video load error:', e)
+          console.error('Video src:', src)
           setIsVideoSupported(false)
+        })
+        
+        video.addEventListener('loadstart', () => {
+          console.log('Video load started:', src)
+        })
+        
+        video.addEventListener('canplay', () => {
+          console.log('Video can play:', src)
         })
         
         // Try to play video immediately
@@ -75,6 +85,7 @@ export default function MobileVideo({
 
   // On mobile, if video can't autoplay, show fallback image
   if (isMobile && !isVideoSupported) {
+    console.log('Showing fallback image for mobile - video not supported')
     return (
       <Image
         src={fallbackImage}
@@ -87,6 +98,8 @@ export default function MobileVideo({
     )
   }
 
+  console.log('Rendering video element, isMobile:', isMobile, 'isVideoSupported:', isVideoSupported)
+  
   return (
     <video
       ref={videoRef}
