@@ -1,6 +1,8 @@
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/component/UI/dialog"
 import { Button } from "@/component/UI/button"
 import { useState, useRef, useEffect } from "react"
+import { isWalletBrowser } from "@/lib/wallet-browser-utils"
+import { isMobileDevice } from "@/lib/token-purchase-utils"
 
 interface TokenPurchaseAgreementDialogProps {
   open: boolean
@@ -15,6 +17,8 @@ export const TokenPurchaseAgreementDialog = ({
 }: TokenPurchaseAgreementDialogProps) => {
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const isWallet = isWalletBrowser()
+  const isMobile = isMobileDevice()
 
   const handleClose = (e?: React.MouseEvent) => {
     if (e) {
@@ -336,29 +340,54 @@ export const TokenPurchaseAgreementDialog = ({
           </div>
         </div>
         
-        <div className="flex justify-center space-x-4">
+        <div className={`flex justify-center ${isMobile || isWallet ? 'flex-col space-y-3' : 'space-x-4'}`}>
+          {/* Show Agree button first on mobile and wallet browsers */}
+          {(isMobile || isWallet) && (
+            <Button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onAgree()
+                onOpenChange(false)
+              }}
+              disabled={!isScrolledToBottom}
+              className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
+                isScrolledToBottom 
+                  ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
+                  : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+              }`}
+            >
+              {isScrolledToBottom ? 'Agree' : 'Scroll to Bottom First'}
+            </Button>
+          )}
+          
+          {/* Show Close button second on mobile/wallet, first on desktop */}
           <Button
             onClick={handleClose}
             className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200"
           >
             Close
           </Button>
-          <Button
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onAgree()
-              onOpenChange(false)
-            }}
-            disabled={!isScrolledToBottom}
-            className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
-              isScrolledToBottom 
-                ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
-                : 'bg-gray-400 text-gray-200 cursor-not-allowed'
-            }`}
-          >
-            {isScrolledToBottom ? 'Agree' : 'Scroll to Bottom First'}
-          </Button>
+          
+          {/* Show Agree button second on desktop browsers */}
+          {!isMobile && !isWallet && (
+            <Button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onAgree()
+                onOpenChange(false)
+              }}
+              disabled={!isScrolledToBottom}
+              className={`px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
+                isScrolledToBottom 
+                  ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
+                  : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+              }`}
+            >
+              {isScrolledToBottom ? 'Agree' : 'Scroll to Bottom First'}
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

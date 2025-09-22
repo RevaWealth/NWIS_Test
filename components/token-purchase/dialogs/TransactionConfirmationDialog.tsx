@@ -3,6 +3,7 @@ import { Button } from "@/component/UI/button"
 import { LoadingSpinner } from "@/component/loading-spinner"
 import { TransactionDetails } from "@/lib/types"
 import { getDialogConfig, isWalletBrowser } from "@/lib/wallet-browser-utils"
+import { isMobileDevice } from "@/lib/token-purchase-utils"
 
 interface TransactionConfirmationDialogProps {
   open: boolean
@@ -30,6 +31,7 @@ export const TransactionConfirmationDialog = ({
   onShowTPA
 }: TransactionConfirmationDialogProps) => {
   const isWallet = isWalletBrowser()
+  const isMobile = isMobileDevice()
   const dialogConfig = getDialogConfig()
   
   return (
@@ -118,12 +120,15 @@ export const TransactionConfirmationDialog = ({
                 <div className={`${isWallet ? 'p-3' : 'p-4'} bg-blue-900/20 border border-blue-600 rounded-xl`}>
                   <h4 className={`${isWallet ? 'text-base' : 'text-lg'} font-semibold text-white mb-3`}>Transaction Details</h4>
                   <div className="space-y-2">
-                    <div>
-                      <span className="text-gray-300 text-sm">Transaction Hash:</span>
-                      <div className="text-white font-mono text-sm break-all mt-1">
-                        {transactionHash}
+                    {/* Only show Transaction Hash on desktop browsers */}
+                    {!isMobile && !isWallet && (
+                      <div>
+                        <span className="text-gray-300 text-sm">Transaction Hash:</span>
+                        <div className="text-white font-mono text-sm break-all mt-1">
+                          {transactionHash}
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="pt-2">
                       <a
                         href={`https://sepolia.etherscan.io/tx/${transactionHash}`}

@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { Button } from "@/component/UI/button"
 import { useState, useRef, useEffect } from "react"
 import { getDialogConfig, isWalletBrowser } from "@/lib/wallet-browser-utils"
+import { isMobileDevice } from "@/lib/token-purchase-utils"
 
 interface TokenPurchaseAgreementDialogProps {
   open: boolean
@@ -17,6 +18,7 @@ export const TokenPurchaseAgreementDialog = ({
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const isWallet = isWalletBrowser()
+  const isMobile = isMobileDevice()
   const dialogConfig = getDialogConfig()
 
   const handleClose = (e?: React.MouseEvent) => {
@@ -351,29 +353,54 @@ export const TokenPurchaseAgreementDialog = ({
           </div>
         </div>
         
-        <div className={`flex ${isWallet ? 'flex-col gap-2' : 'flex-col sm:flex-row justify-center gap-2 sm:gap-4'} flex-shrink-0 mt-auto`}>
+        <div className={`flex ${isWallet || isMobile ? 'flex-col gap-2' : 'flex-col sm:flex-row justify-center gap-2 sm:gap-4'} flex-shrink-0 mt-auto`}>
+          {/* Show Agree button first on mobile and wallet browsers */}
+          {(isMobile || isWallet) && (
+            <Button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onAgree()
+                onOpenChange(false)
+              }}
+              disabled={!isScrolledToBottom}
+              className={`${isWallet || isMobile ? 'w-full' : 'w-full sm:w-auto'} px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
+                isScrolledToBottom 
+                  ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
+                  : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+              }`}
+            >
+              {isScrolledToBottom ? 'Agree' : 'Scroll to Bottom First'}
+            </Button>
+          )}
+          
+          {/* Show Close button second on mobile/wallet, first on desktop */}
           <Button
             onClick={handleClose}
-            className={`${isWallet ? 'w-full' : 'w-full sm:w-auto'} px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200`}
+            className={`${isWallet || isMobile ? 'w-full' : 'w-full sm:w-auto'} px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors duration-200`}
           >
             Close
           </Button>
-          <Button
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onAgree()
-              onOpenChange(false)
-            }}
-            disabled={!isScrolledToBottom}
-            className={`${isWallet ? 'w-full' : 'w-full sm:w-auto'} px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
-              isScrolledToBottom 
-                ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
-                : 'bg-gray-400 text-gray-200 cursor-not-allowed'
-            }`}
-          >
-            {isScrolledToBottom ? 'Agree' : 'Scroll to Bottom First'}
-          </Button>
+          
+          {/* Show Agree button second on desktop browsers */}
+          {!isMobile && !isWallet && (
+            <Button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onAgree()
+                onOpenChange(false)
+              }}
+              disabled={!isScrolledToBottom}
+              className={`${isWallet || isMobile ? 'w-full' : 'w-full sm:w-auto'} px-8 py-3 font-semibold rounded-lg transition-all duration-200 ${
+                isScrolledToBottom 
+                  ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
+                  : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+              }`}
+            >
+              {isScrolledToBottom ? 'Agree' : 'Scroll to Bottom First'}
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>
