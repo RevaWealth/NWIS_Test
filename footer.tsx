@@ -51,12 +51,12 @@ export default function Footer() {
                 <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
                   Manage Cookies
                 </Link>
-                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Privacy Policy
-                </Link>
-                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Terms and Conditions
-                </Link>
+                  <Link href="/privacy-policy" className="text-gray-400 hover:text-blue-400 transition-colors">
+                    Privacy Policy
+                  </Link>
+                  <Link href="/terms-and-conditions" className="text-gray-400 hover:text-blue-400 transition-colors">
+                    Terms and Conditions
+                  </Link>
               </div>
               
               {/* Column 2 */}
