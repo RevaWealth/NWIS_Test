@@ -100,10 +100,49 @@ export default function Home() {
         <RoadmapSection />
         <TokenomicsSection />
         <TeamSection />
-        <PartnersSection />
+        {/* <PartnersSection /> */}
         <FAQSection />
         <ContactSection />
         <Footer />
+        
+        {/* Legal Disclaimer Section */}
+        <section className="bg-gray-900 border-t border-gray-800 py-8 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-xs text-gray-400 leading-relaxed space-y-4">
+              <p className="font-semibold text-gray-300 mb-4">
+                © 2025 NexusWealth, LLC. All rights reserved.
+              </p>
+              
+              <p>
+                This material is provided for informational purposes only and is not intended to be relied upon as a forecast, research or investment advice, and is not a recommendation, offer or solicitation to buy or sell any securities or to adopt any investment strategy. The opinions expressed are subject to change. References to specific securities, asset classes and financial markets are for illustrative purposes only and are not intended to be and should not be interpreted as recommendations. Reliance upon information in this material is at the sole risk and discretion of the reader. The material was prepared without regard to specific objectives, financial situation or needs of any investor.
+              </p>
+              
+              <p>
+                This material may contain "forward-looking" information that is not purely historical in nature. Such information may include, among other things, projections, forecasts, and estimates of yields or returns. No representation is made that any performance presented will be achieved by any BlackRock Funds, or that every assumption made in achieving, calculating or presenting either the forward-looking information or any historical performance information herein has been considered or stated in preparing this material. Any changes to assumptions that may have been made in preparing this material could have a material impact on the investment returns that are presented herein. Past performance is not a reliable indicator of current or future results and should not be the sole factor of consideration when selecting a product or strategy.
+              </p>
+              
+              <p>
+                The information and opinions contained in this material are derived from proprietary and nonproprietary sources deemed by BlackRock to be reliable, are not necessarily all-inclusive and are not guaranteed as to accuracy.
+              </p>
+              
+              <p>
+                In the U.S., this material is for Institutional use only – not for public distribution.
+              </p>
+              
+              <p>
+                The information provided here is neither tax nor legal advice. Investors should speak to their tax professional for specific information regarding their tax situation. Investment involves risk including possible loss of principal. International investing involves risks, including risks related to foreign currency, limited liquidity, less government regulation, and the possibility of substantial volatility due to adverse political, economic or other developments. These risks are often heightened for investments in emerging/developing markets or smaller capital markets.
+              </p>
+              
+              <p className="font-semibold text-gray-300">
+                FOR INSTITUTIONAL, FINANCIAL PROFESSIONAL, PERMITTED CLIENT AND WHOLESALE INVESTOR USE ONLY. THIS MATERIAL IS NOT TO BE REPRODUCED OR DISTRIBUTED TO PERSONS OTHER THAN THE RECIPIENT.
+              </p>
+              
+              <p>
+                NexusWealth® is a registered trademark of NevusWealth, LLC., or its subsidiaries in the United States and elsewhere. All other trademarks are those of their respective owners.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   )

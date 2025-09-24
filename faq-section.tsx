@@ -30,7 +30,7 @@ export default function FAQSection() {
   ]
 
   return (
-    <section id="faq" className="py-20 bg-[#0c1220] bg-sky-950">
+    <section id="faq" className="py-20 bg-gradient-to-br from-slate-900 to-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold text-center text-white mb-12">Frequently Asked Questions</h2>
         <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto">
