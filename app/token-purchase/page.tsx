@@ -7,6 +7,7 @@ import Link from "next/link"
 import CountdownTimer from "../../countdown-timer"
 import TokenPurchaseNew from "../../token-purchase-new"
 import Navbar from "../../navbar"
+import { isMobileDevice, isWalletBrowser } from "../../lib/wallet-browser-utils"
 
 interface TokenSaleData {
   currentPrice: string
@@ -16,6 +17,7 @@ interface TokenSaleData {
 
 export default function TokenPurchasePage() {
   const [tokenSaleData, setTokenSaleData] = useState<TokenSaleData | null>(null)
+  const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,13 +29,26 @@ export default function TokenPurchasePage() {
       } catch (error) {
         console.error("Failed to fetch token sale data:", error)
         setTokenSaleData({
-          currentPrice: "$0.007125",
+          currentPrice: "$0.001",
           amountRaised: "$345,000",
-          tokenValue: "1 NWIS = $0.007125",
+          tokenValue: "1 NWIS = $0.001",
         })
       }
     }
     fetchData()
+  }, [])
+
+  // Detect if it's desktop browser (not mobile and not wallet)
+  useEffect(() => {
+    const checkBrowser = () => {
+      const isMobile = isMobileDevice()
+      const isWallet = isWalletBrowser()
+      setIsDesktop(!isMobile && !isWallet)
+    }
+    
+    checkBrowser()
+    window.addEventListener('resize', checkBrowser)
+    return () => window.removeEventListener('resize', checkBrowser)
   }, [])
 
   if (!tokenSaleData) {
@@ -45,20 +60,40 @@ export default function TokenPurchasePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
-      {/* Header */}
-      <Navbar />
-
-      {/* Hero Section */}
-      <div className="bg-gradient-to-b from-sky-950 to-sky-900 py-16 px-4">
-        <div className="max-w-lg mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Buy NWIS Tokens</h1>
-          <p className="text-xl text-[#a57e24] font-medium">Start on your path to financial freedom</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 relative">
+      {/* ST5.mp4 Video Background - Desktop Only */}
+      {isDesktop && (
+        <div className="fixed inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover"
+          >
+            <source src="/images/ST5.mp4" type="video/mp4" />
+          </video>
+          {/* Dark overlay to ensure content readability */}
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         </div>
-      </div>
+      )}
 
-      {/* Main Content - Centered Token Sale Box */}
-      <main className="flex-1 flex items-center justify-center py-16 px-4">
+      {/* Content Container */}
+      <div className="relative z-10">
+        {/* Header */}
+        <Navbar />
+
+        {/* Hero Section */}
+        <div className="bg-gradient-to-b from-sky-950 to-sky-900 py-8 px-4">
+          <div className="max-w-lg mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">NWIS Token Presale</h1>
+            <p className="text-xl text-[#a57e24] font-medium">Own stake in the disruptive force that is reshaping the future of asset management</p>
+          </div>
+        </div>
+
+        {/* Main Content - Centered Token Sale Box */}
+        <main className="flex-1 flex items-center justify-center py-16 px-4">
         <div className="w-full max-w-lg">
           {/* Token Sale Box */}
           <div className="bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
@@ -112,7 +147,8 @@ export default function TokenPurchasePage() {
             </div>
           </div>
         </div>
-      </main>
+        </main>
+      </div>
     </div>
   )
 }

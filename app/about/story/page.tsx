@@ -98,8 +98,7 @@ function AboutContent() {
               Revolutionizing Investment Through Blockchain
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-4xl mx-auto px-4">
-              As a global investment manager and fiduciary to our community, our purpose at NexusWealth is to help everyone experience financial well-being. 
-              Since 2023, we've been a leading provider of blockchain-based investment solutions.
+              As a global investment manager and fiduciary to our community, our purpose at NexusWealth is to help everyone experience financial well-being.
             </p>
           </div>
 
@@ -163,10 +162,10 @@ function AboutContent() {
                     We believe in empowering individuals to build generational wealth by providing access to diverse 
                     investment opportunities that were traditionally exclusive to institutional and accredited investors.
                   </p>
-                  <div className="flex items-center text-sky-400 font-semibold hover:text-sky-300 cursor-pointer">
+                  <Link href="/documents" className="flex items-center text-sky-400 font-semibold hover:text-sky-300 transition-colors">
                     <span>Learn more about our approach</span>
                     <ArrowRight className="h-4 w-4 ml-2" />
-                  </div>
+                  </Link>
                 </div>
                 <div className="relative">
                   <video
@@ -394,8 +393,7 @@ function AboutContent() {
             Join the Future of Investment
           </h3>
           <p className="text-xl text-sky-200 mb-8 max-w-3xl mx-auto">
-            Become part of the NexusWealth community and start building your generational wealth through 
-            our innovative tokenization platform.
+            Become part of the NexusWealth community on it's journey to transform the global asset management industry. .
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

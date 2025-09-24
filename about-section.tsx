@@ -19,9 +19,6 @@ export default function AboutSection() {
               including Agriculture, Infrastructure, Renewable Energy, and Real Estate.
             </p>
             <p className="text-base text-white leading-relaxed">
-              Our NWIS token is the cornerstone of this ecosystem, offering holders unique benefits and participation in
-              our journey to build the next global asset manager and financial services giant. Join us on our mission to
-              democratize finance and create a future where everyone has the tools to achieve financial freedom.
             </p>
           </div>
           <div className="flex justify-center">

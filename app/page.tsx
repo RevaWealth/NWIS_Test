@@ -60,7 +60,7 @@ export default function Home() {
               poster=""
               alt="Background video for hero section"
               className="w-full h-full object-fill pointer-events-none select-none"
-              fallbackImage="/images/Feri.jpg"
+              fallbackImage="/images/Feri.jpeg"
               fallbackAlt="Background video for hero section"
               width={1920}
               height={1080}

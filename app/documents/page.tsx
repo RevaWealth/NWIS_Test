@@ -8,6 +8,7 @@ import { Button } from '../../component/UI/button'
 import Navbar from '../../navbar'
 import dynamic from 'next/dynamic'
 import { pdfjs } from 'react-pdf'
+import { isMobileDevice, isWalletBrowser } from '../../lib/wallet-browser-utils'
 
 // Only initialize PDF.js on client-side to avoid SSR issues
 if (typeof window !== 'undefined') {
@@ -44,18 +45,26 @@ export default function DocumentsPage() {
   const [activeSubTab, setActiveSubTab] = useState<string | null>(null)
   const [scale, setScale] = useState(1)
   const [isMobile, setIsMobile] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
 
-  // Detect mobile device
+  // Detect mobile device and desktop
   useEffect(() => {
-    const checkMobile = () => {
+    const checkBrowser = () => {
       const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
                             window.innerWidth <= 768
-      console.log('Mobile detection:', {
+      const isWallet = isWalletBrowser()
+      const isDesktopBrowser = !isMobileDevice && !isWallet
+      
+      console.log('Browser detection:', {
         userAgent: navigator.userAgent,
         windowWidth: window.innerWidth,
-        isMobile: isMobileDevice
+        isMobile: isMobileDevice,
+        isWallet: isWallet,
+        isDesktop: isDesktopBrowser
       })
+      
       setIsMobile(isMobileDevice)
+      setIsDesktop(isDesktopBrowser)
       
       // Set default tab for desktop users only
       if (!isMobileDevice && !activeTab) {
@@ -63,9 +72,9 @@ export default function DocumentsPage() {
       }
     }
     
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    checkBrowser()
+    window.addEventListener('resize', checkBrowser)
+    return () => window.removeEventListener('resize', checkBrowser)
   }, [activeTab])
 
   const documentTabs = [
@@ -99,7 +108,7 @@ export default function DocumentsPage() {
         },
         {
           id: 'privacy-policy',
-          name: 'Token Buyer Purchase Agreement',
+          name: 'Token Purchase Agreement',
           description: 'Token purchase terms and conditions',
           file: '/api/pdf?file=TPA.pdf'
         }
@@ -426,7 +435,7 @@ export default function DocumentsPage() {
                       className="w-full px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                     >
                       <div className="text-left">
-                        <div className="font-semibold">Token Buyer Purchase Agreement</div>
+                        <div className="font-semibold">Token Purchase Agreement</div>
                         <div className="text-sm text-green-100">Token purchase terms and conditions</div>
                       </div>
                     </button>
@@ -467,7 +476,7 @@ export default function DocumentsPage() {
                     >
                       <div className="text-left">
                         <div className="text-2xl mb-2">📋</div>
-                        <div className="text-xl font-semibold mb-2">Token Buyer Purchase Agreement</div>
+                        <div className="text-xl font-semibold mb-2">Token Purchase Agreement</div>
                         <div className="text-green-100">Token purchase terms and conditions</div>
                       </div>
                     </button>
@@ -479,26 +488,62 @@ export default function DocumentsPage() {
                 </div>
               </div>
             ) : activeTab === 'security' ? (
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
-                <div className="text-center max-w-md mx-auto p-8">
-                  <div className="mb-6">
-                    <Shield className="h-16 w-16 text-sky-600 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Security Audit</h2>
-                    <p className="text-gray-600 mb-6">Smart contract audit reports and security assessments</p>
+              isDesktop ? (
+                /* Desktop - ST4.mp4 video with white text overlay */
+                <div className="flex flex-col">
+                  <div className="relative h-[600px] w-full">
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="auto"
+                      className="w-full h-full object-cover"
+                    >
+                      <source src="/images/ST4.mp4" type="video/mp4" />
+                    </video>
+                    {/* White text overlay at bottom */}
+                    <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+                      <p className="text-white text-4xl font-semibold">
+                        Will be available soon!
+                      </p>
+                    </div>
                   </div>
                   
-                  <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 shadow-sm">
-                    <div className="flex items-center justify-center mb-4">
-                      <div className="bg-yellow-100 rounded-full p-3">
-                        <Shield className="h-8 w-8 text-yellow-600" />
+                  {/* Shield symbol and text content below video */}
+                  <div className="bg-gradient-to-br from-sky-50 to-sky-100 p-8">
+                    <div className="text-center max-w-md mx-auto">
+                      <div className="mb-6">
+                        <Shield className="h-16 w-16 text-sky-600 mx-auto mb-4" />
+                        <h2 className="text-2xl font-bold text-gray-800 mb-2">Security Audit</h2>
+                        <p className="text-gray-600 mb-6">Smart contract audit reports and security assessments</p>
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-yellow-800 mb-2">Coming Soon</h3>
-                    <p className="text-yellow-700 font-medium text-lg">Will be Available Q4 of 2026</p>
-                    <p className="text-yellow-600 text-sm mt-2">Our comprehensive security audit reports are currently in development and will be published in Q4 2026.</p>
                   </div>
                 </div>
-              </div>
+              ) : (
+                /* Mobile/Wallet - Original yellow box */
+                <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
+                  <div className="text-center max-w-md mx-auto p-8">
+                    <div className="mb-6">
+                      <Shield className="h-16 w-16 text-sky-600 mx-auto mb-4" />
+                      <h2 className="text-2xl font-bold text-gray-800 mb-2">Security Audit</h2>
+                      <p className="text-gray-600 mb-6">Smart contract audit reports and security assessments</p>
+                    </div>
+                    
+                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 shadow-sm">
+                      <div className="flex items-center justify-center mb-4">
+                        <div className="bg-yellow-100 rounded-full p-3">
+                          <Shield className="h-8 w-8 text-yellow-600" />
+                        </div>
+                      </div>
+                      <h3 className="text-lg font-semibold text-yellow-800 mb-2">Coming Soon</h3>
+                      <p className="text-yellow-700 font-medium text-lg">Will be Available Q4 of 2026</p>
+                      <p className="text-yellow-600 text-sm mt-2">Our comprehensive security audit reports are currently in development and will be published in Q4 2026.</p>
+                    </div>
+                  </div>
+                </div>
+              )
             ) : activeDocUrl ? (
               isMobile ? (
                 <MobilePdfViewer
