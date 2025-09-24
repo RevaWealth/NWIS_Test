@@ -60,12 +60,12 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center" aria-label="Go to homepage">
               <Image
-                src="/images/NWIS.png"
+                src="/images/NWISLogo.svg"
                 alt="NWIS logo"
-                width={158}
-                height={35}
+                width={178}
+                height={95}
                 priority
-                className="w-24 md:w-32 lg:w-36 h-auto object-contain"
+                className="w-32 md:w-40 lg:w-48 h-auto object-contain"
               />
             </Link>
           </div>
