@@ -1624,7 +1624,7 @@ export default function TokenPurchaseNew({
           handleCloseTransactionDialog()
         }
       }}>
-        <DialogContent className="sm:max-w-lg border-2 border-sky-950 rounded-xl bg-sky-950">
+        <DialogContent className="sm:max-w-lg border-2 border-[#000000] rounded-xl bg-[#000000]">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-white">
               {isTransactionConfirmed ? "Transaction Confirmed!" : transactionHash ? "Processing Transaction..." : "Confirm Transaction"}
@@ -1773,7 +1773,7 @@ export default function TokenPurchaseNew({
           handleCloseTPADialog()
         }
       }}>
-        <DialogContent className="max-w-4xl max-h-[90vh] bg-sky-950 border-sky-800">
+        <DialogContent className="max-w-4xl max-h-[90vh] bg-[#000000] border-sky-800">
           <DialogTitle className="text-xl font-bold text-white mb-4">
             Token Purchase Agreement
           </DialogTitle>

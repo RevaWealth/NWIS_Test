@@ -53,7 +53,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className="w-full bg-sky-950 border-b border-gray-800 sticky top-0 inset-x-0 z-50">
+    <nav className="w-full bg-[#000000] border-b border-gray-800 sticky top-0 inset-x-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -166,7 +166,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-700 bg-sky-950">
+          <div className="md:hidden border-t border-gray-700 bg-[#000000]">
             <div className="px-4 py-6 space-y-4">
               {navItems.map((item) => (
                 <div key={item.name}>

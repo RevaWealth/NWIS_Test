@@ -24,7 +24,7 @@ export default function TokenomicsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-white">
-            <span className="text-sky-400">NWIS</span> Tokenomics
+            <span className="text-[#a57e24]">NWIS</span> Tokenomics
           </h2>
           <p className="max-w-3xl mx-auto text-base sm:text-lg text-gray-300 px-4">
             Transparent and sustainable token distribution designed for long-term growth and investors benefit.
@@ -142,7 +142,7 @@ export default function TokenomicsPage() {
 
 
         {/* Token Distribution Details and Timeline Section */}
-        <div className="mt-8 sm:mt-12 md:mt-16 bg-sky-950 w-full">
+        <div className="mt-8 sm:mt-12 md:mt-16 bg-[#000000] w-full">
           <div className="w-full py-8 sm:py-12 md:py-16">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 px-4">
               
@@ -202,7 +202,7 @@ export default function TokenomicsPage() {
               </Link>
               <Link 
                 href="/documents" 
-                className="inline-flex items-center justify-center px-6 sm:px-8 py-2 sm:py-3 border-2 border-sky-300 text-sky-300 hover:bg-sky-300 hover:text-sky-950 font-semibold rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                className="inline-flex items-center justify-center px-6 sm:px-8 py-2 sm:py-3 border-2 border-sky-300 text-sky-300 hover:bg-sky-300 hover:text-[#000000] font-semibold rounded-lg transition-colors duration-200 text-sm sm:text-base"
               >
                 Learn More
               </Link>

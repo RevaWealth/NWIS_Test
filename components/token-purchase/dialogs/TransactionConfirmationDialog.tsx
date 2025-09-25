@@ -37,7 +37,7 @@ export const TransactionConfirmationDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className={`${isWallet ? 'max-w-[95vw]' : 'sm:max-w-lg'} border-2 border-sky-950 rounded-xl bg-sky-950`}
+        className={`${isWallet ? 'max-w-[95vw]' : 'sm:max-w-lg'} border-2 border-[#000000] rounded-xl bg-[#000000]`}
         style={{
           zIndex: dialogConfig.zIndex,
           maxWidth: isWallet ? '95vw' : undefined,

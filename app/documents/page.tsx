@@ -248,7 +248,7 @@ export default function DocumentsPage() {
       <Navbar />
 
       {/* Header */}
-      <div className="bg-sky-950 shadow-sm border-b border-sky-800">
+      <div className="bg-[#000000] shadow-sm border-b border-sky-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
             <div className="flex-1 text-center">
@@ -260,7 +260,7 @@ export default function DocumentsPage() {
                 onClick={handleOpenInNewTab}
                 variant="outline"
                 disabled={activeTab === 'security'}
-                className={`flex items-center space-x-2 border-sky-950 text-sky-950 hover:bg-sky-900 hover:text-white text-xs sm:text-sm px-3 sm:px-4 py-2 ${
+                className={`flex items-center space-x-2 border-[#000000] text-[#000000] hover:bg-sky-900 hover:text-white text-xs sm:text-sm px-3 sm:px-4 py-2 ${
                   activeTab === 'security' ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
@@ -298,7 +298,7 @@ export default function DocumentsPage() {
                       onClick={() => handleTabChange(tab.id)}
                       className={`w-full p-3 rounded-lg text-left transition-all duration-200 ${
                         isActive
-                          ? 'bg-sky-950 text-white shadow-md'
+                          ? 'bg-[#000000] text-white shadow-md'
                           : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >

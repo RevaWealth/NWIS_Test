@@ -222,7 +222,7 @@ export default function TokenPurchase({
   return (
     <div className="space-y-6">
       <div className="bg-transparent p-0">
-        <h3 className="text-sky-950 text-lg sm:text-xl md:text-2xl font-semibold text-center md:text-left">Token Sale</h3>
+        <h3 className="text-[#000000] text-lg sm:text-xl md:text-2xl font-semibold text-center md:text-left">Token Sale</h3>
       </div>
       
       {/* Sale Status */}

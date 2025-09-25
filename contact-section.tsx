@@ -3,7 +3,7 @@ import { Mail, MessageCircle } from "lucide-react"
 
 export default function ContactSection() {
   return (
-    <section className="py-20 bg-sky-950">
+    <section className="py-20 bg-[#000000]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl font-bold text-white mb-6">Need Help?</h2>
         <p className="text-xl text-sky-200 mb-8 max-w-3xl mx-auto">

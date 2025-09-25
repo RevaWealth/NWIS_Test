@@ -85,7 +85,7 @@ export default function TokenPurchasePage() {
         <Navbar />
 
         {/* Hero Section */}
-        <div className="bg-gradient-to-b from-sky-950 to-sky-900 py-8 px-4">
+        <div className="bg-gradient-to-b from-[#000000] to-sky-900 py-8 px-4">
           <div className="max-w-lg mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">NWIS Token Presale</h1>
             <p className="text-xl text-[#a57e24] font-medium">Own stake in the disruptive force that is reshaping the future of asset management</p>
@@ -99,16 +99,16 @@ export default function TokenPurchasePage() {
           <div className="bg-[#0c1220] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
             {/* Header */}
             <div className="relative">
-              <div className="bg-sky-900 p-4 text-white flex items-center justify-between">
+              <div className="bg-[#a57e24] p-4 text-white flex items-center justify-between">
                 <div className="flex items-center">
-                  <span className="font-bold">{"Series A"} </span>
+                  <span className="font-bold text-white">{"Series A"} </span>
                 </div>
-                <span className="text-sm"> {"Seed Funding"} </span>
+                <span className="text-sm text-white"> {"DAO Presale"} </span>
               </div>
             </div>
 
             {/* Content */}
-            <div className="p-6 bg-sky-950">
+            <div className="p-6 bg-[#000000]">
               <p className="text-gray-400 text-sm text-center mb-4">Can't find tokens in your wallet?</p>
 
               <h3 className="text-2xl font-bold text-center mb-6">

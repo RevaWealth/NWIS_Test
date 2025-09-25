@@ -48,7 +48,7 @@ export const TokenPurchaseAgreementDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className={`${isWallet ? 'max-w-[95vw]' : 'sm:max-w-4xl'} bg-sky-950 border-sky-800 flex flex-col`}
+        className={`${isWallet ? 'max-w-[95vw]' : 'sm:max-w-4xl'} bg-[#000000] border-sky-800 flex flex-col`}
         style={{
           zIndex: dialogConfig.zIndex,
           maxWidth: isWallet ? '95vw' : undefined,

@@ -79,7 +79,7 @@ function AboutContent() {
       <Navbar />
       
       {/* Header */}
-      <div className="bg-sky-950 shadow-sm border-b border-sky-800">
+      <div className="bg-[#000000] shadow-sm border-b border-sky-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-center">
             <div className="text-center">
@@ -91,7 +91,7 @@ function AboutContent() {
       </div>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-sky-950 to-slate-900 py-8 sm:py-12 md:py-16 lg:py-20">
+      <section className="bg-gradient-to-br from-[#000000] to-slate-900 py-8 sm:py-12 md:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">
@@ -387,7 +387,7 @@ function AboutContent() {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-sky-950 py-16">
+      <section className="bg-[#000000] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h3 className="text-3xl font-bold text-white mb-6">
             Join the Future of Investment
