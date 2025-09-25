@@ -16,6 +16,7 @@ import ContactSection from "../contact-section"
 import Footer from "../footer"
 import CountdownTimer from "../countdown-timer"
 import MobileVideo from "../component/mobile-video"
+import Typewriter from "../component/typewriter"
 import Link from "next/link"
 
 export default function Home() {
@@ -60,7 +61,7 @@ export default function Home() {
               poster=""
               alt="Background video for hero section"
               className="w-full h-full object-fill pointer-events-none select-none"
-              fallbackImage="/images/Feri.jpeg"
+              fallbackImage="/images/Feri.svg"
               fallbackAlt="Background video for hero section"
               width={1920}
               height={1080}
@@ -69,10 +70,23 @@ export default function Home() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 h-full flex items-end justify-center w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 pb-4 sm:pb-8 md:pb-12">
-            <div className="w-full max-w-4xl text-center">
+          <div className="relative z-10 h-full w-full">
+            {/* Main Hero Text with Typewriter Effect - Fixed Top Position */}
+            <div className="absolute top-12 sm:top-16 md:top-32 left-1/2 transform -translate-x-1/2 w-full max-w-7xl px-2 sm:px-4 md:px-6 lg:px-8 text-center">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-8xl xl:text-6xl font-bold text-[#a57e24] leading-tight">
+                <Typewriter 
+                  text="On a mission to disrupt the $130 trillion asset management industry!" 
+                  speed={80}
+                  delay={2000}
+                  className="text-center"
+                />
+              </h1>
+            </div>
+
+            {/* ICO Counter and Button - Fixed Bottom Position */}
+            <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-2 sm:px-4 md:px-6 lg:px-8">
               {/* ICO Launch Countdown Timer */}
-              <div className="mt-4 sm:mt-6 md:mt-8 flex justify-center">
+              <div className="flex justify-center mb-4 sm:mb-6 md:mb-8">
                 <div>
                   <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#a57e24] mb-2 sm:mb-3 md:mb-4 text-center">
                     NWIS DAO Token Presale
@@ -82,7 +96,7 @@ export default function Home() {
               </div>
               
               {/* Buy NWIS Token Button */}
-              <div className="mt-4 sm:mt-6 md:mt-8 flex justify-center">
+              <div className="flex justify-center">
                 <Link
                   href="/token-purchase"
                   className="inline-flex items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold text-sm sm:text-base md:text-lg rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-auto"

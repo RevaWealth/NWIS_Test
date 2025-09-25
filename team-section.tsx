@@ -41,11 +41,11 @@ export default function TeamSection() {
   return (
     <section id="team" className="py-12 bg-[#000000]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center text-white mb-8">Meet Our Team</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <h2 className="text-4xl font-bold text-center text-white mb-8">Meet Our Leadership Team</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {teamMembers.map((member, index) => (
-            <div key={index} className="bg-[#070b14] p-4 rounded-xl border border-gray-800 text-center space-y-3 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-1">
-              <div className="w-[100px] h-[100px] mx-auto rounded-full border-2 border-blue-500 overflow-hidden">
+            <div key={index} className="bg-[#070b14] p-2 sm:p-4 rounded-xl border border-gray-800 text-center space-y-2 sm:space-y-3 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-1">
+              <div className="w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] mx-auto rounded-full border-2 border-blue-500 overflow-hidden">
                 <Image
                   src={member.image || "/placeholder.svg"}
                   alt={member.name}
@@ -54,8 +54,8 @@ export default function TeamSection() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <h3 className="text-lg font-semibold text-white">{member.name}</h3>
-              <p className="text-blue-400 text-sm">{member.role}</p>
+              <h3 className="text-sm sm:text-lg font-semibold text-white">{member.name}</h3>
+              <p className="text-blue-400 text-xs sm:text-sm">{member.role}</p>
               <div className="flex justify-center">
                 <Link 
                   href={member.linkedin} 

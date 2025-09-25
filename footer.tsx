@@ -40,11 +40,11 @@ export default function Footer() {
           <div className="hidden lg:block w-px bg-white mx-8"></div>
 
           {/* Right Section - Links and Social Media */}
-          <div className="flex-1 pl-0 lg:pl-8 mt-8 lg:mt-0">
+          <div className="flex-1 pl-0 lg:pl-8 mt-8 lg:mt-12">
             {/* Navigation Links - 4 Columns */}
-            <div className="grid grid-cols-5 gap-x-16 gap-y-4 w-full">
+              <div className="grid grid-cols-6 gap-x-3 gap-y-6 w-full">
               {/* Column 1 - Double Width */}
-              <div className="col-span-2 flex flex-col space-y-4">
+              <div className="col-span-2 flex flex-col space-y-2">
                 <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
                   Cookie Notice
                 </Link>
@@ -60,8 +60,8 @@ export default function Footer() {
               </div>
               
               {/* Column 2 */}
-              <div className="flex flex-col space-y-4">
-                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <div className="col-span-1 flex flex-col space-y-2">
+                <Link href="/careers" className="text-gray-400 hover:text-blue-400 transition-colors">
                   Careers
                 </Link>
                 <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
@@ -70,7 +70,7 @@ export default function Footer() {
               </div>
               
               {/* Column 3 */}
-              <div className="flex flex-col space-y-4">
+              <div className="col-span-2 flex flex-col space-y-2">
                 <Link href="/contact" className="text-gray-400 hover:text-blue-400 transition-colors">
                   Contact Us
                 </Link>
