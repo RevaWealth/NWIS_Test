@@ -46,8 +46,17 @@ export default function MobileVideo({
         // Set video to load immediately
         video.load()
         
-        video.addEventListener('error', () => {
+        video.addEventListener('error', (e) => {
+          console.error('Video loading error:', e)
           setIsVideoSupported(false)
+        })
+        
+        video.addEventListener('loadstart', () => {
+          console.log('Video load started:', src)
+        })
+        
+        video.addEventListener('canplay', () => {
+          console.log('Video can play:', src)
         })
         
         // Try to play video immediately
@@ -99,6 +108,12 @@ export default function MobileVideo({
       width={width}
       height={height}
       style={{ backgroundColor: 'transparent' }}
+      onError={() => {
+        console.error('Video element error for:', src)
+        setIsVideoSupported(false)
+      }}
+      onLoadStart={() => console.log('Video load started for:', src)}
+      onCanPlay={() => console.log('Video can play for:', src)}
     >
       <source src={src} type="video/mp4" />
       {/* Fallback image if video fails to load */}

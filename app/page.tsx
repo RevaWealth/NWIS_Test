@@ -58,7 +58,7 @@ export default function Home() {
           {/* Background video */}
           <div className="absolute inset-0 z-0">
             <MobileVideo
-              src="/images/Far.mp4"
+              src="/images/Far.MP4"
               poster=""
               alt="Background video for hero section"
               className="w-full h-full object-fill pointer-events-none select-none"
