@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Navbar from '../../navbar'
+import Navbar from '../../sections/navbar'
 
 export default function TokenomicsPage() {
   const tokenomics = [

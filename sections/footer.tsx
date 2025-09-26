@@ -45,17 +45,14 @@ export default function Footer() {
               <div className="grid grid-cols-6 gap-x-3 gap-y-6 w-full">
               {/* Column 1 - Double Width */}
               <div className="col-span-2 flex flex-col space-y-2">
-                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Cookie Notice
-                </Link>
-                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Manage Cookies
-                </Link>
                   <Link href="/privacy-policy" className="text-gray-400 hover:text-blue-400 transition-colors">
                     Privacy Policy
                   </Link>
                   <Link href="/terms-and-conditions" className="text-gray-400 hover:text-blue-400 transition-colors">
                     Terms and Conditions
+                  </Link>
+                  <Link href="/risk-factors" className="text-gray-400 hover:text-blue-400 transition-colors">
+                    Risk Factors Disclaimer
                   </Link>
               </div>
               
@@ -67,12 +64,18 @@ export default function Footer() {
                 <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
                   About us
                 </Link>
+                <Link href="/contact" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Contact us
+                </Link>
               </div>
               
               {/* Column 3 */}
               <div className="col-span-2 flex flex-col space-y-2">
-                <Link href="/contact" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Contact Us
+              <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Cookie Notice
+                </Link>
+                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Cookies Settings
                 </Link>
               </div>
               

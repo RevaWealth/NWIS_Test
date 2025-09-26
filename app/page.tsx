@@ -3,18 +3,18 @@
 import { useEffect } from "react"
 import Image from "next/image"
 // removed unused Clock import
-import AnnouncementBar from "../announcement-bar"
-import Navbar from "../navbar"
-import AboutSection from "../about-section"
-import FeaturesSection from "../features-section"
-import TokenomicsSection from "../tokenomics-section"
-import RoadmapSection from "../roadmap-section"
-import TeamSection from "../team-section"
-import PartnersSection from "../partners-section"
-import FAQSection from "../faq-section"
-import ContactSection from "../contact-section"
-import Footer from "../footer"
-import CountdownTimer from "../countdown-timer"
+import AnnouncementBar from "../sections/announcement-bar"
+import Navbar from "../sections/navbar"
+import AboutSection from "../sections/about-section"
+import FeaturesSection from "../sections/features-section"
+import TokenomicsSection from "../sections/tokenomics-section"
+import RoadmapSection from "../sections/roadmap-section"
+import TeamSection from "../sections/team-section"
+import PartnersSection from "../sections/partners-section"
+import FAQSection from "../sections/faq-section"
+import ContactSection from "../sections/contact-section"
+import Footer from "../sections/footer"
+import CountdownTimer from "../sections/countdown-timer"
 import MobileVideo from "../component/mobile-video"
 import Typewriter from "../component/typewriter"
 import Link from "next/link"
@@ -132,11 +132,11 @@ export default function Home() {
               </p>
               
               <p>
-                This material may contain "forward-looking" information that is not purely historical in nature. Such information may include, among other things, projections, forecasts, and estimates of yields or returns. No representation is made that any performance presented will be achieved by any BlackRock Funds, or that every assumption made in achieving, calculating or presenting either the forward-looking information or any historical performance information herein has been considered or stated in preparing this material. Any changes to assumptions that may have been made in preparing this material could have a material impact on the investment returns that are presented herein. Past performance is not a reliable indicator of current or future results and should not be the sole factor of consideration when selecting a product or strategy.
+                This material may contain "forward-looking" information that is not purely historical in nature. Such information may include, among other things, projections, forecasts, and estimates of yields or returns. No representation is made that any performance presented will be achieved by NexusWealth Investment Solutions, or that every assumption made in achieving, calculating or presenting either the forward-looking information or any historical performance information herein has been considered or stated in preparing this material. Any changes to assumptions that may have been made in preparing this material could have a material impact on the investment returns that are presented herein. Past performance is not a reliable indicator of current or future results and should not be the sole factor of consideration when selecting a product or strategy.
               </p>
               
               <p>
-                The information and opinions contained in this material are derived from proprietary and nonproprietary sources deemed by BlackRock to be reliable, are not necessarily all-inclusive and are not guaranteed as to accuracy.
+                The information and opinions contained in this material are derived from proprietary and nonproprietary sources deemed by NexusWealth Investment Solutions to be reliable, are not necessarily all-inclusive and are not guaranteed as to accuracy.
               </p>
               
               <p>

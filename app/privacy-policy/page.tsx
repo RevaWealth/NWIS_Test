@@ -1,7 +1,7 @@
 'use client'
 
-import Navbar from "../../navbar"
-import Footer from "../../footer"
+import Navbar from "../../sections/navbar"
+import Footer from "../../sections/footer"
 
 export default function PrivacyPolicyPage() {
   return (
@@ -158,7 +158,7 @@ export default function PrivacyPolicyPage() {
                 We may update this Privacy Policy from time to time. Changes will be posted on this page with a revised "Last Updated" date.
               </p>
 
-              <h2 className="text-2xl font-semibold text-white mb-4 mt-8">12. Contact Us</h2>
+              <h2 className="text-2xl font-semibold text-white mb-4 mt-8">12. Contact us</h2>
               <p>
                 For privacy-related inquiries or to exercise your data rights, contact us at:
               </p>

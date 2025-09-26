@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Mail, Phone, MapPin, Send } from "lucide-react"
-import Navbar from "../../navbar"
+import Navbar from "../../sections/navbar"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -49,7 +49,7 @@ export default function ContactPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Contact Us
+            Contact us
           </h1>
           <p className="text-xl text-sky-200 max-w-3xl mx-auto">
             Have questions about NWIS? Need support? We're here to help you on your journey to financial freedom.
@@ -100,7 +100,7 @@ export default function ContactPage() {
             </div>
 
             <div className="bg-sky-900/50 p-6 rounded-lg border border-sky-700">
-              <h3 className="text-white font-semibold mb-3">Why Contact Us?</h3>
+              <h3 className="text-white font-semibold mb-3">Why Contact us?</h3>
               <ul className="text-sky-200 space-y-2 text-sm">
                 <li>• Technical support with wallet connections</li>
                 <li>• Questions about NWIS token purchases</li>

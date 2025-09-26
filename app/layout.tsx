@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import { Inter } from "next/font/google"
 import { WalletProvider } from "../wallet-provider"
-import { ErrorBoundary } from "../error-boundary"
+import { ErrorBoundary } from "../sections/error-boundary"
 import { Toaster } from "@/component/UI/toaster"
 import { ThemeProvider } from "../component/theme-provider"
 

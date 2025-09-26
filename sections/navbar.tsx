@@ -94,9 +94,9 @@ export default function Navbar() {
                         onMouseLeave={handleMouseLeave}
                       >
                         {/* Dropdown Header */}
-                        <div className="bg-gradient-to-r from-sky-600 to-sky-700 text-white px-6 py-4">
+                        <div className="bg-[#000000] text-white px-6 py-4">
                           <h3 className="font-semibold text-lg">About NexusWealth</h3>
-                          <p className="text-sky-100 text-sm mt-1">Discover our journey and team</p>
+                          <p className="text-gray-300 text-sm mt-1">Discover our journey and team</p>
                         </div>
                         
                         {/* Dropdown Items */}
@@ -113,17 +113,6 @@ export default function Navbar() {
                               </span>
                             </Link>
                           ))}
-                        </div>
-                        
-                        {/* Dropdown Footer */}
-                        <div className="bg-gray-50 px-6 py-4 border-t border-gray-100">
-                          <Link
-                            href="/contact"
-                            className="flex items-center justify-center space-x-2 w-full bg-sky-600 hover:bg-sky-700 text-white px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm"
-                          >
-                            <MessageCircle className="h-4 w-4" />
-                            <span>Contact Us</span>
-                          </Link>
                         </div>
                       </div>
                     )}
@@ -156,7 +145,7 @@ export default function Navbar() {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-sky-900 transition-colors"
+              className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-[#000000] transition-colors"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -186,16 +175,6 @@ export default function Navbar() {
                           <span>{dropdownItem.name}</span>
                         </Link>
                       ))}
-                      <div className="px-6 py-3">
-                        <Link
-                          href="/contact"
-                          className="flex items-center justify-center space-x-2 w-full bg-sky-600 hover:bg-sky-700 text-white px-4 py-3 rounded-lg transition-colors font-medium text-sm"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <MessageCircle className="h-4 w-4" />
-                          <span>Contact Us</span>
-                        </Link>
-                      </div>
                     </div>
                   ) : (
                     <Link
@@ -213,10 +192,16 @@ export default function Navbar() {
                 </div>
               ))}
               
-              {/* Mobile Wallet Button */}
+              {/* Mobile Buy NWIS Token Button */}
               <div className="pt-4 border-t border-gray-700">
                 <div className="px-3">
-                  <WalletButton />
+                  <Link
+                    href="/token-purchase"
+                    className="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold text-sm sm:text-base rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Buy NWIS Token
+                  </Link>
                 </div>
               </div>
             </div>

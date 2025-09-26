@@ -18,6 +18,16 @@ export const ProgressBar = ({ contractData, isLoadingContractData }: ProgressBar
 
   const tierProgress = calculateTierProgress()
 
+  // Calculate color based on progress percentage
+  const getProgressColor = () => {
+    const progress = parseFloat(tierProgress)
+    if (progress <= 35) return 'bg-blue-500'
+    if (progress <= 75) return 'bg-violet-600'
+    if (progress <= 90) return 'bg-red-500'
+    if (progress <= 100) return 'bg-red-700'
+    return 'bg-red-800'
+  }
+
   return (
     <div className="mb-6">
       <div className="flex justify-between items-center mb-2">
@@ -25,7 +35,7 @@ export const ProgressBar = ({ contractData, isLoadingContractData }: ProgressBar
       </div>
       <div className="relative w-full bg-gray-700 rounded-full h-9 overflow-hidden">
         <div 
-          className="h-full bg-gradient-to-r from-violet-500 to-red-700 rounded-full transition-all duration-500 ease-out relative"
+          className={`h-full ${getProgressColor()} rounded-full transition-all duration-500 ease-out relative`}
           style={{ width: `${isLoadingContractData ? "0" : tierProgress}%` }}
         >
           {/* Sliding pulse effect */}
@@ -40,7 +50,7 @@ export const ProgressBar = ({ contractData, isLoadingContractData }: ProgressBar
       </div>
       <div className="flex justify-between text-sm mt-1">
         <span className="font-bold text-white">
-          Current Tier Price: <span className="text-violet-400">
+          Current Tier Price: <span className="text-blue-500">
             {isLoadingContractData ? "Loading..." : `$${contractData.currentTier.price.toFixed(4)}`}
           </span>
         </span>

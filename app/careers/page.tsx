@@ -1,5 +1,5 @@
-import Navbar from "../../navbar"
-import Footer from "../../footer"
+import Navbar from "../../sections/navbar"
+import Footer from "../../sections/footer"
 
 export default function Careers() {
   return (

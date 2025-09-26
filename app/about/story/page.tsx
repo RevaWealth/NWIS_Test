@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Building2, Users, TrendingUp, Globe, Shield, Target, ArrowRight, ChevronRight } from 'lucide-react'
-import Navbar from '../../../navbar'
+import Navbar from '../../../sections/navbar'
 
 function AboutContent() {
   const searchParams = useSearchParams()
@@ -409,7 +409,7 @@ function AboutContent() {
               href="/contact"
               className="border border-sky-300 text-sky-300 hover:bg-sky-800 px-8 py-3 rounded-lg font-semibold transition-colors"
             >
-              Contact Us
+              Contact us
             </Link>
           </div>
         </div>

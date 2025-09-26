@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 
 import Image from "next/image"
 import Link from "next/link"
-import CountdownTimer from "../../countdown-timer"
+import CountdownTimer from "../../sections/countdown-timer"
 import TokenPurchaseNew from "../../token-purchase-new"
-import Navbar from "../../navbar"
+import Navbar from "../../sections/navbar"
 import { isMobileDevice, isWalletBrowser } from "../../lib/wallet-browser-utils"
 
 interface TokenSaleData {
@@ -128,7 +128,7 @@ export default function TokenPurchasePage() {
           {/* Additional Information */}
           <div className="mt-8 text-center">
             <p className="text-gray-300 mb-4">
-              Ready to start building your generational wealth?
+              Ready to start improving your financial future?
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
