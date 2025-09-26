@@ -48,7 +48,7 @@ export function isWalletBrowser(): boolean {
   // Check for reduced functionality (common in wallet browsers)
   const hasReducedFeatures = !window.localStorage || 
                              typeof window.localStorage.setItem !== 'function' ||
-                             typeof window.IndexedDB === 'undefined'
+                             typeof window.indexedDB === 'undefined'
 
   // Only consider it a wallet browser if it's a mobile device OR has wallet user agent OR is a WebView
   // Desktop browsers with wallet extensions should not be considered wallet browsers
@@ -95,7 +95,7 @@ export function getDialogConfig() {
     maxWidth: isWallet ? '95vw' : isMobile ? '95vw' : '4xl',
     margin: isWallet ? '0.5rem' : isMobile ? '0.5rem' : '0',
     padding: isWallet ? '1rem' : isMobile ? '1rem' : '1.5rem',
-    zIndex: isWallet ? 80 : 50,
+    zIndex: isWallet ? 9998 : 9998,
     scrollable: isWallet, // Force scrollable in wallet browsers
     backdrop: isWallet ? true : true, // Always show backdrop in wallet browsers
     closeOnBackdrop: !isWallet, // Prevent accidental closes in wallet browsers
@@ -110,7 +110,7 @@ export function getBannerConfig() {
   const isMobile = isMobileDevice()
   
   return {
-    zIndex: isWallet ? 90 : 70,
+    zIndex: isWallet ? 9999 : 9999,
     bottom: isWallet ? '1rem' : isMobile ? '5rem' : '2rem',
     maxWidth: isWallet ? '90vw' : isMobile ? '95vw' : 'auto',
     margin: isWallet ? '0.5rem' : '0',

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import type { Metadata } from "next"
 import Image from "next/image"
 // removed unused Clock import
 import AnnouncementBar from "../sections/announcement-bar"
