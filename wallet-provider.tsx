@@ -25,8 +25,27 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
           options={{
             hideBalance: false,
             embedGoogleFonts: true,
-            // Ensure QR code functionality is enabled
+            // Enable QR code functionality
             walletConnectCTA: "link",
+            // Enable mobile wallet support
+            mobileWallets: [
+              {
+                id: "metamask",
+                name: "MetaMask",
+                links: {
+                  native: "metamask://",
+                  universal: "https://metamask.app.link",
+                },
+              },
+              {
+                id: "trust",
+                name: "Trust Wallet",
+                links: {
+                  native: "trust://",
+                  universal: "https://link.trustwallet.com",
+                },
+              },
+            ],
             // Enable all wallet connection methods
             initialChainId: 1,
           }}

@@ -6,7 +6,6 @@ import Image from "next/image"
 import { Menu, X, ChevronDown, Users, Building2, MessageCircle } from "lucide-react"
 import { Button } from "@/component/UI/button"
 import { WalletButton } from "@/component/wallet-button"
-import { MobileWalletButton } from "@/component/mobile-wallet-button"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -40,9 +39,6 @@ export default function Navbar() {
     }, 150)
   }
 
-  const handleMobileConnect = () => {
-    setIsMenuOpen(false)
-  }
 
   useEffect(() => {
     return () => {
@@ -133,13 +129,10 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Wallet Buttons */}
+          {/* Wallet Button */}
           <div className="flex items-center space-x-3">
             <div className="flex">
               <WalletButton />
-            </div>
-            <div className="hidden md:flex">
-              <MobileWalletButton />
             </div>
             
             {/* Mobile menu button */}

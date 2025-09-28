@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import type { Metadata } from "next"
+import { useTracking, useInteractionTracking, useConversionTracking, useInitializeTracking } from "../hooks/use-tracking"
 import Image from "next/image"
 // removed unused Clock import
 import AnnouncementBar from "../sections/announcement-bar"
@@ -21,6 +22,11 @@ import Typewriter from "../component/typewriter"
 import Link from "next/link"
 
 export default function Home() {
+  // Initialize tracking
+  useInitializeTracking()
+  const { trackEvent } = useTracking()
+  const { trackClick, trackScroll } = useInteractionTracking()
+  const { trackTokenPurchase, trackWalletConnection } = useConversionTracking()
 
   useEffect(() => {
     // Suppress Safe Apps SDK errors

@@ -3,42 +3,41 @@ import { CheckCircle } from 'lucide-react'
 export default function RoadmapSection() {
   const roadmapPhases = [
     {
-      title: "Phase 1: Foundation & ICO (Q3 2025)",
+      title: "Phase 1: Foundation & Regulatory Compliance (Q3 2025)",
       items: [
         "Corporate Inception & Whitepaper Release",
         "Smart Contract Development & Audit",
         "Website Launch & Community Building",
-        "NWIS Token Presale - Series A Seed funding",
+        "Marketing Campaigns",
       ],
       completed: true,
     },
     {
-      title: "Phase 2: Platform Development, Marketing/Fundraising (Q4 2025)",
+      title: "Phase 2: Marketing/Fundraising (Q4 2025)",
       items: [
-        "Resource Onboarding and Team Expansion",
-        "Staking Platform Launch",
-        "Initial Real-World Asset Integration",
-        "Global Marketing Campaigns",
+        "Presale launch",
+        "Team Expansion",
+        "Enhancing Legal Framework for RWA Integration",
       ],
       completed: false,
     },
     {
       title: "Phase 3: Ecosystem Expansion (Q1 2026)",
       items: [
-        "NWIS Token Listing on DEXs",
+        "NWIS Token Listing on major exchanges",
         "Token Holders Access to NexusWealth Strategic Investment Paths",
         "Partnership Expansion",
-        "NexusWealth Collateralized Loans",
+        "Governance Platform Launch",
       ],
       completed: false,
     },
     {
-      title: "Phase 4: Ecosystem Expansion (Q4 2026)",
+      title: "Phase 4: DAO Integration & Audits (Q4 2026)",
       items: [
         "Cross-Chain Compatibility",
-        "Decentralized Governance Implementation",
-        "First 3rd Party Audit Publish",
-        "Yield Payouts",
+        "Governance Integration",
+        "First 3rd Party Audit",
+        "Earnings Reports",
       ],
       completed: false,
     },
@@ -47,7 +46,7 @@ export default function RoadmapSection() {
       items: [
         "Expansion to New Global Investment Categories",
         "Quarterly Audits",
-        "Monthly Yield Payouts",
+        "NWIS Token Utility Full Expansion",
         "Global Regulatory Compliance",
       ],
       completed: false,

@@ -71,12 +71,19 @@ export default function Footer() {
               
               {/* Column 3 */}
               <div className="col-span-2 flex flex-col space-y-2">
-              <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <Link href="/privacy-policy" className="text-gray-400 hover:text-blue-400 transition-colors">
                   Cookie Notice
                 </Link>
-                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+                <button 
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && window.openCookieSettings) {
+                      window.openCookieSettings()
+                    }
+                  }}
+                  className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+                >
                   Cookies Settings
-                </Link>
+                </button>
               </div>
               
               {/* Column 4 - Social Media Links */}
