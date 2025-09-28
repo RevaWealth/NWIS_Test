@@ -5,17 +5,17 @@ export default function FAQSection() {
     {
       question: "What is NWIS Token?",
       answer:
-        "NWIS (NexusWealth Investment Solutions) Token is the native cryptocurrency of the NexusWealth platform, designed to facilitate decentralized investments in real-world assets and provide governance rights to its holders.",
+        "The NWIS token is the governance and participation token of the NexusWealth ecosystem, enabling holders to propose and vote on asset management strategies, treasury allocations, and platform upgrades. It provides decentralized decision-making power without representing equity, ownership, or profit-sharing rights in NexusWealth or its affiliated entities.",
     },
     {
       question: "How can I buy NWIS Tokens?",
       answer:
-        "You can purchase NWIS Tokens during our ongoing presale by connecting your crypto wallet (e.g., MetaMask) and exchanging ETH, USDT, or BNB for NWIS. Detailed instructions are available on the token purchase section.",
+        "You can purchase NWIS Tokens during our ongoing presale by connecting your crypto wallet (e.g., MetaMask) and exchanging ETH, USDT, or USDC for NWIS. Detailed instructions are available on the token purchase section.",
     },
     {
       question: "What are the benefits of holding NWIS Tokens?",
       answer:
-        "Holding NWIS Tokens offers several benefits, including participation in platform governance, staking rewards, reduced transaction fees, and exclusive access to premium investment opportunities.",
+        "Here are the key benefits of holding NWIS tokens:\n\nGovernance Participation – Token holders can propose and vote on important decisions such as asset acquisition strategies, treasury allocations, ecosystem grants, and platform upgrades.\n\nStaking Incentives & Rewards – Participants may stake NWIS tokens to earn rewards or access premium features within the NexusWealth ecosystem.\n\nEarly Access & Ecosystem Privileges – Token holders can gain early or exclusive access to new tokenized asset offerings, platform tools, or community programs.\n\nTreasury Transparency & Influence – Voting power allows holders to directly influence how DAO treasury funds are managed and deployed.\n\nLong-Term Ecosystem Alignment – Tokenomics are designed to reward long-term holders and active participants, aligning incentives across the community.",
     },
     {
       question: "Is the NWIS platform secure?",
@@ -25,7 +25,7 @@ export default function FAQSection() {
     {
       question: "When will NWIS be listed on exchanges?",
       answer:
-        "Following the successful completion of our presale, we plan to list NWIS on major decentralized exchanges (DEXs) in Q1 2025, with centralized exchange (CEX) listings to follow.",
+        "Following the successful completion of our presale, we plan to list NWIS on major exchanges in Q1 2026.",
     },
   ]
 

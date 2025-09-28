@@ -1,10 +1,9 @@
 export default function TokenomicsSection() {
   const tokenomics = [
-    { label: "Total Supply", value: "50,000,000,000 NWIS", percentage: 100, color: "from-purple-600 to-pink-600" },
     { label: "Presale", value: "30,000,000,000 NWIS", percentage: 60, color: "from-blue-500 to-cyan-500" },
-    { label: "Liquidity", value: "7,500,000,000 NWIS", percentage: 15, color: "from-green-500 to-emerald-500" },
-    { label: "Marketing", value: "5,000,000,000 NWIS", percentage: 10, color: "from-orange-500 to-red-500" },
-    { label: "Team", value: "7,500,000,000 NWIS", percentage: 15, color: "from-yellow-500 to-amber-500" },
+    { label: "Treasury", value: "10,000,000,000 NWIS", percentage: 20, color: "from-green-500 to-emerald-500" },
+    { label: "Team & Advisors", value: "7,500,000,000 NWIS", percentage: 15, color: "from-yellow-500 to-amber-500" },
+    { label: "Marketing", value: "2,500,000,000 NWIS", percentage: 5, color: "from-orange-500 to-red-500" },
   ]
 
   return (
@@ -19,11 +18,11 @@ export default function TokenomicsSection() {
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-start lg:items-center">
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-2 sm:space-y-3">
             {tokenomics.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 sm:p-6 bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:shadow-md transition-shadow"
+                className="flex items-center justify-between p-2 sm:p-3 bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center">
                   <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gradient-to-r ${item.color} mr-3 sm:mr-4`}></div>

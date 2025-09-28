@@ -56,9 +56,10 @@ export default function TeamSection() {
               </div>
               <h3 className="text-sm sm:text-lg font-semibold text-white">{member.name}</h3>
               <p className="text-blue-400 text-xs sm:text-sm">{member.role}</p>
-              <div className="flex justify-center">
+              {/* LinkedIn links hidden for now */}
+              {/* <div className="flex justify-center">
                 <Link 
-                  href={member.linkedin} 
+                  href={member.linkedin || "#"} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group relative p-2 rounded-lg hover:bg-blue-600/10 transition-all duration-200"
@@ -70,7 +71,7 @@ export default function TeamSection() {
                     LinkedIn Profile
                   </span>
                 </Link>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
