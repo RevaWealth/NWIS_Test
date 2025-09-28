@@ -118,7 +118,10 @@ export const TransactionConfirmationDialog = ({
               {/* Transaction Hash - show after submission */}
               {transactionHash && (
                 <div className={`${isWallet ? 'p-3' : 'p-4'} bg-blue-900/20 border border-blue-600 rounded-xl`}>
-                  <h4 className={`${isWallet ? 'text-base' : 'text-lg'} font-semibold text-white mb-3`}>Transaction Details</h4>
+                  {/* Only show "Transaction Details" title for non-wallet browsers */}
+                  {!isWallet && (
+                    <h4 className="text-lg font-semibold text-white mb-3">Transaction Details</h4>
+                  )}
                   <div className="space-y-2">
                     {/* Only show Transaction Hash on desktop browsers */}
                     {!isMobile && !isWallet && (
