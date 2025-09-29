@@ -1,6 +1,8 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
-import { Facebook, Linkedin, X, Youtube } from "lucide-react"
+import { Facebook, Instagram, Linkedin, MessageCircle, Send, X, Youtube } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -88,17 +90,41 @@ export default function Footer() {
               
               {/* Column 4 - Social Media Links */}
               <div className="flex flex-col space-y-4">
-                <Link href="#" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors">
+                <Link 
+                  href="https://x.com/nwis_llc?s=21&t=TI3W-zvEjbOFY6gcvBl4hg" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                  aria-label="Follow us on X (Twitter)"
+                >
                   <X className="h-6 w-6" />
                 </Link>
-                <Link href="#" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors">
-                  <Linkedin className="h-6 w-6" />
+                <Link 
+                  href="https://www.instagram.com/invites/contact/?igsh=1ud3admh9by2p&utm_content=zh0j9ko" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-pink-500 transition-colors"
+                  aria-label="Follow us on Instagram"
+                >
+                  <Instagram className="h-6 w-6" />
                 </Link>
-                <Link href="#" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-700 transition-colors">
+                <Link 
+                  href="https://www.facebook.com/profile.php?id=61581421117460&mibextid=wwXIfr&mibextid=wwXIfr" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-blue-600 transition-colors"
+                  aria-label="Follow us on Facebook"
+                >
                   <Facebook className="h-6 w-6" />
                 </Link>
-                <Link href="#" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-600 transition-colors">
-                  <Youtube className="h-6 w-6" />
+                <Link 
+                  href="https://t.me/NWIS_io" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-blue-500 transition-colors"
+                  aria-label="Join our Telegram"
+                >
+                  <Send className="h-6 w-6" />
                 </Link>
               </div>
             </div>

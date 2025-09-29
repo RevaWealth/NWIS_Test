@@ -12,7 +12,7 @@
  - Functions protected: buyToken(), buyTokenWithEthPrice(), withdrawFunds()
 
  - Backend Price Verification: ETH prices are verified by authorized backend with signatures
- - Price Bounds Validation: ETH price limits ($100-$10,000) prevent extreme manipulation
+ - Price Bounds Validation: ETH price limits ($1,000-$6,500) prevent extreme manipulation
  - Timestamp Validation: Price freshness requirements (5 minutes) prevent stale price attacks
  - Signature Replay Protection: Unique signature IDs prevent replay attacks
  - ERC20 Token Whitelist: Only approved ERC20 tokens can be used for payments
@@ -23,11 +23,11 @@
  based on the total amount of tokens sold. The system includes 6 price tiers:
  
  Tier 1: 0 - 1B tokens: $0.001 USD
- Tier 2: 1B - 3.5B tokens: $0.002 USD  
- Tier 3: 3.5B - 10B tokens: $0.0025 USD
- Tier 4: 10B - 20B tokens: $0.003 USD
- Tier 5: 20B - 25B tokens: $0.0035 USD
- Tier 6: 25B - 30B tokens: $0.004 USD
+ Tier 2: 1B - 3B tokens: $0.002 USD  
+ Tier 3: 3B - 8B tokens: $0.003 USD
+ Tier 4: 8B - 13B tokens: $0.004 USD
+ Tier 5: 13B - 18B tokens: $0.006 USD
+ Tier 6: 18B - 30B tokens: $0.008 USD
  
  
  BACKEND INTEGRATION WITH ALCHEMY API (RECOMMENDED):
@@ -632,23 +632,23 @@ contract NexusWealthPresale is Ownable, ReentrancyGuard {
     
     /**
      * @dev Initialize the price tier system
-     * Tier 1: 0 - 1B tokens: $0.001 USD
-     * Tier 2: 1B - 3.5B tokens: $0.002 USD  
-     * Tier 3: 3.5B - 10B tokens: $0.0025 USD
-     * Tier 4: 10B - 20B tokens: $0.003 USD
-     * Tier 5: 20B - 25B tokens: $0.0035 USD
-     * Tier 6: 25B - 30B tokens: $0.004 USD
+ * Tier 1: 0 - 1B tokens: $0.001 USD
+ * Tier 2: 1B - 3B tokens: $0.002 USD  
+ * Tier 3: 3B - 8B tokens: $0.003 USD
+ * Tier 4: 8B - 13B tokens: $0.004 USD
+ * Tier 5: 13B - 18B tokens: $0.006 USD
+ * Tier 6: 18B - 30B tokens: $0.008 USD
      */
     function initializePriceTiers() internal {
         // Convert billions to actual token amounts (assuming 18 decimals)
         uint256 billion = 1e9 * 1e18; // 1 billion tokens with 18 decimals
         
         priceTiers.push(PriceTier(0, 1 * billion, 1000));                 // 0 - 1B: $0.001
-        priceTiers.push(PriceTier(1 * billion, 35 * billion / 10, 2000)); // 1B - 3.5B: $0.002
-        priceTiers.push(PriceTier(35 * billion / 10, 10 * billion, 2500)); // 3.5B - 10B: $0.0025
-        priceTiers.push(PriceTier(10 * billion, 20 * billion, 3000));     // 10B - 20B: $0.003
-        priceTiers.push(PriceTier(20 * billion, 25 * billion, 3500));     // 20B - 25B: $0.0035
-        priceTiers.push(PriceTier(25 * billion, 30 * billion, 4000));     // 25B - 30B: $0.004
+        priceTiers.push(PriceTier(1 * billion, 3 * billion, 2000));       // 1B - 3B: $0.002
+        priceTiers.push(PriceTier(3 * billion, 8 * billion, 3000));      // 3B - 8B: $0.003
+        priceTiers.push(PriceTier(8 * billion, 13 * billion, 4000));      // 8B - 13B: $0.004
+        priceTiers.push(PriceTier(13 * billion, 18 * billion, 6000));     // 13B - 18B: $0.006
+        priceTiers.push(PriceTier(18 * billion, 30 * billion, 8000));     // 18B - 30B: $0.008
         
         currentTierIndex = 0;
     }
@@ -937,8 +937,8 @@ contract NexusWealthPresale is Ownable, ReentrancyGuard {
         require(_ethUsdPrice > 0, "NexusWealthIS: ETH price must be greater than 0");
         
         // Validate ETH price is within reasonable bounds
-        uint256 minEthPrice = 100 * 1e6;   // $100.00 minimum
-        uint256 maxEthPrice = 10000 * 1e6; // $10,000.00 maximum
+        uint256 minEthPrice = 1000 * 1e6;   // $1,000.00 minimum
+        uint256 maxEthPrice = 6500 * 1e6;  // $6,500.00 maximum
         require(
             _ethUsdPrice >= minEthPrice && _ethUsdPrice <= maxEthPrice,
             "NexusWealthIS: ETH price outside reasonable bounds"
@@ -1298,8 +1298,8 @@ contract NexusWealthPresale is Ownable, ReentrancyGuard {
         require(totalTokensforSale > 0, "NexusWealthIS: No tokens available for sale");
         
         // Validate ETH price is within reasonable bounds to prevent manipulation
-        uint256 minEthPrice = 100 * 1e6;   // $100.00 minimum
-        uint256 maxEthPrice = 10000 * 1e6; // $10,000.00 maximum
+        uint256 minEthPrice = 1000 * 1e6;   // $1,000.00 minimum
+        uint256 maxEthPrice = 6500 * 1e6;  // $6,500.00 maximum
         require(
             _ethUsdPrice >= minEthPrice && _ethUsdPrice <= maxEthPrice,
             "NexusWealthIS: ETH price outside reasonable bounds"
