@@ -85,7 +85,7 @@ const PRESALE_ABI = [
 ];
 
 // Contract address on Sepolia testnet - UPDATED
-const PRESALE_CONTRACT_ADDRESS = "0x30e0c9c7e3661176595f1d2b1a1563a990ac0b0e";
+const PRESALE_CONTRACT_ADDRESS = "0x019bD590ae865C571972A7B7bFB1Ca8450b7F9b5";
 
 // Sepolia RPC endpoint (using Alchemy)
 const SEPOLIA_RPC_URL = "https://eth-sepolia.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht";

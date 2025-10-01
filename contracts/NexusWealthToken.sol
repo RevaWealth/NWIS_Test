@@ -52,6 +52,7 @@ contract NexusWealthToken is ERC20, ERC20Burnable, ERC20Pausable, ERC20Permit, O
     uint256 public quorum;
     uint256 public votingDelay;
     uint256 public votingPeriod;
+    uint256 public minProposalTokens;
     
     // Cross-chain bridging
     struct BridgeRequest {
@@ -81,6 +82,7 @@ contract NexusWealthToken is ERC20, ERC20Burnable, ERC20Pausable, ERC20Permit, O
     event VoteCast(address indexed voter, uint256 indexed proposalId, bool support, uint256 weight);
     event ProposalExecuted(uint256 indexed proposalId);
     event ProposalCanceled(uint256 indexed proposalId);
+    event MinProposalTokensUpdated(uint256 newMinTokens);
     event BridgeRequestInitiated(uint256 indexed requestId, address indexed from, uint256 amount, uint256 targetChainId);
     event BridgeRequestProcessed(uint256 indexed requestId, address indexed to, uint256 amount, uint256 sourceChainId);
     event BridgeOperatorUpdated(address indexed operator, bool isOperator);
@@ -133,6 +135,7 @@ contract NexusWealthToken is ERC20, ERC20Burnable, ERC20Pausable, ERC20Permit, O
         quorum = _maxSupply / 100; // 1% of max supply
         votingDelay = 1 days;
         votingPeriod = 7 days;
+        minProposalTokens = _maxSupply / 1000; // 0.1% of max supply
         
         // Set bridge parameters
         maxBridgeAmount = 50_000_000 * 10**decimals_; // 50 million tokens
@@ -225,6 +228,7 @@ contract NexusWealthToken is ERC20, ERC20Burnable, ERC20Pausable, ERC20Permit, O
      */
     function createProposal(string memory description) external notBlacklisted(msg.sender) returns (uint256) {
         require(bytes(description).length > 0, "Description cannot be empty");
+        require(balanceOf(msg.sender) >= minProposalTokens, "Insufficient tokens for proposal creation");
         
         uint256 proposalId = proposalCount++;
         Proposal storage proposal = proposals[proposalId];
@@ -296,6 +300,16 @@ contract NexusWealthToken is ERC20, ERC20Burnable, ERC20Pausable, ERC20Permit, O
         
         proposal.canceled = true;
         emit ProposalCanceled(proposalId);
+    }
+    
+    /**
+     * @dev Set minimum token requirement for proposal creation
+     * @param newMinTokens New minimum token requirement
+     */
+    function setMinProposalTokens(uint256 newMinTokens) external onlyOwner {
+        require(newMinTokens > 0, "Minimum tokens must be greater than 0");
+        minProposalTokens = newMinTokens;
+        emit MinProposalTokensUpdated(newMinTokens);
     }
     
     /**

@@ -63,7 +63,7 @@ export const ERC20_ABI = [
 ] as const;
 
 // Contract address from Sepolia deployment
-export const PRESALE_CONTRACT_ADDRESS = "0x30e0c9c7e3661176595f1d2b1a1563a990ac0b0e";
+export const PRESALE_CONTRACT_ADDRESS = "0x019bD590ae865C571972A7B7bFB1Ca8450b7F9b5";
 
 // Network configurations
 export const NETWORKS = {
