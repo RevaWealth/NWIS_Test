@@ -90,7 +90,7 @@ export default function DocumentsPage() {
       name: 'Tokenomics',
       icon: Calculator,
       description: 'Token distribution & economics',
-      file: '/api/pdf?file=Whitepaper.pdf' // Placeholder - will be updated with actual tokenomics doc
+      file: '/api/pdf?file=Tokenomics.pdf'
     },
     {
       id: 'legal',
@@ -111,6 +111,18 @@ export default function DocumentsPage() {
           name: 'Token Purchase Agreement',
           description: 'Token purchase terms and conditions',
           file: '/api/pdf?file=TPA.pdf'
+        },
+        {
+          id: 'risk-factors',
+          name: 'Risk Factors',
+          description: 'Investment risks and disclosures',
+          file: '/api/pdf?file=Risk Factors.pdf'
+        },
+        {
+          id: 'regulatory-positioning',
+          name: 'Regulatory Positioning Statement',
+          description: 'Regulatory compliance and positioning',
+          file: '/api/pdf?file=Regulatory Positioning Statement.pdf'
         }
       ]
     },
@@ -374,7 +386,8 @@ export default function DocumentsPage() {
             </div>
           </div>
 
-          {/* Document Content Area */}
+          {/* Document Content Area - Hide on mobile for simple documents that open in new tab */}
+          {!(isMobile && activeTab && activeTab !== 'legal') && (
           <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden">
             {/* No document selected - show default message for desktop only */}
             {!activeTab ? (
@@ -439,6 +452,34 @@ export default function DocumentsPage() {
                         <div className="text-sm text-green-100">Token purchase terms and conditions</div>
                       </div>
                     </button>
+                    
+                    <button
+                      onClick={() => {
+                        const filename = 'Risk Factors.pdf'
+                        console.log('Opening Risk Factors in new tab:', filename)
+                        window.open(`/${filename}`, '_blank')
+                      }}
+                      className="w-full px-4 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                    >
+                      <div className="text-left">
+                        <div className="font-semibold">Risk Factors</div>
+                        <div className="text-sm text-purple-100">Investment risks and disclosures</div>
+                      </div>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        const filename = 'Regulatory Positioning Statement.pdf'
+                        console.log('Opening Regulatory Positioning Statement in new tab:', filename)
+                        window.open(`/${filename}`, '_blank')
+                      }}
+                      className="w-full px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                    >
+                      <div className="text-left">
+                        <div className="font-semibold">Regulatory Positioning Statement</div>
+                        <div className="text-sm text-orange-100">Regulatory compliance and positioning</div>
+                      </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -478,6 +519,34 @@ export default function DocumentsPage() {
                         <div className="text-2xl mb-2">📋</div>
                         <div className="text-xl font-semibold mb-2">Token Purchase Agreement</div>
                         <div className="text-green-100">Token purchase terms and conditions</div>
+                      </div>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        console.log('Opening Risk Factors sub-tab')
+                        setActiveSubTab('risk-factors')
+                      }}
+                      className="p-6 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors shadow-lg hover:shadow-xl"
+                    >
+                      <div className="text-left">
+                        <div className="text-2xl mb-2">⚠️</div>
+                        <div className="text-xl font-semibold mb-2">Risk Factors</div>
+                        <div className="text-purple-100">Investment risks and disclosures</div>
+                      </div>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        console.log('Opening Regulatory Positioning sub-tab')
+                        setActiveSubTab('regulatory-positioning')
+                      }}
+                      className="p-6 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-lg hover:shadow-xl"
+                    >
+                      <div className="text-left">
+                        <div className="text-2xl mb-2">🏛️</div>
+                        <div className="text-xl font-semibold mb-2">Regulatory Positioning Statement</div>
+                        <div className="text-orange-100">Regulatory compliance and positioning</div>
                       </div>
                     </button>
                   </div>
@@ -546,11 +615,8 @@ export default function DocumentsPage() {
               )
             ) : activeDocUrl ? (
               isMobile ? (
-                <MobilePdfViewer
-                  fileUrl={activeDocUrl}
-                  initialScale={scale}
-                  enableTextLayer={false}
-                />
+                // On mobile, don't show PDF viewer since PDFs open in new tab
+                null
               ) : (
                 <DesktopPdfViewer
                   fileUrl={activeDocUrl}
@@ -565,6 +631,7 @@ export default function DocumentsPage() {
                   </div>
             )}
           </div>
+          )}
         </div>
       </div>
 

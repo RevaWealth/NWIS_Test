@@ -5,8 +5,8 @@ import type { JSX } from "react" // Declare JSX variable
 export default function CountdownTimer() {
   const calculateTimeLeft = () => {
     const now = new Date()
-    // Set target date to October 1st, 2025
-    const targetDate = new Date('2025-10-01T00:00:00.000Z')
+    // Set target date to October 15th, 2025 at 8:00 AM PST (16:00:00 UTC)
+    const targetDate = new Date('2025-10-15T16:00:00.000Z')
     const difference = +targetDate - +now
 
     let timeLeft = {
@@ -50,6 +50,9 @@ export default function CountdownTimer() {
     return () => clearInterval(timer)
   }, [])
 
+  // Check if countdown has reached zero
+  const isCountdownOver = timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0
+
   const timerComponents: JSX.Element[] = []
 
   Object.keys(timeLeft).forEach((interval) => {
@@ -86,9 +89,20 @@ export default function CountdownTimer() {
     )
   }
 
+  // If countdown is over, show red "NWIS Presale is Live NOW!" message
+  if (isCountdownOver) {
+    return (
+      <div className="flex justify-center">
+        <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-red-600 animate-pulse">
+          NWIS Presale is Live NOW!
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6">
-      {timerComponents.length ? timerComponents : <span className="text-[#a57e24]">ICO Started!</span>}
+      {timerComponents}
     </div>
   )
 }
