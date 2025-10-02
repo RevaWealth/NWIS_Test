@@ -1,6 +1,6 @@
 # 🚀 **NexusWealth PreSale Dapp Integration Guide**
 
-This guide will help you integrate your dapp with the deployed NexusWealth PreSale contract on Sepolia testnet.
+This guide will help you integrate your dapp with the deployed NexusWealth PreSale contract on Ethereum mainnet.
 
 ## 📋 **Table of Contents**
 
@@ -15,7 +15,7 @@ This guide will help you integrate your dapp with the deployed NexusWealth PreSa
 
 - ✅ **Deployed Contracts** (Already done!)
   - PreSale Contract: `0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d`
-  - NWIS Token: `0xACCeea4CFe324AD2597EE6193642f60917C254f7`
+  - NWIS Token: `0xeB97Dfd15898b959CF8a7c685f39a97e92b2d711`
 - ✅ **Ethereum Mainnet** configured
 - ✅ **MetaMask** or compatible wallet
 - ✅ **ETH** for gas fees
@@ -34,7 +34,7 @@ This guide will help you integrate your dapp with the deployed NexusWealth PreSa
 
 - **Network**: Ethereum Mainnet (Chain ID: 1)
 - **PreSale Contract**: `0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d`
-- **NWIS Token**: `0xACCeea4CFe324AD2597EE6193642f60917C254f7`
+- **NWIS Token**: `0xeB97Dfd15898b959CF8a7c685f39a97e92b2d711`
 - **Backend Signer**: `0x9c784Eb444866fAa7101221DB14D96Ae6B7fC9a0`
 
 ## 🔗 **Integration Steps**
@@ -219,8 +219,8 @@ useEffect(() => {
 
 ### **Test Purchase Flow**
 
-1. **Connect Wallet** to Sepolia testnet
-2. **Check Balance** - ensure you have Sepolia ETH
+1. **Connect Wallet** to Ethereum mainnet
+2. **Check Balance** - ensure you have ETH
 3. **Preview Purchase** - test with small amounts (0.01 ETH)
 4. **Execute Purchase** - confirm transaction in wallet
 5. **Verify Results** - check token balance and transaction
@@ -229,7 +229,7 @@ useEffect(() => {
 
 - ✅ **Valid Purchase**: 0.01 ETH → Should receive NWIS tokens
 - ✅ **Invalid Amount**: 0.001 ETH → Should show error (below minimum)
-- ✅ **Network Switch**: Change to mainnet → Should prompt for Sepolia
+- ✅ **Network Switch**: Change to testnet → Should prompt for Ethereum mainnet
 - ✅ **Account Switch**: Change MetaMask account → Should update data
 
 ## 🔍 **Troubleshooting**
@@ -239,8 +239,8 @@ useEffect(() => {
 | Issue | Solution |
 |-------|----------|
 | **"MetaMask not found"** | Install MetaMask extension |
-| **"Wrong network"** | Switch to Sepolia testnet |
-| **"Insufficient balance"** | Get Sepolia ETH from faucet |
+| **"Wrong network"** | Switch to Ethereum mainnet |
+| **"Insufficient balance"** | Get ETH from exchange or faucet |
 | **"Contract not found"** | Verify contract addresses |
 | **"Gas estimation failed"** | Check contract state and parameters |
 
@@ -261,25 +261,25 @@ console.log('Sale active:', status);
 
 ### **Network Configuration**
 
-If Sepolia is not available in MetaMask:
+If Ethereum Mainnet is not available in MetaMask:
 
 ```javascript
-// Add Sepolia network
-const sepoliaNetwork = {
-    chainId: "0xaa36a7",
-    chainName: "Sepolia testnet",
+// Add Ethereum Mainnet network
+const mainnetNetwork = {
+    chainId: "0x1", // Ethereum mainnet
+    chainName: "Ethereum Mainnet",
     nativeCurrency: {
-        name: "Sepolia Ether",
-        symbol: "SEP",
+        name: "Ether",
+        symbol: "ETH",
         decimals: 18
     },
-    rpcUrls: ["https://eth-sepolia.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj"],
-    blockExplorerUrls: ["https://sepolia.etherscan.io"]
+    rpcUrls: ["https://eth-mainnet.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht"],
+    blockExplorerUrls: ["https://etherscan.io"]
 };
 
 await window.ethereum.request({
     method: 'wallet_addEthereumChain',
-    params: [sepoliaNetwork]
+    params: [mainnetNetwork]
 });
 ```
 
@@ -305,7 +305,7 @@ If you encounter issues:
 
 1. Check the browser console for error messages
 2. Verify contract addresses are correct
-3. Ensure you're on Sepolia testnet
+3. Ensure you're on Ethereum mainnet
 4. Check that contracts are properly deployed
 5. Verify backend signature verification is working
 

@@ -1,7 +1,7 @@
 /**
  * Contract Configuration for NexusWealth PreSale Dapp
  * This file contains all the necessary contract addresses, ABIs, and configuration
- * for connecting your dapp to the deployed smart contracts on Sepolia testnet.
+ * for connecting your dapp to the deployed smart contracts on Ethereum mainnet.
  */
 
 // ============================================================================
@@ -11,7 +11,7 @@
 export const CONTRACT_ADDRESSES = {
     // Main contracts
     PRESALE_CONTRACT: "0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d",
-    NWIS_TOKEN: "0xACCeea4CFe324AD2597EE6193642f60917C254f7",
+    NWIS_TOKEN: "0xeB97Dfd15898b959CF8a7c685f39a97e92b2d711",
     
     // Network configuration
     NETWORK_ID: 1, // Ethereum mainnet
@@ -19,8 +19,8 @@ export const CONTRACT_ADDRESSES = {
     
     // Backend configuration
     BACKEND_SIGNER: "0x9c784Eb444866fAa7101221DB14D96Ae6B7fC9a0",
-    ALCHEMY_API_KEY: "iw39nauos-kYHDLTagkEj", // Your Alchemy Project ID
-    ALCHEMY_ENDPOINT: "https://eth-mainnet.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj"
+    ALCHEMY_API_KEY: "t_cKAT7elVCzwNTz3E8Ht", // Your Alchemy Project ID
+    ALCHEMY_ENDPOINT: "https://eth-mainnet.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht"
 };
 
 // ============================================================================
@@ -88,8 +88,8 @@ export const NETWORK_CONFIG = {
             decimals: 18
         },
         rpcUrls: [
-            "https://eth-mainnet.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj",
-            "https://mainnet.infura.io/v3/iw39nauos-kYHDLTagkEj"
+            "https://eth-mainnet.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht",
+            "https://mainnet.infura.io/v3/t_cKAT7elVCzwNTz3E8Ht"
         ],
         blockExplorerUrls: ["https://etherscan.io"]
     }
@@ -110,7 +110,7 @@ export const PRICING_CONFIG = {
     // Price sources
     PRICE_SOURCES: {
         COINGECKO: "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd",
-        ALCHEMY: "https://eth-sepolia.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj"
+        ALCHEMY: "https://eth-mainnet.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht"
     }
 };
 
@@ -159,7 +159,7 @@ export const formatUSD = (amount) => {
 // ============================================================================
 
 export const ERROR_MESSAGES = {
-    NETWORK_NOT_SUPPORTED: "Please connect to Sepolia testnet",
+    NETWORK_NOT_SUPPORTED: "Please connect to Ethereum mainnet",
     INSUFFICIENT_BALANCE: "Insufficient balance for this purchase",
     PURCHASE_LIMITS_EXCEEDED: "Purchase amount exceeds limits",
     SALE_NOT_ACTIVE: "Presale is not currently active",
@@ -177,7 +177,7 @@ export const SUCCESS_MESSAGES = {
     PURCHASE_SUCCESS: "Tokens purchased successfully!",
     APPROVAL_SUCCESS: "Token approval successful!",
     CONNECTION_SUCCESS: "Wallet connected successfully!",
-    NETWORK_SWITCHED: "Network switched to Sepolia successfully!"
+    NETWORK_SWITCHED: "Network switched to Ethereum mainnet successfully!"
 };
 
 // ============================================================================
