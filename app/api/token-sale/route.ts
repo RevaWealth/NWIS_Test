@@ -84,22 +84,22 @@ const PRESALE_ABI = [
   }
 ];
 
-// Contract address on Sepolia testnet - UPDATED
-const PRESALE_CONTRACT_ADDRESS = "0x019bD590ae865C571972A7B7bFB1Ca8450b7F9b5";
+// Contract address on Ethereum mainnet - UPDATED
+const PRESALE_CONTRACT_ADDRESS = "0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d";
 
-// Sepolia RPC endpoint (using Alchemy)
-const SEPOLIA_RPC_URL = "https://eth-sepolia.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht";
+// Ethereum mainnet RPC endpoint (using Alchemy)
+const MAINNET_RPC_URL = "https://eth-mainnet.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht";
 
 export async function GET() {
   try {
-    console.log('🔗 Connecting to Sepolia testnet...');
+    console.log('🔗 Connecting to Ethereum mainnet...');
     
-    // Connect to Sepolia testnet
-    const web3 = new Web3(SEPOLIA_RPC_URL);
+    // Connect to Ethereum mainnet
+    const web3 = new Web3(MAINNET_RPC_URL);
     
     // Test basic connection
     const blockNumber = await web3.eth.getBlockNumber();
-    console.log('✅ Connected to Sepolia. Latest block:', blockNumber);
+    console.log('✅ Connected to Ethereum mainnet. Latest block:', blockNumber);
     
     // Create contract instance
     const presaleContract = new web3.eth.Contract(PRESALE_ABI, PRESALE_CONTRACT_ADDRESS);

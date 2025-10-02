@@ -5,22 +5,22 @@
  */
 
 // ============================================================================
-// CONTRACT ADDRESSES (SEPOLIA TESTNET)
+// CONTRACT ADDRESSES (ETHEREUM MAINNET)
 // ============================================================================
 
 export const CONTRACT_ADDRESSES = {
     // Main contracts
-    PRESALE_CONTRACT: "0x019bD590ae865C571972A7B7bFB1Ca8450b7F9b5",
+    PRESALE_CONTRACT: "0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d",
     NWIS_TOKEN: "0xACCeea4CFe324AD2597EE6193642f60917C254f7",
     
     // Network configuration
-    NETWORK_ID: 11155111, // Sepolia testnet
-    NETWORK_NAME: "Sepolia Testnet",
+    NETWORK_ID: 1, // Ethereum mainnet
+    NETWORK_NAME: "Ethereum Mainnet",
     
     // Backend configuration
     BACKEND_SIGNER: "0x9c784Eb444866fAa7101221DB14D96Ae6B7fC9a0",
     ALCHEMY_API_KEY: "iw39nauos-kYHDLTagkEj", // Your Alchemy Project ID
-    ALCHEMY_ENDPOINT: "https://eth-sepolia.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj"
+    ALCHEMY_ENDPOINT: "https://eth-mainnet.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj"
 };
 
 // ============================================================================
@@ -79,19 +79,19 @@ export const NWIS_TOKEN_ABI = [
 // ============================================================================
 
 export const NETWORK_CONFIG = {
-    sepolia: {
-        chainId: "0xaa36a7", // 11155111 in hex
-        chainName: "Sepolia testnet",
+    mainnet: {
+        chainId: "0x1", // 1 in hex
+        chainName: "Ethereum Mainnet",
         nativeCurrency: {
-            name: "Sepolia Ether",
-            symbol: "SEP",
+            name: "Ether",
+            symbol: "ETH",
             decimals: 18
         },
         rpcUrls: [
-            "https://eth-sepolia.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj",
-            "https://rpc.sepolia.org"
+            "https://eth-mainnet.g.alchemy.com/v2/iw39nauos-kYHDLTagkEj",
+            "https://mainnet.infura.io/v3/iw39nauos-kYHDLTagkEj"
         ],
-        blockExplorerUrls: ["https://sepolia.etherscan.io"]
+        blockExplorerUrls: ["https://etherscan.io"]
     }
 };
 

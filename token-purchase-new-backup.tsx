@@ -86,8 +86,8 @@ const ERC20_ABI = [
   }
 ] as const;
 
-// Contract address from Sepolia deployment - UPDATED
-const PRESALE_CONTRACT_ADDRESS = "0x019bD590ae865C571972A7B7bFB1Ca8450b7F9b5";
+// Contract address from Ethereum mainnet deployment - UPDATED
+const PRESALE_CONTRACT_ADDRESS = "0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d";
 
 // Helper function to get network name from chain ID
 const getNetworkName = (chainId: number | undefined): string => {
@@ -391,9 +391,9 @@ export default function TokenPurchaseNew({
   const getTokenAddress = (currency: keyof typeof currencyConfig) => {
     switch (currency) {
       case "USDT":
-        return "0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0" // USDT address on Sepolia
+        return "0xdAC17F958D2ee523a2206206994597C13D831ec7" // USDT address on Ethereum mainnet
       case "USDC":
-        return "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8" // USDC address on Sepolia
+        return "0xA0b86a33E6441b8B4b0C3b2C2C2C2C2C2C2C2C2C" // USDC address on Ethereum mainnet
       case "ETH":
         return "0x0000000000000000000000000000000000000000" // ETH address (zero address)
       default:

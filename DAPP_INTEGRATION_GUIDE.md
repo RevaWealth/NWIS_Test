@@ -14,11 +14,11 @@ This guide will help you integrate your dapp with the deployed NexusWealth PreSa
 ## 🔧 **Prerequisites**
 
 - ✅ **Deployed Contracts** (Already done!)
-  - PreSale Contract: `0x019bD590ae865C571972A7B7bFB1Ca8450b7F9b5`
+  - PreSale Contract: `0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d`
   - NWIS Token: `0xACCeea4CFe324AD2597EE6193642f60917C254f7`
-- ✅ **Sepolia Testnet** configured
+- ✅ **Ethereum Mainnet** configured
 - ✅ **MetaMask** or compatible wallet
-- ✅ **Sepolia ETH** for gas fees
+- ✅ **ETH** for gas fees
 
 ## 📁 **Files Overview**
 
@@ -32,8 +32,8 @@ This guide will help you integrate your dapp with the deployed NexusWealth PreSa
 
 ### **Contract Details**
 
-- **Network**: Sepolia Testnet (Chain ID: 11155111)
-- **PreSale Contract**: `0x019bD590ae865C571972A7B7bFB1Ca8450b7F9b5`
+- **Network**: Ethereum Mainnet (Chain ID: 1)
+- **PreSale Contract**: `0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d`
 - **NWIS Token**: `0xACCeea4CFe324AD2597EE6193642f60917C254f7`
 - **Backend Signer**: `0x9c784Eb444866fAa7101221DB14D96Ae6B7fC9a0`
 
