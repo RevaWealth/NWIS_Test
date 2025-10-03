@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import Web3 from 'web3';
 
+// In-memory cache for token sale data
+interface TokenSaleCache {
+  data: any;
+  timestamp: number;
+}
+
+let tokenSaleCache: TokenSaleCache | null = null;
+const TOKEN_SALE_CACHE_DURATION = 60000; // 1 minute in milliseconds (longer than ETH price since blockchain data changes less frequently)
+
 // Contract ABI for the NexusWealthPresale contract - UPDATED
 const PRESALE_ABI = [
   // Sale Status
@@ -92,7 +101,18 @@ const MAINNET_RPC_URL = "https://eth-mainnet.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E
 
 export async function GET() {
   try {
-    console.log('🔗 Connecting to Ethereum mainnet...');
+    const now = Date.now();
+    
+    // Check if we have a valid cached token sale data
+    if (tokenSaleCache && (now - tokenSaleCache.timestamp) < TOKEN_SALE_CACHE_DURATION) {
+      console.log('📦 Using cached token sale data');
+      return NextResponse.json({
+        ...tokenSaleCache.data,
+        cached: true
+      });
+    }
+    
+    console.log('🔗 Fetching fresh token sale data from blockchain...');
     
     // Connect to Ethereum mainnet
     const web3 = new Web3(MAINNET_RPC_URL);
@@ -161,10 +181,32 @@ export async function GET() {
         : "0"
     };
 
-    return NextResponse.json(data);
+    // Update cache with new data
+    tokenSaleCache = {
+      data: data,
+      timestamp: now
+    };
+
+    console.log('✅ Token sale data fetched and cached');
+
+    return NextResponse.json({
+      ...data,
+      cached: false
+    });
     
   } catch (error) {
     console.error('❌ Error fetching token sale data:', error);
+    
+    // If we have cached data, use it even if it's expired
+    if (tokenSaleCache) {
+      console.log('📦 Using expired cached token sale data as fallback');
+      return NextResponse.json({
+        ...tokenSaleCache.data,
+        cached: true,
+        expired: true,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
     
     // Log specific error details for debugging
     if (error.message) {
