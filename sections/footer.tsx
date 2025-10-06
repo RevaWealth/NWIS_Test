@@ -118,7 +118,7 @@ export default function Footer() {
                   <Facebook className="h-6 w-6" />
                 </Link>
                 <Link 
-                  href="https://t.me/NWIS_io" 
+                  href="https://t.me/NWIS_Public_Channel" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-gray-400 hover:text-blue-500 transition-colors"

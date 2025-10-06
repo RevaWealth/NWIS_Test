@@ -8,12 +8,20 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Nonces.sol"; 
 
 /**
  * @title NexusWealthToken
- * @notice ERC20 with governance, bridge, blacklist, blacklist operators, supported chains, and supply cap.
- * Compatible with OpenZeppelin Contracts v5.x
+ * @notice ERC20 with:
+ *  - Custom decimals() override (constructor-provided)
+ *  - Snapshot-based governance via OpenZeppelin ERC20Votes (checkpointing)
+ *  - Pause + blacklist controls
+ *  - Simple burn/mint capped by maxSupply
+ *  - Minimal L1->L2 bridge request flow with fees + cancellation
+ *
+ *  Governance notes:
+ *   - Voting power is taken from getPastVotes at a fixed snapshot block captured
+ *     at proposal creation time (p.snapshotBlock). Token transfers after that
+ *     block do NOT affect voting power for that proposal, preventing vote reuse.
  */
 contract NexusWealthToken is
     ERC20,
@@ -24,25 +32,22 @@ contract NexusWealthToken is
     Ownable,
     ReentrancyGuard
 {
+    // ===== Custom Decimals =====
     uint8 private _customDecimals;
+
+    // ===== Supply Tracking =====
     uint256 public maxSupply;
     uint256 public totalMinted;
     uint256 public totalBurned;
 
+    // ===== Blacklist =====
     mapping(address => bool) public isBlacklisted;
 
-    uint256 public maxBridgeAmount;
-    uint256 public bridgeFee;
+    // ===== Bridge =====
+    uint256 public maxBridgeAmount; // e.g., 50M * 10**decimals
+    uint256 public bridgeFee;       // flat fee in wei (configurable)
     uint256 public bridgeFeesCollected;
     mapping(address => bool) public bridgeOperators;
-
-    // === Blacklist Operators ===
-    mapping(address => bool) public blacklistOperators;
-    event BlacklistOperatorUpdated(address indexed operator, bool status);
-
-    // === Supported Chains ===
-    mapping(uint256 => bool) public supportedChains;
-    event SupportedChainUpdated(uint256 indexed chainId, bool supported);
 
     struct BridgeRequest {
         address from;
@@ -56,14 +61,15 @@ contract NexusWealthToken is
     mapping(uint256 => BridgeRequest) public bridgeRequests;
     uint256 public bridgeRequestCount;
 
+    // ===== Governance (lightweight wrapper over ERC20Votes) =====
     enum VoteType { Against, For, Abstain }
 
     struct Proposal {
         address proposer;
         string  description;
-        uint256 snapshotBlock;
-        uint256 startBlock;
-        uint256 endBlock;
+        uint256 snapshotBlock;     // block at which voting power is measured
+        uint256 startBlock;        // voting start (inclusive)
+        uint256 endBlock;          // voting end (inclusive)
         uint256 forVotes;
         uint256 againstVotes;
         uint256 abstainVotes;
@@ -75,12 +81,14 @@ contract NexusWealthToken is
     mapping(uint256 => mapping(address => bool)) public hasVoted;
     uint256 public proposalCount;
 
-    uint256 public proposalThreshold;
-    uint256 public votingDelay;
-    uint256 public votingPeriod;
-    uint256 public quorumNumerator;
+    // Governance params
+    uint256 public proposalThreshold; // minimum past votes required to create proposal
+    uint256 public votingDelay;       // blocks
+    uint256 public votingPeriod;      // blocks
+    uint256 public quorumNumerator;   // e.g., 400 = 4.00%; base = 10_000
     uint256 public constant QUORUM_DENOMINATOR = 10_000;
 
+    // ===== Events =====
     event BridgeInitiated(uint256 indexed requestId, address indexed from, uint256 amount, uint256 fee);
     event BridgeProcessed(uint256 indexed requestId, address indexed to, uint256 amount);
     event BridgeCanceled(uint256 indexed requestId, address indexed by);
@@ -97,50 +105,46 @@ contract NexusWealthToken is
         uint8 decimals_,
         uint256 _maxSupply,
         uint256 _initialSupply
-    )
-        ERC20(name, symbol)
-        ERC20Permit(name)
-        Ownable(msg.sender)
-    {
+    ) ERC20(name, symbol) ERC20Permit(name) Ownable(msg.sender) {
+        // Decimals + supply
         _customDecimals = decimals_;
         maxSupply = _maxSupply * 10 ** _customDecimals;
         require(_initialSupply * 10 ** _customDecimals <= maxSupply, "Initial supply exceeds max");
         _mint(msg.sender, _initialSupply * 10 ** _customDecimals);
         totalMinted = _initialSupply * 10 ** _customDecimals;
 
+        // Bridge
         maxBridgeAmount = 50_000_000 * 10 ** _customDecimals;
-        bridgeFee = 0;
+        bridgeFee = 0; // owner can set later
 
-        proposalThreshold = 0;
-        votingDelay = 0;
-        votingPeriod = 45_000;
-        quorumNumerator = 400;
+        // Governance defaults (tune as desired)
+        proposalThreshold = 0;        // require no threshold by default
+        votingDelay = 0;              // start immediately
+        votingPeriod = 45_000;        // ~1 week on 12s blocks
+        quorumNumerator = 400;        // 4.00%
     }
 
     // ===== Admin setters =====
-    function setBridgeOperator(address operator, bool status) external onlyOwner { bridgeOperators[operator] = status; }
+    function setBridgeOperator(address operator, bool status) external onlyOwner {
+        bridgeOperators[operator] = status;
+    }
     function setBridgeFee(uint256 newFeeWei) external onlyOwner { bridgeFee = newFeeWei; }
-    function setBlacklistOperator(address operator, bool status) external onlyOwner {
-        blacklistOperators[operator] = status;
-        emit BlacklistOperatorUpdated(operator, status);
-    }
-    function setSupportedChain(uint256 chainId, bool status) external onlyOwner {
-        supportedChains[chainId] = status;
-        emit SupportedChainUpdated(chainId, status);
+    function setBlacklistStatus(address user, bool status) external onlyOwner { isBlacklisted[user] = status; }
+
+    function setVotingParams(uint256 _threshold, uint256 _delay, uint256 _period, uint256 _quorumNumerator)
+        external
+        onlyOwner
+    {
+        require(_quorumNumerator <= QUORUM_DENOMINATOR, "quorum too high");
+        proposalThreshold = _threshold;
+        votingDelay = _delay;
+        votingPeriod = _period;
+        quorumNumerator = _quorumNumerator;
     }
 
-    // ===== Blacklist management =====
-    modifier onlyBlacklistAdmin() {
-        require(msg.sender == owner() || blacklistOperators[msg.sender], "Not authorized");
-        _;
-    }
-
-    function setBlacklistStatus(address user, bool status) external onlyBlacklistAdmin {
-        isBlacklisted[user] = status;
-    }
-
-    // ===== ERC20 controls =====
+    // ===== ERC20 basic controls =====
     function decimals() public view override returns (uint8) { return _customDecimals; }
+
     function pause() external onlyOwner { _pause(); }
     function unpause() external onlyOwner { _unpause(); }
 
@@ -150,18 +154,24 @@ contract NexusWealthToken is
         totalMinted += amount;
     }
 
-    // ===== Bridge =====
-    function initiateBridge(address to, uint256 amount, uint256 targetChainId) external payable nonReentrant whenNotPaused {
+    // ===== Bridge Flow =====
+    function initiateBridge(address to, uint256 amount) external payable nonReentrant whenNotPaused {
         require(!isBlacklisted[msg.sender], "Blacklisted");
         require(amount <= maxBridgeAmount, "Exceeds bridge cap");
         require(msg.value >= bridgeFee, "Insufficient fee");
-        require(supportedChains[targetChainId], "Chain not supported");
 
         _burn(msg.sender, amount);
         totalBurned += amount;
 
         bridgeRequestCount++;
-        bridgeRequests[bridgeRequestCount] = BridgeRequest(msg.sender, to, amount, msg.value, false, false);
+        bridgeRequests[bridgeRequestCount] = BridgeRequest({
+            from: msg.sender,
+            to: to,
+            amount: amount,
+            fee: msg.value,
+            processed: false,
+            canceled: false
+        });
 
         bridgeFeesCollected += msg.value;
         emit BridgeInitiated(bridgeRequestCount, msg.sender, amount, msg.value);
@@ -197,28 +207,30 @@ contract NexusWealthToken is
     }
 
     // ===== Governance API =====
-    function quorum(uint256 ) public view returns (uint256) {
+    function quorum(uint256 /*blockNumber*/ ) public view returns (uint256) {
+        // Simple fixed-percent-of-totalSupply quorum
         return (totalSupply() * quorumNumerator) / QUORUM_DENOMINATOR;
     }
 
-    function setVotingParams(uint256 _threshold, uint256 _delay, uint256 _period, uint256 _quorumNumerator)
-        external
-        onlyOwner
-    {
-        require(_quorumNumerator <= QUORUM_DENOMINATOR, "quorum too high");
-        proposalThreshold = _threshold;
-        votingDelay = _delay;
-        votingPeriod = _period;
-        quorumNumerator = _quorumNumerator;
-    }
-
     function createProposal(string calldata description) external returns (uint256 id) {
+        // proposer must meet past-vote threshold at the prior block
         require(getPastVotes(msg.sender, block.number - 1) >= proposalThreshold, "threshold");
         id = ++proposalCount;
-        uint256 snap = block.number;
+        uint256 snap = block.number; // snapshot at creation block
         uint256 start = snap + votingDelay;
         uint256 end = start + votingPeriod;
-        proposals[id] = Proposal(msg.sender, description, snap, start, end, 0, 0, 0, false, false);
+        proposals[id] = Proposal({
+            proposer: msg.sender,
+            description: description,
+            snapshotBlock: snap,
+            startBlock: start,
+            endBlock: end,
+            forVotes: 0,
+            againstVotes: 0,
+            abstainVotes: 0,
+            executed: false,
+            canceled: false
+        });
         emit ProposalCreated(id, msg.sender, snap, start, end, description);
     }
 
@@ -245,6 +257,8 @@ contract NexusWealthToken is
         if (p.canceled) return "Canceled";
         if (block.number < p.startBlock) return "Pending";
         if (block.number <= p.endBlock) return "Active";
+        // voting ended
+        // Check quorum: forVotes + abstainVotes + againstVotes >= quorum
         uint256 turnout = p.forVotes + p.againstVotes + p.abstainVotes;
         if (turnout < quorum(p.snapshotBlock)) return "Defeated";
         if (p.forVotes <= p.againstVotes) return "Defeated";
@@ -269,9 +283,11 @@ contract NexusWealthToken is
         require(p.forVotes > p.againstVotes, "not passed");
         p.executed = true;
         emit ProposalExecuted(id);
+        // NOTE: This minimal governor does not queue/call external targets.
+        // Wire your own execution logic here or integrate OZ Governor for full proposal execution.
     }
 
-    // ===== Required overrides =====
+    // ===== Internal overrides =====
     function _update(address from, address to, uint256 value)
         internal
         override(ERC20, ERC20Pausable, ERC20Votes)
@@ -281,12 +297,17 @@ contract NexusWealthToken is
         super._update(from, to, value);
     }
 
-    function nonces(address owner)
-        public
-        view
-        override(ERC20Permit, Nonces)
-        returns (uint256)
+    function _mint(address to, uint256 amount)
+        internal
+        override(ERC20, ERC20Votes)
     {
-        return super.nonces(owner);
+        super._mint(to, amount);
+    }
+
+    function _burn(address from, uint256 amount)
+        internal
+        override(ERC20, ERC20Votes)
+    {
+        super._burn(from, amount);
     }
 }

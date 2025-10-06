@@ -134,7 +134,7 @@ export const TransactionConfirmationDialog = ({
                     )}
                     <div className="pt-2">
                       <a
-                        href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                        href={`https://etherscan.io/tx/${transactionHash}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium"

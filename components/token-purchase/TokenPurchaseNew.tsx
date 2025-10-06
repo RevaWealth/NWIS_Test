@@ -389,13 +389,13 @@ function TokenPurchaseNew({
       if (isMobileDevice()) {
         toast({
           title: "Manual Network Switch Required",
-          description: "Please manually switch to Sepolia Testnet in your wallet app. Look for 'Networks' or 'Settings' in your wallet.",
+          description: "Please manually switch to Ethereum Mainnet in your wallet app. Look for 'Networks' or 'Settings' in your wallet.",
           variant: "destructive",
         })
       } else {
         toast({
           title: "Network Switch Failed",
-          description: "Please switch to Sepolia Testnet manually in your wallet.",
+          description: "Please switch to Ethereum Mainnet manually in your wallet.",
           variant: "destructive",
         })
       }
@@ -425,7 +425,7 @@ function TokenPurchaseNew({
     if (!isCorrectNetwork) {
       toast({
         title: "Wrong Network",
-        description: "Please switch to Sepolia testnet to purchase tokens.",
+        description: "Please switch to Ethereum mainnet to purchase tokens.",
         variant: "destructive",
       })
       return
