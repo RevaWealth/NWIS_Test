@@ -94,7 +94,7 @@ const PRESALE_ABI = [
 ];
 
 // Contract address on Ethereum mainnet - UPDATED
-const PRESALE_CONTRACT_ADDRESS = "0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d";
+const PRESALE_CONTRACT_ADDRESS = "0xECA1795FaFC23E7077Da9F6654573844BB8DC43e";
 
 // Ethereum mainnet RPC endpoint (using Alchemy)
 const MAINNET_RPC_URL = "https://eth-mainnet.g.alchemy.com/v2/t_cKAT7elVCzwNTz3E8Ht";

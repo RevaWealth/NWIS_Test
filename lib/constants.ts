@@ -63,7 +63,7 @@ export const ERC20_ABI = [
 ] as const;
 
 // Contract address from Ethereum mainnet deployment
-export const PRESALE_CONTRACT_ADDRESS = "0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d";
+export const PRESALE_CONTRACT_ADDRESS = "0xECA1795FaFC23E7077Da9F6654573844BB8DC43e";
 
 // Network configurations
 export const NETWORKS = {

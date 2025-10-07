@@ -14,7 +14,7 @@ This guide will help you integrate your dapp with the deployed NexusWealth PreSa
 ## 🔧 **Prerequisites**
 
 - ✅ **Deployed Contracts** (Already done!)
-  - PreSale Contract: `0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d`
+  - PreSale Contract: `0xECA1795FaFC23E7077Da9F6654573844BB8DC43e`
   - NWIS Token: `0xeB97Dfd15898b959CF8a7c685f39a97e92b2d711`
 - ✅ **Ethereum Mainnet** configured
 - ✅ **MetaMask** or compatible wallet
@@ -33,7 +33,7 @@ This guide will help you integrate your dapp with the deployed NexusWealth PreSa
 ### **Contract Details**
 
 - **Network**: Ethereum Mainnet (Chain ID: 1)
-- **PreSale Contract**: `0xb272a56DfaC2B3eB2Ff42BEd4cf6b3CA676C9d8d`
+- **PreSale Contract**: `0xECA1795FaFC23E7077Da9F6654573844BB8DC43e`
 - **NWIS Token**: `0xeB97Dfd15898b959CF8a7c685f39a97e92b2d711`
 - **Backend Signer**: `0x9c784Eb444866fAa7101221DB14D96Ae6B7fC9a0`
 
