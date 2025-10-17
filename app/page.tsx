@@ -8,6 +8,7 @@ import Image from "next/image"
 import AnnouncementBar from "../sections/announcement-bar"
 import Navbar from "../sections/navbar"
 import AboutSection from "../sections/about-section"
+import LearnMoreSection from "../sections/learn-more-section"
 import FeaturesSection from "../sections/features-section"
 import TokenomicsSection from "../sections/tokenomics-section"
 import RoadmapSection from "../sections/roadmap-section"
@@ -80,7 +81,7 @@ export default function Home() {
           <div className="relative z-10 h-full w-full">
             {/* Main Hero Text with Typewriter Effect - Fixed Top Position */}
             <div className="absolute top-12 sm:top-16 md:top-32 left-1/2 transform -translate-x-1/2 w-full max-w-7xl px-2 sm:px-4 md:px-6 lg:px-8 text-center">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-8xl xl:text-6xl font-bold text-[#a57e24] leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-8xl xl:text-6xl font-bold text-white leading-tight">
                 <Typewriter 
                   text="On a mission to disrupt the $130 trillion asset management industry!" 
                   speed={80}
@@ -90,9 +91,9 @@ export default function Home() {
               </h1>
             </div>
 
-            {/* ICO Counter and Button - Fixed Bottom Position */}
+            {/* Presale Counter and Button - Fixed Bottom Position */}
             <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-2 sm:px-4 md:px-6 lg:px-8">
-              {/* ICO Launch Countdown Timer */}
+              {/* Presale Launch Countdown Timer */}
               <div className="flex justify-center mb-4 sm:mb-6 md:mb-8">
                 <div>
                   <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#a57e24] mb-2 sm:mb-3 md:mb-4 text-center">
@@ -116,6 +117,7 @@ export default function Home() {
         </section>
 
         {/* Additional Sections */}
+        <LearnMoreSection />
         <AboutSection />
         <FeaturesSection />
         <RoadmapSection />

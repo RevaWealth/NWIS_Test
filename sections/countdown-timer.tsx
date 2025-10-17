@@ -5,8 +5,8 @@ import type { JSX } from "react" // Declare JSX variable
 export default function CountdownTimer() {
   const calculateTimeLeft = () => {
     const now = new Date()
-    // Set target date to October 15th, 2025 at 8:00 AM PST (16:00:00 UTC)
-    const targetDate = new Date('2025-10-15T16:00:00.000Z')
+    // Set target date to October 22nd, 2025 at 8:00 AM PST (16:00:00 UTC)
+    const targetDate = new Date('2025-10-22T16:00:00.000Z')
     const difference = +targetDate - +now
 
     let timeLeft = {

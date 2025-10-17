@@ -119,7 +119,7 @@ export default function TokenPurchasePage() {
 
               <CountdownTimer />
 
-              <p className="text-gray-400 text-center text-sm mt-4 mb-6">ICO Starts October 1st, 2025</p>
+              <p className="text-gray-400 text-center text-sm mt-4 mb-6">Presale Starts October 22nd, 2025</p>
 
               <TokenPurchaseNew />
             </div>

@@ -114,7 +114,7 @@ export default function TokenPurchaseNew({
   amountRaised = "$0", 
   tokenValue = "1 NWIS = $0.0010",
   progressPercentage = "0",
-  totalTokensForSale = "1000000",
+  totalTokensForSale = "1000000000",
   totalTokensSold = "0"
 }: TokenPurchaseProps) {
   // Client-side hydration fix

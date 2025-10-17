@@ -13,19 +13,20 @@ export default function RoadmapSection() {
       completed: true,
     },
     {
-      title: "Phase 2: Marketing/Fundraising (Q4 2025)",
+      title: "Phase 2: Marketing/Fundraising/Compliance (Q4 2025)",
       items: [
         "Presale launch",
         "Team Expansion",
         "Enhancing Legal Framework for RWA Integration",
+        "KYC/AML Compliance and Whitelisting",
       ],
       completed: false,
     },
     {
       title: "Phase 3: Ecosystem Expansion (Q1 2026)",
       items: [
+        "NWIS Token Unlock",
         "NWIS Token Listing on major exchanges",
-        "Token Holders Access to NexusWealth Strategic Investment Paths",
         "Partnership Expansion",
         "Governance Platform Launch",
       ],
@@ -54,7 +55,7 @@ export default function RoadmapSection() {
   ]
 
   return (
-    <section id="roadmap" className="py-20 bg-[#070b14] bg-[#000000]">
+    <section id="roadmap" className="py-20 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8 md:mb-12">Our Roadmap</h2>
         <div className="relative">

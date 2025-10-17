@@ -109,7 +109,7 @@ export default function FeaturesSection() {
   }
 
   return (
-    <section id="features" className="py-20 bg-gradient-to-br from-slate-800 to-slate-900 text-white">
+    <section id="features" className="py-20 bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl font-bold mb-12 text-white">Key Features</h2>
         

@@ -126,6 +126,15 @@ export default function Footer() {
                 >
                   <Send className="h-6 w-6" />
                 </Link>
+                <Link 
+                  href="https://www.youtube.com/@NWIS-Foundation" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-red-500 transition-colors"
+                  aria-label="Subscribe to our YouTube channel"
+                >
+                  <Youtube className="h-6 w-6" />
+                </Link>
               </div>
             </div>
           </div>

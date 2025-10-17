@@ -1,15 +1,17 @@
 #!/bin/bash
 
-# Google Cloud Run Deployment Script for NexusWealth Dapp
-# Make sure you have gcloud CLI installed and configured
+# Multi-Region Deployment Script for NexusWealth Dapp
+# Deploys to US, Europe, and Asia for global low-latency access
 
 # Configuration
 PROJECT_ID="nexuswealthtest"  # Your actual Google Cloud Project ID
 SERVICE_NAME="nexuswealth-dapp"
-REGION="us-central1"  # Change to your preferred region
+REGIONS=("us-central1" "europe-west1" "asia-southeast1")  # Multi-region deployment
 IMAGE_NAME="gcr.io/$PROJECT_ID/$SERVICE_NAME"
 
-echo "🚀 Starting deployment to Google Cloud Run..."
+echo "🌍 Starting multi-region deployment to Google Cloud Run..."
+echo "Regions: ${REGIONS[*]}"
+echo ""
 
 # Check if gcloud is installed
 if ! command -v gcloud &> /dev/null; then
@@ -27,9 +29,10 @@ fi
 echo "📋 Setting project to: $PROJECT_ID"
 gcloud config set project $PROJECT_ID
 
-# Build the Docker image
+# Build the Docker image (once for all regions)
+echo ""
 echo "🔨 Building Docker image..."
-docker build -t $IMAGE_NAME .
+docker build --platform linux/amd64 -t $IMAGE_NAME .
 
 if [ $? -ne 0 ]; then
     echo "❌ Docker build failed!"
@@ -37,6 +40,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Push the image to Google Container Registry
+echo ""
 echo "📤 Pushing image to Google Container Registry..."
 docker push $IMAGE_NAME
 
@@ -45,24 +49,58 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Deploy to Cloud Run
-echo "🚀 Deploying to Cloud Run..."
-gcloud run deploy $SERVICE_NAME \
-    --image $IMAGE_NAME \
-    --platform managed \
-    --region $REGION \
-    --allow-unauthenticated \
-    --port 3000 \
-    --memory 1Gi \
-    --cpu 1 \
-    --max-instances 10 \
-    --set-env-vars NODE_ENV=production
+echo ""
+echo "✅ Image pushed successfully!"
+echo ""
 
-if [ $? -eq 0 ]; then
-    echo "✅ Deployment successful!"
-    echo "🌐 Your dapp is now available at:"
-    gcloud run services describe $SERVICE_NAME --platform managed --region $REGION --format="value(status.url)"
-else
-    echo "❌ Deployment failed!"
-    exit 1
-fi
+# Deploy to each region
+for region in "${REGIONS[@]}"; do
+    echo "================================================"
+    echo "🚀 Deploying to $region..."
+    echo "================================================"
+    
+    gcloud run deploy $SERVICE_NAME \
+        --image $IMAGE_NAME \
+        --platform managed \
+        --region $region \
+        --allow-unauthenticated \
+        --port 3000 \
+        --memory 2Gi \
+        --cpu 2 \
+        --min-instances 1 \
+        --max-instances 10 \
+        --timeout 60 \
+        --set-env-vars NODE_ENV=production,REGION=$region \
+        --quiet
+    
+    if [ $? -eq 0 ]; then
+        echo "✅ Deployed to $region successfully!"
+        SERVICE_URL=$(gcloud run services describe $SERVICE_NAME \
+            --platform managed \
+            --region $region \
+            --format="value(status.url)")
+        echo "   URL: $SERVICE_URL"
+    else
+        echo "❌ Deployment to $region failed!"
+        exit 1
+    fi
+    
+    echo ""
+done
+
+echo "================================================"
+echo "🎉 Multi-region deployment complete!"
+echo "================================================"
+echo ""
+echo "📊 Deployment Summary:"
+for region in "${REGIONS[@]}"; do
+    SERVICE_URL=$(gcloud run services describe $SERVICE_NAME \
+        --platform managed \
+        --region $region \
+        --format="value(status.url)")
+    echo "  $region: $SERVICE_URL"
+done
+echo ""
+echo "💡 For global load balancing with custom domain:"
+echo "   See MULTI_REGION_DEPLOYMENT_GUIDE.md for setting up Cloud Load Balancer"
+echo ""
