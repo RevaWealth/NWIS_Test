@@ -1,6 +1,6 @@
 export default function AnnouncementBar() {
   return (
-    <div className="bg-gradient-to-r from-purple-900 to-purple-600 py-2 text-sm font-medium text-white overflow-hidden relative">
+    <div className="bg-gradient-to-r from-red-800 to-red-600 py-2 text-sm font-medium text-white overflow-hidden relative">
       <div className="animate-scroll whitespace-nowrap w-max">
         <span className="inline-block px-4">
           NWIS DAO Token Presale Will Go LIVE Soon! Ready to Own a Stake in a Force that will Revolutionize the Asset Management Industry? • HURRY UP! BEFORE THIS TIER ENDS AND THE PRICE INCREASES!

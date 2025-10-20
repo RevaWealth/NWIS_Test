@@ -131,7 +131,7 @@ export default function DocumentsPage() {
       name: 'Security Audit',
       icon: Shield,
       description: 'Smart contract audit reports',
-      file: '/api/pdf?file=Whitepaper.pdf' // Placeholder - will be updated with actual audit docs
+      file: '/api/pdf?file=Certik.pdf'
     }
   ]
 
@@ -175,7 +175,7 @@ export default function DocumentsPage() {
     
     if (isMobile) {
       // On mobile, only open PDF in new tab if the tab has no sub-tabs
-      if (tab && !tab.hasSubTabs && tab.id !== 'security') {
+      if (tab && !tab.hasSubTabs) {
         const filename = tab.file.split('file=')[1]
         console.log('Opening PDF in new tab:', filename)
         window.open(`/${filename}`, '_blank')
@@ -184,7 +184,7 @@ export default function DocumentsPage() {
       // If tab has sub-tabs, let it show the sub-tabs menu instead
     } else {
       // On desktop, only open PDF directly if the tab has no sub-tabs
-      if (tab && !tab.hasSubTabs && tab.id !== 'security') {
+      if (tab && !tab.hasSubTabs) {
         // Let it proceed to show the PDF in embedded viewer
       } else if (tab && tab.hasSubTabs) {
         // If tab has sub-tabs, just select the tab and let user choose sub-tab
@@ -271,18 +271,11 @@ export default function DocumentsPage() {
               <Button
                 onClick={handleOpenInNewTab}
                 variant="outline"
-                disabled={activeTab === 'security'}
-                className={`flex items-center space-x-2 border-[#000000] text-[#000000] hover:bg-sky-900 hover:text-white text-xs sm:text-sm px-3 sm:px-4 py-2 ${
-                  activeTab === 'security' ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                className="flex items-center space-x-2 border-[#000000] text-[#000000] hover:bg-sky-900 hover:text-white text-xs sm:text-sm px-3 sm:px-4 py-2"
               >
                 <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">
-                  {activeTab === 'security' ? 'Not Available' : 'Open in New Tab'}
-                </span>
-                <span className="sm:hidden">
-                  {activeTab === 'security' ? 'N/A' : 'Open'}
-                </span>
+                <span className="hidden sm:inline">Open in New Tab</span>
+                <span className="sm:hidden">Open</span>
               </Button>
             </div>
           </div>
@@ -296,6 +289,20 @@ export default function DocumentsPage() {
           {/* Vertical Tab Bar */}
           <div className="w-full lg:w-80 bg-white rounded-lg shadow-lg p-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Available Documents</h2>
+            
+            {/* ST4.mp4 Video */}
+            <div className="mb-4 rounded-lg overflow-hidden">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                className="w-full h-auto"
+              >
+                <source src="/images/ST4.mp4" type="video/mp4" />
+              </video>
+            </div>
             
             <div className="space-y-2">
               {documentTabs.map((tab) => {
@@ -387,7 +394,7 @@ export default function DocumentsPage() {
           </div>
 
           {/* Document Content Area - Hide on mobile for simple documents that open in new tab */}
-          {!(isMobile && activeTab && activeTab !== 'legal') && (
+          {!(isMobile && activeTab && activeTab !== 'legal' && activeTab !== 'security') && (
           <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden">
             {/* No document selected - show default message for desktop only */}
             {!activeTab ? (
@@ -556,63 +563,6 @@ export default function DocumentsPage() {
                   </div>
                 </div>
               </div>
-            ) : activeTab === 'security' ? (
-              isDesktop ? (
-                /* Desktop - ST4.mp4 video with white text overlay */
-                <div className="flex flex-col">
-                  <div className="relative h-[600px] w-full">
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      className="w-full h-full object-cover"
-                    >
-                      <source src="/images/ST4.mp4" type="video/mp4" />
-                    </video>
-                    {/* White text overlay at bottom */}
-                    <div className="absolute bottom-8 left-0 right-0 flex justify-center">
-                      <p className="text-white text-4xl font-semibold">
-                        Will be available soon!
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Shield symbol and text content below video */}
-                  <div className="bg-gradient-to-br from-sky-50 to-sky-100 p-8">
-                    <div className="text-center max-w-md mx-auto">
-                      <div className="mb-6">
-                        <Shield className="h-16 w-16 text-sky-600 mx-auto mb-4" />
-                        <h2 className="text-2xl font-bold text-gray-800 mb-2">Security Audit</h2>
-                        <p className="text-gray-600 mb-6">Smart contract audit reports and security assessments</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                /* Mobile/Wallet - Original yellow box */
-                <div className="flex items-center justify-center h-full bg-gradient-to-br from-sky-50 to-sky-100">
-                  <div className="text-center max-w-md mx-auto p-8">
-                    <div className="mb-6">
-                      <Shield className="h-16 w-16 text-sky-600 mx-auto mb-4" />
-                      <h2 className="text-2xl font-bold text-gray-800 mb-2">Security Audit</h2>
-                      <p className="text-gray-600 mb-6">Smart contract audit reports and security assessments</p>
-                    </div>
-                    
-                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 shadow-sm">
-                      <div className="flex items-center justify-center mb-4">
-                        <div className="bg-yellow-100 rounded-full p-3">
-                          <Shield className="h-8 w-8 text-yellow-600" />
-                        </div>
-                      </div>
-                      <h3 className="text-lg font-semibold text-yellow-800 mb-2">Coming Soon</h3>
-                      <p className="text-yellow-700 font-medium text-lg">Will be Available Q4 of 2026</p>
-                      <p className="text-yellow-600 text-sm mt-2">Our comprehensive security audit reports are currently in development and will be published in Q4 2026.</p>
-                    </div>
-                  </div>
-                </div>
-              )
             ) : activeDocUrl ? (
               isMobile ? (
                 // On mobile, don't show PDF viewer since PDFs open in new tab
