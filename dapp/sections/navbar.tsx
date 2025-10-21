@@ -14,7 +14,7 @@ export default function Navbar() {
     { name: "Buy NWIS Tokens", href: "https://App.nwis.io" },
     { name: "Stake", href: "/stake" },
         { name: "Governance", href: "/governance" },
-    { name: "Documents", href: "https://nwis.io/documents" },
+    { name: "Finance", href: "/finance" },
   ]
 
 

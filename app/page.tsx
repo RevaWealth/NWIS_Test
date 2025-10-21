@@ -123,7 +123,7 @@ export default function Home() {
         <RoadmapSection />
         <TokenomicsSection />
         <TeamSection />
-        {/* <PartnersSection /> */}
+        <PartnersSection />
         <FAQSection />
         <ContactSection />
         <Footer />
