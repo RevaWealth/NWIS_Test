@@ -1,0 +1,136 @@
+"use client"
+
+import Link from "next/link"
+import Image from "next/image"
+import { Facebook, Instagram, Linkedin, MessageCircle, Send, X, Youtube } from "lucide-react"
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#070b14] py-12 border-t border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Two horizontal sections */}
+        <div className="flex flex-col lg:flex-row">
+          {/* Left Section - Logo and Description */}
+          <div className="flex-1 pr-0 lg:pr-8 mb-8 lg:mb-0">
+            {/* Logo */}
+            <div className="mb-1">
+              <Link href="/" className="inline-block" aria-label="Go to homepage">
+                <Image
+                  src="/images/NWISLogo.svg"
+                  alt="NWIS logo"
+                  width={178}
+                  height={95}
+                  priority
+                  className="w-32 md:w-40 lg:w-48 h-auto object-contain"
+                />
+              </Link>
+            </div>
+            
+            {/* Description Text */}
+            <div className="text-gray-400 text-md leading-relaxed">
+              <p>
+                NexusWealth's purpose is to help more and more people experience financial well-being. As a fiduciary to investors and a provider of financial technology, we plan to help millions of people, alll around the world, build savings that serve them throughout their lives by making investing easier and more affordable. For additional information on NexusWealth, please visit our{' '}
+                <Link href="/documents" className="text-blue-400 hover:text-blue-300 underline">
+                  Whitepaper
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+
+          {/* Vertical divider line */}
+          <div className="hidden lg:block w-px bg-white mx-8"></div>
+
+          {/* Right Section - Links and Social Media */}
+          <div className="flex-1 pl-0 lg:pl-8 mt-8 lg:mt-12">
+            {/* Navigation Links - 4 Columns */}
+              <div className="grid grid-cols-6 gap-x-3 gap-y-6 w-full">
+              {/* Column 1 - Double Width */}
+              <div className="col-span-2 flex flex-col space-y-2">
+                  <Link href="/privacy-policy" className="text-gray-400 hover:text-blue-400 transition-colors">
+                    Privacy Policy
+                  </Link>
+                  <Link href="/terms-and-conditions" className="text-gray-400 hover:text-blue-400 transition-colors">
+                    Terms and Conditions
+                  </Link>
+                  <Link href="/risk-factors" className="text-gray-400 hover:text-blue-400 transition-colors">
+                    Risk Factors Disclaimer
+                  </Link>
+              </div>
+              
+              {/* Column 2 */}
+              <div className="col-span-1 flex flex-col space-y-2">
+                <Link href="/careers" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Careers
+                </Link>
+                <Link href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  About us
+                </Link>
+                <Link href="/contact" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Contact us
+                </Link>
+              </div>
+              
+              {/* Column 3 */}
+              <div className="col-span-2 flex flex-col space-y-2">
+              <Link href="/privacy-policy" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Cookie Notice
+                </Link>
+                <button 
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && window.openCookieSettings) {
+                      window.openCookieSettings()
+                    }
+                  }}
+                  className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+                >
+                  Cookies Settings
+                </button>
+              </div>
+              
+              {/* Column 4 - Social Media Links */}
+              <div className="flex flex-col space-y-4">
+                <Link 
+                  href="https://x.com/nwis_llc?s=21&t=TI3W-zvEjbOFY6gcvBl4hg" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                  aria-label="Follow us on X (Twitter)"
+                >
+                  <X className="h-6 w-6" />
+                </Link>
+                <Link 
+                  href="https://www.instagram.com/invites/contact/?igsh=1ud3admh9by2p&utm_content=zh0j9ko" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-pink-500 transition-colors"
+                  aria-label="Follow us on Instagram"
+                >
+                  <Instagram className="h-6 w-6" />
+                </Link>
+                <Link 
+                  href="https://www.facebook.com/profile.php?id=61581421117460&mibextid=wwXIfr&mibextid=wwXIfr" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-blue-600 transition-colors"
+                  aria-label="Follow us on Facebook"
+                >
+                  <Facebook className="h-6 w-6" />
+                </Link>
+                <Link 
+                  href="https://t.me/NWIS_Public_Channel" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-400 hover:text-blue-500 transition-colors"
+                  aria-label="Join our Telegram"
+                >
+                  <Send className="h-6 w-6" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}

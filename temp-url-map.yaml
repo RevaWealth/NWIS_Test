@@ -1,0 +1,2 @@
+name: nexuswealth-url-map
+defaultService: https://www.googleapis.com/compute/v1/projects/nexuswealthtest/global/backendServices/nwisbackend

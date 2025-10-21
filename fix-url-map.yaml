@@ -1,0 +1,14 @@
+name: nexuswealth-url-map
+defaultService: https://www.googleapis.com/compute/v1/projects/nexuswealthtest/global/backendServices/nwisbackend
+hostRules:
+- hosts:
+  - nwis.io
+  - www.nwis.io
+  pathMatcher: nexuswealth-path-matcher
+pathMatchers:
+- name: nexuswealth-path-matcher
+  defaultService: https://www.googleapis.com/compute/v1/projects/nexuswealthtest/global/backendServices/nwisbackend
+  pathRules:
+  - paths:
+    - /*
+    service: https://www.googleapis.com/compute/v1/projects/nexuswealthtest/global/backendServices/nwisbackend

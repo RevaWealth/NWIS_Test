@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Normalize text scaling on mobile browsers to avoid unexpected zoom/resizing */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Prevent horizontal scroll that can cause micro layout shifts */
+body {
+  overflow-x: hidden;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Mobile video improvements */
+  video {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  /* Better spacing for mobile */
+  .space-y-1 > * + * {
+    margin-top: 0.25rem;
+  }
+  
+  .space-y-2 > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  .space-y-3 > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Prevent text from being too small on mobile */
+  p, span, div {
+    font-size: clamp(14px, 4vw, 16px);
+  }
+  
+  /* Better mobile touch handling */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection where needed */
+  p, h1, h2, h3, h4, h5, h6, span {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  
+  /* Mobile navigation improvements */
+  nav {
+    -webkit-overflow-scrolling: touch;
+    transform: none !important;
+    transform-origin: top left !important;
+  }
+  
+  /* Prevent navbar scaling issues */
+  nav * {
+    transform: none !important;
+    transform-origin: top left !important;
+  }
+  
+  /* Mobile button improvements */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Mobile spacing improvements */
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+  
+  .space-y-8 > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  .space-y-12 > * + * {
+    margin-top: 2rem;
+  }
+  
+  .space-y-16 > * + * {
+    margin-top: 2.5rem;
+  }
+  
+  h1 {
+    font-size: clamp(24px, 8vw, 32px);
+  }
+  
+  h2 {
+    font-size: clamp(20px, 6vw, 28px);
+  }
+  
+  /* Navbar scaling fixes */
+  @media (max-width: 768px) {
+    nav {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    
+    nav img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  h3 {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+}
+
+/* Prevent iOS Safari zoom on form focus by ensuring 16px font-size on mobile */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-white text-neutral-900;
+  }
+}
+
+/* Custom sliding pulse animation for progress bars */
+@keyframes pulse-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+
+}
+
+.animate-pulse-slide {
+  animation: pulse-slide 2s ease-in-out infinite;
+}
+
