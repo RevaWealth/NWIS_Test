@@ -31,8 +31,8 @@ export default function PartnersSection() {
   }, [])
 
   // Calculate items per slide
-  const itemsPerSlide = isMobile ? 2 : 6
-  const totalSlides = isMobile ? Math.ceil(partners.length / 2) : 1
+  const itemsPerSlide = isMobile ? 2 : 3
+  const totalSlides = isMobile ? Math.ceil(partners.length / 2) : Math.ceil(partners.length / 3)
 
   // Navigation functions
   const nextSlide = () => {
@@ -77,8 +77,10 @@ export default function PartnersSection() {
       const endIndex = startIndex + 2
       return partners.slice(startIndex, endIndex)
     } else {
-      // Desktop: show all partners
-      return partners
+      // Desktop: show 3 items per slide with sliding
+      const startIndex = currentSlide * 3
+      const endIndex = startIndex + 3
+      return partners.slice(startIndex, endIndex)
     }
   }
 
@@ -86,38 +88,94 @@ export default function PartnersSection() {
     <section id="partners" className="py-20 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold text-center text-white mb-12">Our Valued Partners</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-center">
-          {partners.map((partner, index) => (
-                <div
-                  key={index}
-                  className="flex justify-center items-center p-1 bg-black rounded-2xl aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32"
-                >
-                  {partner.url ? (
-                    <Link href={partner.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+        
+        {/* Sliding Partners Container */}
+        <div className="relative">
+          {/* Navigation Buttons - Always visible like Key Features */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-slate-700 hover:bg-slate-600 text-white p-3 rounded-full shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={totalSlides <= 1}
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-slate-700 hover:bg-slate-600 text-white p-3 rounded-full shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={totalSlides <= 1}
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+
+          {/* Partners Grid */}
+          <div 
+            ref={containerRef}
+            className={`${isMobile ? 'mx-12' : 'mx-12 sm:mx-16'}`}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className={`grid gap-6 items-center justify-center ${
+              isMobile ? 'grid-cols-2' : 'grid-cols-3'
+            }`}>
+              {getCurrentPartners().map((partner, index) => {
+                // Calculate the actual partner index for proper key
+                const actualIndex = isMobile ? currentSlide * 2 + index : currentSlide * 3 + index
+                return (
+                  <div
+                    key={actualIndex}
+                    className="flex justify-center items-center p-1 bg-black rounded-2xl aspect-square w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32"
+                  >
+                    {partner.url ? (
+                      <Link href={partner.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                        <div className="w-full h-full rounded-xl overflow-hidden">
+                          <Image
+                            src={partner.logo || "/placeholder.svg"}
+                            alt={partner.name}
+                            width={250}
+                            height={250}
+                            className="object-cover transition-all duration-300 cursor-pointer w-full h-full"
+                          />
+                        </div>
+                      </Link>
+                    ) : (
                       <div className="w-full h-full rounded-xl overflow-hidden">
                         <Image
                           src={partner.logo || "/placeholder.svg"}
                           alt={partner.name}
                           width={250}
                           height={250}
-                          className="object-cover transition-all duration-300 cursor-pointer w-full h-full"
+                          className="object-cover transition-all duration-300 w-full h-full"
                         />
                       </div>
-                    </Link>
-                  ) : (
-                    <div className="w-full h-full rounded-xl overflow-hidden">
-                      <Image
-                        src={partner.logo || "/placeholder.svg"}
-                        alt={partner.name}
-                        width={250}
-                        height={250}
-                        className="object-cover transition-all duration-300 w-full h-full"
-                      />
-                    </div>
-                  )}
-                </div>
-          ))}
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
+
+        {/* Slide Indicators - Always visible like Key Features */}
+        {totalSlides > 1 && (
+          <div className="flex justify-center items-center mt-8 space-x-2">
+            {Array.from({ length: totalSlides }).map((_, index) => {
+              const isActive = index === currentSlide
+              return (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`transition-all duration-200 rounded-full ${
+                    isActive 
+                      ? 'w-12 h-3 bg-white'
+                      : 'w-3 h-3 bg-gray-300 hover:bg-gray-200'
+                  }`}
+                />
+              )
+            })}
+          </div>
+        )}
       </div>
     </section>
   )

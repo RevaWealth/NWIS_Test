@@ -30,8 +30,223 @@ export default function StakingDashboard() {
 
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white relative">
       <Navbar />
+      
+      {/* Q2 2026 Watermark Overlay */}
+      <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+        <div className="absolute inset-0 w-full h-full">
+          {/* Multiple Q2 2026 texts to cover the entire page */}
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '10%',
+              left: '-15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '10%',
+              left: '15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '10%',
+              left: '45%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '35%',
+              left: '-15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '35%',
+              left: '15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '35%',
+              left: '45%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '60%',
+              left: '-15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '60%',
+              left: '15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '60%',
+              left: '45%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '85%',
+              left: '-15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '85%',
+              left: '15%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '85%',
+              left: '45%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '10%',
+              left: '75%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '35%',
+              left: '75%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '60%',
+              left: '75%'
+            }}
+          >
+            Q2 2026
+          </div>
+          <div 
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            style={{
+              transform: 'rotate(-45deg)',
+              transformOrigin: 'top left',
+              whiteSpace: 'nowrap',
+              lineHeight: '1',
+              top: '85%',
+              left: '75%'
+            }}
+          >
+            Q2 2026
+          </div>
+        </div>
+      </div>
       
       <div className="pt-20 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

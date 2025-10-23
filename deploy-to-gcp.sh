@@ -101,6 +101,7 @@ for region in "${REGIONS[@]}"; do
     echo "  $region: $SERVICE_URL"
 done
 echo ""
-echo "💡 For global load balancing with custom domain:"
-echo "   See MULTI_REGION_DEPLOYMENT_GUIDE.md for setting up Cloud Load Balancer"
+echo "💡 Load balancer already configured:"
+echo "   Your existing load balancer will automatically route to the new deployments"
+echo "   No changes needed to load balancer configuration"
 echo ""
