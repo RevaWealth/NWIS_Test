@@ -1142,10 +1142,10 @@ contract NexusWealthPresale is Ownable, ReentrancyGuard {
 
     function transferETH(uint256 _amount) internal {
         uint256 DEVAmt = (_amount * 5) / 100;
-        (bool ok1, ) = payable(DEV).call{value: devAmt}("");
+        (bool ok1, ) = payable(DEV).call{value: DEVAmt}("");
         require(ok1, "Dev payout failed");
 
-        (bool ok2, ) = payable(ICO).call{value: icoAmt}("");
+        (bool ok2, ) = payable(ICO).call{value: _amount - DEVAmt}("");
         require(ok2, "ICO payout failed");
     }
 

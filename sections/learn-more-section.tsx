@@ -17,35 +17,35 @@ export default function LearnMoreSection() {
       duration: "5:30"
     },
     {
-      id: "video2", 
+      id: "video2",
+      thumbnail: "https://img.youtube.com/vi/x_8pkH8P7Eo/maxresdefault.jpg",
+      youtubeUrl: "https://youtu.be/x_8pkH8P7Eo",
+      duration: "New Video"
+    },
+    {
+      id: "video3", 
       thumbnail: "https://img.youtube.com/vi/example2/maxresdefault.jpg",
       youtubeUrl: "https://www.youtube.com/@NWIS-Foundation",
       duration: "7:15"
     },
     {
-      id: "video3",
+      id: "video4",
       thumbnail: "https://img.youtube.com/vi/example3/maxresdefault.jpg", 
       youtubeUrl: "https://www.youtube.com/@NWIS-Foundation",
       duration: "4:45"
     },
     {
-      id: "video4",
+      id: "video5",
       thumbnail: "https://img.youtube.com/vi/example4/maxresdefault.jpg",
       youtubeUrl: "https://www.youtube.com/@NWIS-Foundation", 
       duration: "8:20"
     },
     {
-      id: "video5",
+      id: "video6",
       thumbnail: "https://img.youtube.com/vi/example5/maxresdefault.jpg",
       youtubeUrl: "https://www.youtube.com/@NWIS-Foundation",
       duration: "6:10"
     },
-    {
-      id: "video6",
-      thumbnail: "https://img.youtube.com/vi/example6/maxresdefault.jpg",
-      youtubeUrl: "https://www.youtube.com/@NWIS-Foundation",
-      duration: "9:30"
-    }
   ]
 
   // Detect mobile device
