@@ -7,6 +7,7 @@ import Link from "next/link"
 import CountdownTimer from "../../sections/countdown-timer"
 import TokenPurchaseNew from "../../token-purchase-new"
 import Navbar from "../../sections/navbar"
+import { TokenContractModal } from "../../components/TokenContractModal"
 import { isMobileDevice, isWalletBrowser } from "../../lib/wallet-browser-utils"
 
 interface TokenSaleData {
@@ -18,6 +19,7 @@ interface TokenSaleData {
 export default function TokenPurchasePage() {
   const [tokenSaleData, setTokenSaleData] = useState<TokenSaleData | null>(null)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [showTokenModal, setShowTokenModal] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,7 +111,12 @@ export default function TokenPurchasePage() {
 
             {/* Content */}
             <div className="p-6 bg-[#000000]">
-              <p className="text-gray-400 text-sm text-center mb-4">Can't find tokens in your wallet?</p>
+              <p 
+                className="text-gray-400 text-sm text-center mb-4 cursor-pointer hover:text-[#a57e24] transition-colors"
+                onClick={() => setShowTokenModal(true)}
+              >
+                Can't find tokens in your wallet?
+              </p>
 
               <h3 className="text-2xl font-bold text-center mb-6">
                 <span className="text-white">First Stage - Buy </span>
@@ -119,7 +126,7 @@ export default function TokenPurchasePage() {
 
               <CountdownTimer />
 
-              <p className="text-gray-400 text-center text-sm mt-4 mb-6">Presale Starts October 22nd, 2025</p>
+              <p className="text-gray-400 text-center text-sm mt-4 mb-6">Presale Ends on December 31st, 2025</p>
 
               <TokenPurchaseNew />
             </div>
@@ -149,6 +156,12 @@ export default function TokenPurchasePage() {
         </div>
         </main>
       </div>
+
+      {/* Token Contract Modal */}
+      <TokenContractModal 
+        isOpen={showTokenModal}
+        onClose={() => setShowTokenModal(false)}
+      />
     </div>
   )
 }
