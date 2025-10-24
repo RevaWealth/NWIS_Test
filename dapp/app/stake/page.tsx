@@ -38,7 +38,7 @@ export default function StakingDashboard() {
         <div className="absolute inset-0 w-full h-full">
           {/* Multiple Q2 2026 texts to cover the entire page */}
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -51,7 +51,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -64,7 +64,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -77,7 +77,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -90,7 +90,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -103,7 +103,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -116,7 +116,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -129,7 +129,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -142,7 +142,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -155,7 +155,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -168,7 +168,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -181,7 +181,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -194,7 +194,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -207,7 +207,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -220,7 +220,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -233,7 +233,7 @@ export default function StakingDashboard() {
             Q2 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -256,7 +256,7 @@ export default function StakingDashboard() {
               NWIS Staking Dashboard
             </h1>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Stake your NWIS tokens to earn rewards and participate in network governance
+              Stake your NWIS tokens to earn rewards and participate in NexusWealth's DAO ecosystem
             </p>
           </div>
 

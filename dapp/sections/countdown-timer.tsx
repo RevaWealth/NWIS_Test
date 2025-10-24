@@ -93,7 +93,7 @@ export default function CountdownTimer() {
   if (isCountdownOver) {
     return (
       <div className="flex justify-center">
-        <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-red-600 animate-pulse">
+        <span className="text-lg sm:text-xl md:text-2xl font-bold text-red-600 animate-pulse">
           NWIS Presale is Live NOW!
         </span>
       </div>

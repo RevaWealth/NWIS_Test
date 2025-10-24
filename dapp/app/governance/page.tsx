@@ -92,38 +92,38 @@ export default function GovernanceDashboard() {
     <div className="min-h-screen bg-black text-white relative">
       <Navbar />
       
-      {/* Q2 2026 Watermark Overlay */}
+      {/* Q1 2026 Watermark Overlay */}
       <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
-          {/* Multiple Q2 2026 texts to cover the entire page */}
+          {/* Multiple Q1 2026 texts to cover the entire page */}
+              <div 
+                className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
+                style={{
+                  transform: 'rotate(-45deg)',
+                  transformOrigin: 'top left',
+                  whiteSpace: 'nowrap',
+                  lineHeight: '1',
+                  top: '10%',
+                  left: '-15%'
+                }}
+              >
+                Q1 2026
+              </div>
+              <div 
+                className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
+                style={{
+                  transform: 'rotate(-45deg)',
+                  transformOrigin: 'top left',
+                  whiteSpace: 'nowrap',
+                  lineHeight: '1',
+                  top: '10%',
+                  left: '15%'
+                }}
+              >
+                Q1 2026
+              </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
-            style={{
-              transform: 'rotate(-45deg)',
-              transformOrigin: 'top left',
-              whiteSpace: 'nowrap',
-              lineHeight: '1',
-              top: '10%',
-              left: '-15%'
-            }}
-          >
-            Q2 2026
-          </div>
-          <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
-            style={{
-              transform: 'rotate(-45deg)',
-              transformOrigin: 'top left',
-              whiteSpace: 'nowrap',
-              lineHeight: '1',
-              top: '10%',
-              left: '15%'
-            }}
-          >
-            Q2 2026
-          </div>
-          <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -133,10 +133,10 @@ export default function GovernanceDashboard() {
               left: '45%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -146,10 +146,10 @@ export default function GovernanceDashboard() {
               left: '-15%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -159,10 +159,10 @@ export default function GovernanceDashboard() {
               left: '15%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -172,10 +172,10 @@ export default function GovernanceDashboard() {
               left: '45%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -185,10 +185,10 @@ export default function GovernanceDashboard() {
               left: '-15%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -198,10 +198,10 @@ export default function GovernanceDashboard() {
               left: '15%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -211,10 +211,10 @@ export default function GovernanceDashboard() {
               left: '45%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -224,10 +224,10 @@ export default function GovernanceDashboard() {
               left: '-15%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -237,10 +237,10 @@ export default function GovernanceDashboard() {
               left: '15%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -250,10 +250,10 @@ export default function GovernanceDashboard() {
               left: '45%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -263,10 +263,10 @@ export default function GovernanceDashboard() {
               left: '75%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -276,10 +276,10 @@ export default function GovernanceDashboard() {
               left: '75%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -289,10 +289,10 @@ export default function GovernanceDashboard() {
               left: '75%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
           <div 
-            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-10"
+            className="absolute text-[#a57e24] font-bold text-4xl md:text-6xl lg:text-7xl opacity-20"
             style={{
               transform: 'rotate(-45deg)',
               transformOrigin: 'top left',
@@ -302,7 +302,7 @@ export default function GovernanceDashboard() {
               left: '75%'
             }}
           >
-            Q2 2026
+            Q1 2026
           </div>
         </div>
       </div>
