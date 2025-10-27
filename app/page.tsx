@@ -97,7 +97,7 @@ export default function Home() {
               <div className="flex justify-center mb-4 sm:mb-6 md:mb-8">
                 <div>
                   <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#a57e24] mb-2 sm:mb-3 md:mb-4 text-center">
-                    NWIS DAO Token Presale
+                    $20,000 Giveway! Complete tasks to earn rewards! <Link href="/quests" className="underline hover:text-white">Learn more..</Link>
                   </h3>
                   <CountdownTimer />
                 </div>
