@@ -15,6 +15,7 @@ export default function PartnersSection() {
     { name: "CoinMarketCap", logo: "/images/CMC.JPEG" },
     { name: "CoinTelegraph", logo: "/images/CT.png" },
     { name: "CoinGecko", logo: "/images/CG2.jpg" },
+    { name: "Etherscan", logo: "/images/Etherscan.jpeg", url: "https://etherscan.io/token/0x3e3a84c2be12035c68b39a2748d42aaaba329455" },
   ]
 
   // Detect mobile device
