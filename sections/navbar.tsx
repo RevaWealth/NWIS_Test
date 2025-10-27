@@ -18,7 +18,7 @@ export default function Navbar() {
     { name: "About", href: "#about", hasDropdown: true },
     { name: "Documents", href: "/documents" },
     { name: "Tokenomics", href: "/tokenomics" },
-    { name: "FAQ", href: "/#faq" },
+    { name: "Quests", href: "/quests" },
   ]
 
   const aboutDropdownItems = [

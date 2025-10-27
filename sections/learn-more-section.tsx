@@ -18,7 +18,7 @@ export default function LearnMoreSection() {
     },
     {
       id: "video2",
-      thumbnail: "https://img.youtube.com/vi/x_8pkH8P7Eo/maxresdefault.jpg",
+      thumbnail: "https://img.youtube.com/vi/x_8pkH8P7Eo/hqdefault.jpg",
       youtubeUrl: "https://youtu.be/x_8pkH8P7Eo",
       duration: "New Video"
     },

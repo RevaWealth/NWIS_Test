@@ -15,8 +15,6 @@ export default function PartnersSection() {
     { name: "CoinMarketCap", logo: "/images/CMC.JPEG" },
     { name: "CoinTelegraph", logo: "/images/CT.png" },
     { name: "CoinGecko", logo: "/images/CG2.jpg" },
-    { name: "Partner 5", logo: "/placeholder.svg?height=80&width=150" },
-    { name: "Partner 6", logo: "/placeholder.svg?height=80&width=150" },
   ]
 
   // Detect mobile device
