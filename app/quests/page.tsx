@@ -266,6 +266,16 @@ export default function QuestsPage() {
 
       {/* Quests Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Quest Giveaway Title */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
+            <span className="text-[#a57e24]">15,000,000</span> $NWIS Giveaway
+          </h2>
+          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+            Complete quests to earn your share of the massive NWIS token giveaway!
+          </p>
+        </div>
+
         {/* Quest Categories */}
         <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
           {categories.map((category) => (
