@@ -283,11 +283,15 @@ export default function DocumentsPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 ${
+        isMobile && activeTab === 'legal' ? 'pb-32' : ''
+      }`}>
         <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-200px)] min-h-[500px]">
           
           {/* Vertical Tab Bar */}
-          <div className="w-full lg:w-80 bg-white rounded-lg shadow-lg p-4">
+          <div className={`w-full lg:w-80 bg-white rounded-lg shadow-lg p-4 ${
+            isMobile && activeTab === 'legal' ? 'pb-32' : ''
+          }`}>
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Available Documents</h2>
             
             {/* ST4.mp4 Video */}
@@ -380,16 +384,6 @@ export default function DocumentsPage() {
                   </div>
                 )
               })}
-            </div>
-
-            {/* Document Info */}
-            <div className="mt-6 p-3 bg-gray-50 rounded-lg">
-              <h3 className="text-sm font-medium text-gray-800 mb-2">Document Info</h3>
-              <div className="text-xs text-gray-600 space-y-1">
-                <p><span className="font-medium">Type:</span> PDF Document</p>
-                <p><span className="font-medium">Format:</span> Interactive Viewer</p>
-                <p><span className="font-medium">Access:</span> Public</p>
-              </div>
             </div>
           </div>
 
@@ -582,20 +576,6 @@ export default function DocumentsPage() {
             )}
           </div>
           )}
-        </div>
-      </div>
-
-      {/* Footer Info */}
-      <div className="bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="text-center text-gray-600">
-            <p className="mb-2 text-sm sm:text-base">
-              <strong>NexusWealth Investment Solutions (NWIS)</strong> - Empowering individuals to build generational wealth through blockchain tokenization.
-            </p>
-            <p className="text-xs sm:text-sm">
-              This whitepaper outlines our vision for revolutionizing real-world investment through decentralized innovation.
-            </p>
-          </div>
         </div>
       </div>
     </div>

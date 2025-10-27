@@ -33,19 +33,20 @@ export default function LearnMoreSection() {
       thumbnail: "https://img.youtube.com/vi/example3/maxresdefault.jpg", 
       youtubeUrl: "https://www.youtube.com/@NWIS-Foundation",
       duration: "4:45"
-    },
-    {
-      id: "video5",
-      thumbnail: "https://img.youtube.com/vi/example4/maxresdefault.jpg",
-      youtubeUrl: "https://www.youtube.com/@NWIS-Foundation", 
-      duration: "8:20"
-    },
-    {
-      id: "video6",
-      thumbnail: "https://img.youtube.com/vi/example5/maxresdefault.jpg",
-      youtubeUrl: "https://www.youtube.com/@NWIS-Foundation",
-      duration: "6:10"
-    },
+    }
+    // Video 5 and 6 are hidden for now
+    // {
+    //   id: "video5",
+    //   thumbnail: "https://img.youtube.com/vi/example4/maxresdefault.jpg",
+    //   youtubeUrl: "https://www.youtube.com/@NWIS-Foundation", 
+    //   duration: "8:20"
+    // },
+    // {
+    //   id: "video6",
+    //   thumbnail: "https://img.youtube.com/vi/example5/maxresdefault.jpg",
+    //   youtubeUrl: "https://www.youtube.com/@NWIS-Foundation",
+    //   duration: "6:10"
+    // },
   ]
 
   // Detect mobile device
@@ -61,7 +62,7 @@ export default function LearnMoreSection() {
 
   // Calculate items per slide
   const itemsPerSlide = isMobile ? 1 : 3
-  const totalSlides = isMobile ? videos.length : 4 // 4 slides for desktop with overlapping effect
+  const totalSlides = isMobile ? videos.length : 2 // 2 slides for desktop (4 videos total, 3 per slide)
 
   // Navigation functions
   const nextSlide = () => {

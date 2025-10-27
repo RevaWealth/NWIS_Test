@@ -90,7 +90,7 @@ export default function TokenPurchasePage() {
         <div className="bg-gradient-to-b from-[#000000] to-sky-900 py-8 px-4">
           <div className="max-w-lg mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">NWIS Token Presale</h1>
-            <p className="text-xl text-[#a57e24] font-medium">Own stake in the disruptive force that is reshaping the future of asset management</p>
+            <p className="text-xl text-[#a57e24] font-medium">Own stake in the disruptive force that is reshaping the future of the investment management industry!</p>
           </div>
         </div>
 

@@ -92,12 +92,12 @@ export default function Home() {
             </div>
 
             {/* Presale Counter and Button - Fixed Bottom Position */}
-            <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-2 sm:px-4 md:px-6 lg:px-8">
+            <div className="absolute bottom-12 sm:bottom-20 md:bottom-28 left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-2 sm:px-4 md:px-6 lg:px-8">
               {/* Presale Launch Countdown Timer */}
               <div className="flex justify-center mb-4 sm:mb-6 md:mb-8">
                 <div>
-                  <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#a57e24] mb-2 sm:mb-3 md:mb-4 text-center">
-                    $20,000 Giveway! Complete tasks to earn rewards! <Link href="/quests" className="underline hover:text-white">Learn more..</Link>
+                  <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#a57e24] mb-2 sm:mb-3 md:mb-4 text-center relative overflow-hidden inline-block animate-shimmer bg-clip-text bg-gradient-to-r from-[#a57e24] via-[#d4a574] to-[#a57e24] bg-[length:200%_100%] text-transparent">
+                    $20,000 Giveway! Complete tasks to earn rewards! <Link href="/quests" className="underline hover:text-white animate-shimmer bg-gradient-to-r from-[#a57e24] via-[#d4a574] to-[#a57e24] bg-[length:200%_100%] bg-clip-text text-transparent">Learn more..</Link>
                   </h3>
                   <CountdownTimer />
                 </div>
