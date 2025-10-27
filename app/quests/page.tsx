@@ -211,17 +211,17 @@ export default function QuestsPage() {
       {/* Navbar */}
       <Navbar />
 
-             {/* Header */}
-             <div className="text-center pt-12 pb-8 px-4 sm:px-6 lg:px-8">
-               <div className="max-w-7xl mx-auto">
-                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-white">
-                   <span className="text-[#a57e24]">NWIS</span> Quests
-                 </h1>
-                 <p className="max-w-3xl mx-auto text-base sm:text-lg text-gray-300">
-                   Complete quests to earn NWIS tokens and unlock exclusive rewards. Level up your participation in the NWIS ecosystem.
-                 </p>
-               </div>
-             </div>
+      {/* Header */}
+      <div className="text-center pt-12 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-white">
+            <span className="text-[#a57e24]">NWIS</span> Quests
+          </h1>
+          <p className="max-w-3xl mx-auto text-base sm:text-lg text-gray-300">
+            Complete quests to earn NWIS tokens and unlock exclusive rewards. Level up your participation in the NWIS ecosystem.
+          </p>
+        </div>
+      </div>
 
       {/* Special Reward Section */}
       <div className="bg-black py-12 px-4 sm:px-6 lg:px-8">
@@ -288,7 +288,7 @@ export default function QuestsPage() {
           {filteredQuests.map((quest) => (
             <div key={quest.id} className="bg-gray-900 border border-gray-700 rounded-xl p-8 hover:border-gray-600 transition-colors transform hover:scale-105 hover:shadow-2xl flex flex-col h-full">
               {/* Quest Header */}
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 pr-4">
                   <h3 className="text-2xl font-bold text-white mb-3">{quest.title}</h3>
                   <p className="text-gray-400 text-base leading-relaxed line-clamp-4">{quest.description}</p>
@@ -302,7 +302,7 @@ export default function QuestsPage() {
               <div className="flex-grow"></div>
 
               {/* Quest Category - anchored before progress bar */}
-              <div className="mb-4">
+              <div className="mb-4 min-h-[40px] flex items-center">
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(quest.category)}`}>
                   {quest.category}
                 </span>
@@ -322,51 +322,51 @@ export default function QuestsPage() {
                 </div>
               </div>
 
-                     {/* Reward */}
-                     <div className="flex items-center justify-between">
-                       <div className="text-base text-gray-400">
-                         Reward: <span className="text-[#a57e24] font-semibold text-lg">{quest.reward}</span>
-                       </div>
-                       <ConnectKitButton.Custom>
-                         {({ isConnected, show }) => {
-                           if (quest.id === 1) {
-                             return (
-                               <button 
-                                 onClick={() => {
-                                   if (!isConnected) {
-                                     show?.()
-                                   } else {
-                                     handleQuestClick(quest)
-                                   }
-                                 }}
-                                 className={`px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
-                                   quest.status === 'active'
-                                     ? 'bg-[#a57e24] hover:bg-[#8a671d] text-white'
-                                     : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                                 }`}
-                                 disabled={quest.status !== 'active'}
-                               >
-                                 {isConnected ? 'Start Quest' : 'Connect Wallet'}
-                               </button>
-                             )
-                           } else {
-                             return (
-                               <button 
-                                 onClick={() => handleQuestClick(quest)}
-                                 className={`px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
-                                   quest.status === 'active'
-                                     ? 'bg-[#a57e24] hover:bg-[#8a671d] text-white'
-                                     : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                                 }`}
-                                 disabled={quest.status !== 'active'}
-                               >
-                                 {quest.status === 'active' ? 'Start Quest' : 'Locked'}
-                               </button>
-                             )
-                           }
-                         }}
-                       </ConnectKitButton.Custom>
-                     </div>
+              {/* Reward */}
+              <div className="flex items-center justify-between">
+                <div className="text-base text-gray-400">
+                  Reward: <span className="text-[#a57e24] font-semibold text-lg">{quest.reward}</span>
+                </div>
+                <ConnectKitButton.Custom>
+                  {({ isConnected, show }) => {
+                    if (quest.id === 1) {
+                      return (
+                        <button 
+                          onClick={() => {
+                            if (!isConnected) {
+                              show?.()
+                            } else {
+                              handleQuestClick(quest)
+                            }
+                          }}
+                          className={`px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
+                            quest.status === 'active'
+                              ? 'bg-[#a57e24] hover:bg-[#8a671d] text-white'
+                              : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                          }`}
+                          disabled={quest.status !== 'active'}
+                        >
+                          {isConnected ? 'Start Quest' : 'Connect Wallet'}
+                        </button>
+                      )
+                    } else {
+                      return (
+                        <button 
+                          onClick={() => handleQuestClick(quest)}
+                          className={`px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
+                            quest.status === 'active'
+                              ? 'bg-[#a57e24] hover:bg-[#8a671d] text-white'
+                              : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                          }`}
+                          disabled={quest.status !== 'active'}
+                        >
+                          {quest.status === 'active' ? 'Start Quest' : 'Locked'}
+                        </button>
+                      )
+                    }
+                  }}
+                </ConnectKitButton.Custom>
+              </div>
             </div>
           ))}
         </div>
@@ -398,12 +398,12 @@ export default function QuestsPage() {
         </div>
       </div>
 
-             {/* Social Media Modal */}
-             <SocialMediaModal 
-               isOpen={showSocialModal}
-               onClose={() => setShowSocialModal(false)}
-               onQuestComplete={handleSocialQuestComplete}
-             />
-           </div>
-         )
-       }
+      {/* Social Media Modal */}
+      <SocialMediaModal 
+        isOpen={showSocialModal}
+        onClose={() => setShowSocialModal(false)}
+        onQuestComplete={handleSocialQuestComplete}
+      />
+    </div>
+  )
+}
