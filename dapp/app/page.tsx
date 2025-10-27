@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import CountdownTimer from "../sections/countdown-timer"
 import TokenPurchaseNew from "../components/token-purchase-new"
 import Navbar from "../sections/navbar"
+import AnnouncementBar from "../sections/announcement-bar"
 import { TokenContractModal } from "../components/TokenContractModal"
 import { isMobileDevice, isWalletBrowser } from "../lib/wallet-browser-utils"
 
@@ -81,52 +82,7 @@ export default function DappHomePage() {
       {/* Content Container */}
       <div className="relative z-10">
         {/* Announcement Bar */}
-        <div className="bg-gradient-to-r from-red-800 to-red-600 py-2 text-sm font-medium text-white overflow-hidden relative">
-          <div className="animate-scroll whitespace-nowrap w-max">
-            <span className="inline-block px-4">
-              NWIS DAO Token Presale is LIVE on Ethereum Mainnet! Ready to Own a Stake in a Force that will Revolutionize the Asset Management Industry? • HURRY UP! BEFORE THIS TIER ENDS AND THE PRICE INCREASES!
-            </span>
-            <span className="inline-block px-4">
-              NWIS DAO Token Presale is LIVE on Ethereum Mainnet! Ready to Own a Stake in a Force that will Revolutionize the Asset Management Industry? • HURRY UP! BEFORE THIS TIER ENDS AND THE PRICE INCREASES!
-            </span>
-            <span className="inline-block px-4">
-              NWIS DAO Token Presale is LIVE on Ethereum Mainnet! Ready to Own a Stake in a Force that will Revolutionize the Asset Management Industry? • HURRY UP! BEFORE THIS TIER ENDS AND THE PRICE INCREASES!
-            </span>
-            <span className="inline-block px-4">
-              NWIS DAO Token Presale is LIVE on Ethereum Mainnet! Ready to Own a Stake in a Force that will Revolutionize the Asset Management Industry? • HURRY UP! BEFORE THIS TIER ENDS AND THE PRICE INCREASES!
-            </span>
-            <span className="inline-block px-4">
-              NWIS DAO Token Presale is LIVE on Ethereum Mainnet! Ready to Own a Stake in a Force that will Revolutionize the Asset Management Industry? • HURRY UP! BEFORE THIS TIER ENDS AND THE PRICE INCREASES!
-            </span>
-          </div>
-          
-          <style jsx>{`
-            @keyframes scroll {
-              0% {
-                transform: translateX(0%);
-              }
-              100% {
-                transform: translateX(-100%);
-              }
-            }
-            
-            .animate-scroll {
-              animation: scroll 80s linear infinite;
-            }
-            
-            @media (max-width: 768px) {
-              .animate-scroll {
-                animation: scroll 60s linear infinite;
-              }
-            }
-            
-            @media (max-width: 480px) {
-              .animate-scroll {
-                animation: scroll 40s linear infinite;
-              }
-            }
-          `}</style>
-        </div>
+        <AnnouncementBar />
         
         {/* Header */}
         <Navbar />
