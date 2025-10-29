@@ -337,9 +337,9 @@ export default function QuestsPage() {
                 <div className="text-base text-gray-400">
                   Reward: <span className="text-[#a57e24] font-semibold text-lg">{quest.reward}</span>
                 </div>
-                <ConnectKitButton.Custom>
-                  {({ isConnected, show }) => {
-                    if (quest.id === 1) {
+                {quest.id === 1 ? (
+                  <ConnectKitButton.Custom>
+                    {({ show }) => {
                       return (
                         <button 
                           onClick={() => {
@@ -359,23 +359,21 @@ export default function QuestsPage() {
                           {isConnected ? 'Start Quest' : 'Connect Wallet'}
                         </button>
                       )
-                    } else {
-                      return (
-                        <button 
-                          onClick={() => handleQuestClick(quest)}
-                          className={`px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
-                            quest.status === 'active'
-                              ? 'bg-[#a57e24] hover:bg-[#8a671d] text-white'
-                              : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                          }`}
-                          disabled={quest.status !== 'active'}
-                        >
-                          {quest.status === 'active' ? 'Start Quest' : 'Locked'}
-                        </button>
-                      )
-                    }
-                  }}
-                </ConnectKitButton.Custom>
+                    }}
+                  </ConnectKitButton.Custom>
+                ) : (
+                  <button 
+                    onClick={() => handleQuestClick(quest)}
+                    className={`px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
+                      quest.status === 'active'
+                        ? 'bg-[#a57e24] hover:bg-[#8a671d] text-white'
+                        : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                    }`}
+                    disabled={quest.status !== 'active'}
+                  >
+                    {quest.status === 'active' ? 'Start Quest' : 'Locked'}
+                  </button>
+                )}
               </div>
             </div>
           ))}
