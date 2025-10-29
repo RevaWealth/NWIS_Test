@@ -21,6 +21,15 @@ export default function QuestsPage() {
 
   // Use ConnectKit and Wagmi hooks for wallet connection
   const { isConnected, address } = useAccount()
+  
+  // Additional state to track wallet connection
+  const [walletConnected, setWalletConnected] = useState(false)
+  
+  // Update wallet connection state when useAccount changes
+  useEffect(() => {
+    console.log('Wallet connection state changed:', { isConnected, address })
+    setWalletConnected(isConnected)
+  }, [isConnected, address])
 
   const quests = [
     {
@@ -36,7 +45,7 @@ export default function QuestsPage() {
     {
       id: 2,
       title: "Social Media Champion",
-      description: "Follow NWIS on X and Instagram, tag NWIS in a post with your wallet address.",
+      description: "Follow NWIS on X and Instagram, tag NWIS in a post.",
       reward: "10000 NWIS",
       status: "active",
       category: "social",
@@ -343,7 +352,7 @@ export default function QuestsPage() {
                       return (
                         <button 
                           onClick={() => {
-                            if (!isConnected) {
+                            if (!walletConnected) {
                               show?.()
                             } else {
                               handleQuestClick(quest)
@@ -356,7 +365,7 @@ export default function QuestsPage() {
                           }`}
                           disabled={quest.status !== 'active'}
                         >
-                          {isConnected ? 'Start Quest' : 'Connect Wallet'}
+                          {walletConnected ? 'Start Quest' : 'Connect Wallet'}
                         </button>
                       )
                     }}
