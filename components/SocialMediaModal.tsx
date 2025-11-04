@@ -127,7 +127,7 @@ export function SocialMediaModal({ isOpen, onClose, onQuestComplete }: SocialMed
           {/* Content */}
           <div className="space-y-4">
             <p className="text-gray-300 mb-6">
-              Follow NWIS on X (Twitter) and Instagram to complete this quest. Tag us in your posts with your wallet address!
+              Follow NWIS on X (Twitter) and Instagram to complete this quest. Tag us in a post!
             </p>
 
             {/* Social Media Links */}
@@ -180,8 +180,7 @@ export function SocialMediaModal({ isOpen, onClose, onQuestComplete }: SocialMed
                 <br />
                 1. Follow both accounts<br />
                 2. Create a post tagging NWIS<br />
-                3. Include your wallet address in the post<br />
-                4. Submit the links to your posts below
+                3. Submit the links to your posts below
               </p>
             </div>
 
