@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react"
-import { useAccount, useSimulateContract, useChainId, useReadContract, useSwitchChain } from "wagmi" 
+import { useAccount, useSimulateContract, useChainId, useReadContract, useSwitchChain, useBalance } from "wagmi" 
 import { useModal } from "connectkit"
 import { useToast } from "@/hooks/use-toast"
 import { useTokenCalculation } from "@/hooks/use-token-calculation"
@@ -66,6 +66,50 @@ function TokenPurchaseNew({
   // Custom hooks
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
   const { contractData, isLoadingContractData, fetchContractData } = useContractData()
+  
+  // Wallet balance checks - always fetch when connected to have balances ready
+  const { data: ethBalance, isLoading: isEthBalanceLoading } = useBalance({
+    address: address,
+    query: {
+      enabled: isConnected && !!address
+    }
+  })
+  
+  const { data: usdtBalance, isLoading: isUsdtBalanceLoading } = useReadContract({
+    address: isConnected && address ? (getTokenAddress("USDT") as `0x${string}`) : undefined,
+    abi: [
+      {
+        "inputs": [{"name": "account", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: isConnected && !!address
+    }
+  })
+  
+  const { data: usdcBalance, isLoading: isUsdcBalanceLoading } = useReadContract({
+    address: isConnected && address ? (getTokenAddress("USDC") as `0x${string}`) : undefined,
+    abi: [
+      {
+        "inputs": [{"name": "account", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: isConnected && !!address
+    }
+  })
   const { tokenAmount, isCalculating } = useTokenCalculation({ 
     amount: amount, 
     currency,
@@ -120,8 +164,11 @@ function TokenPurchaseNew({
     onShowMobileBanner: () => setShowMobileApprovalBanner(true)
   })
 
-  // Network validation
-  const isCorrectNetwork = chainId === REQUIRED_NETWORK
+  // Network validation - check if chainId is defined and matches required network
+  const isCorrectNetwork = useMemo(() => {
+    if (!isConnected || !chainId) return false
+    return chainId === REQUIRED_NETWORK
+  }, [isConnected, chainId])
 
   // Convert amount to smallest units
   const amountInSmallestUnits = useMemo(() => {
@@ -206,19 +253,22 @@ function TokenPurchaseNew({
   }, [currency, needsApproval, simulationData, simulationDataETH, simulationDataERC20, isSimulating, isSimulatingETH, isSimulatingERC20, simulateError, simulateErrorETH, simulateErrorERC20, amountInSmallestUnits, isConnected, contractData.saleActive, debouncedAmount, amount, ethPrice, timestamp])
 
   // Get pay amount for ERC20 tokens
+  const getPayAmountArgs = useMemo(() => {
+    if (!debouncedNwisTokenAmount || currency === "ETH") return undefined
+    const parsedAmount = Number.parseFloat(debouncedNwisTokenAmount)
+    if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) {
+      return undefined
+    }
+    return [getTokenAddress(currency) as `0x${string}`, BigInt(Math.floor(parsedAmount * 1e18))] as const
+  }, [debouncedNwisTokenAmount, currency])
+
   const { data: payAmountData, isLoading: isPayAmountLoading, error: payAmountError } = useReadContract({
     address: PRESALE_CONTRACT_ADDRESS,
     abi: PRESALE_ABI,
     functionName: "getPayAmount",
-    args: debouncedNwisTokenAmount && currency !== "ETH" ? (() => {
-      const parsedAmount = Number.parseFloat(debouncedNwisTokenAmount)
-      if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) {
-        return undefined
-      }
-      return [getTokenAddress(currency) as `0x${string}`, BigInt(Math.floor(parsedAmount * 1e18))]
-    })() : undefined,
+    args: getPayAmountArgs,
     query: {
-      enabled: Boolean(debouncedNwisTokenAmount && contractData.saleActive && currency !== "ETH"),
+      enabled: Boolean(getPayAmountArgs && contractData.saleActive && currency !== "ETH" && isConnected),
     }
   })
 
@@ -250,6 +300,69 @@ function TokenPurchaseNew({
     }
     return null
   }, [currency, ethPayAmount, payAmountData])
+  
+  // Format wallet balance for display - always show when connected, even if zero
+  const formattedWalletBalance = useMemo(() => {
+    if (!isConnected) return null
+    
+    if (currency === "ETH") {
+      if (isEthBalanceLoading) return "Loading..."
+      if (!ethBalance) return "0.000000"
+      const balanceInEth = Number(ethBalance.value) / 1e18
+      return balanceInEth.toFixed(6)
+    } else if (currency === "USDT") {
+      if (isUsdtBalanceLoading) return "Loading..."
+      if (!usdtBalance) return "0.00"
+      const balanceInUsdt = Number(usdtBalance) / 1e6
+      return balanceInUsdt.toFixed(2)
+    } else if (currency === "USDC") {
+      if (isUsdcBalanceLoading) return "Loading..."
+      if (!usdcBalance) return "0.00"
+      const balanceInUsdc = Number(usdcBalance) / 1e6
+      return balanceInUsdc.toFixed(2)
+    }
+    
+    return null
+  }, [currency, ethBalance, usdtBalance, usdcBalance, isConnected, isEthBalanceLoading, isUsdtBalanceLoading, isUsdcBalanceLoading])
+  
+  // Check if balance is insufficient
+  const hasInsufficientBalance = useMemo(() => {
+    // Always check against the amount the user entered (what they want to spend)
+    if (!amount || !isConnected) return false
+    
+    const parsedAmount = Number.parseFloat(amount)
+    if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) return false
+    
+    // Check if balance is still loading - if so, don't disable yet
+    if (currency === "ETH") {
+      if (isEthBalanceLoading) return false
+      // If balance data exists (even if zero), check it
+      if (ethBalance !== undefined) {
+        const balanceInEth = Number(ethBalance.value) / 1e18
+        return parsedAmount > balanceInEth
+      }
+      // If balance is not loaded yet, don't show insufficient balance
+      return false
+    } else if (currency === "USDT") {
+      if (isUsdtBalanceLoading) return false
+      // If balance data exists (even if zero), check it
+      if (usdtBalance !== undefined) {
+        const balanceInUsdt = Number(usdtBalance) / 1e6
+        return parsedAmount > balanceInUsdt
+      }
+      return false
+    } else if (currency === "USDC") {
+      if (isUsdcBalanceLoading) return false
+      // If balance data exists (even if zero), check it
+      if (usdcBalance !== undefined) {
+        const balanceInUsdc = Number(usdcBalance) / 1e6
+        return parsedAmount > balanceInUsdc
+      }
+      return false
+    }
+    
+    return false
+  }, [amount, currency, ethBalance, usdtBalance, usdcBalance, isConnected, isEthBalanceLoading, isUsdtBalanceLoading, isUsdcBalanceLoading])
 
   // Effects
   useLayoutEffect(() => {
@@ -286,13 +399,55 @@ function TokenPurchaseNew({
     return () => clearTimeout(timer)
   }, [mounted, nwisTokenAmount])
 
+  // Debug network state
   useEffect(() => {
-    if (isConnected && !isCorrectNetwork && mounted) {
-      setShowNetworkDialog(true)
-    } else if (isCorrectNetwork) {
+    if (mounted && isConnected) {
+      console.log('Network state:', {
+        isConnected,
+        chainId,
+        REQUIRED_NETWORK,
+        isCorrectNetwork,
+        chainIdType: typeof chainId,
+        chainIdValue: chainId
+      })
+    }
+  }, [mounted, isConnected, chainId, isCorrectNetwork])
+
+  // Network check effect - show dialog when connected to wrong network
+  // This runs automatically after wallet connection
+  useEffect(() => {
+    if (!mounted) return
+    
+    // Only check network if wallet is connected
+    if (isConnected) {
+      // Wait a bit for chainId to be available (some wallets take a moment)
+      const checkNetwork = setTimeout(() => {
+        // If chainId is available and doesn't match, show dialog
+        // Check for both undefined and 0 (some wallets return 0 when not set)
+        if (chainId !== undefined && chainId !== 0 && chainId !== REQUIRED_NETWORK) {
+          console.log('Network mismatch detected after connection - showing dialog:', { chainId, REQUIRED_NETWORK, isCorrectNetwork })
+          setShowNetworkDialog(true)
+        } else if (chainId === REQUIRED_NETWORK) {
+          console.log('Correct network detected - hiding dialog')
+          setShowNetworkDialog(false)
+        } else if (chainId === undefined || chainId === 0) {
+          console.log('ChainId not yet available, will check again:', { chainId })
+          // If chainId is still not available after delay, check one more time
+          setTimeout(() => {
+            if (chainId !== undefined && chainId !== 0 && chainId !== REQUIRED_NETWORK) {
+              console.log('Network mismatch detected on second check - showing dialog:', { chainId, REQUIRED_NETWORK })
+              setShowNetworkDialog(true)
+            }
+          }, 1000)
+        }
+      }, 100) // Small delay to allow chainId to be set
+
+      return () => clearTimeout(checkNetwork)
+    } else {
+      // Hide dialog when wallet is disconnected
       setShowNetworkDialog(false)
     }
-  }, [isConnected, isCorrectNetwork, mounted])
+  }, [isConnected, chainId, isCorrectNetwork, mounted])
 
   useEffect(() => {
     if (mounted && payAmount && debouncedNwisTokenAmount && !amount) {
@@ -389,13 +544,13 @@ function TokenPurchaseNew({
       if (isMobileDevice()) {
         toast({
           title: "Manual Network Switch Required",
-          description: "Please manually switch to Sepolia Testnet in your wallet app. Look for 'Networks' or 'Settings' in your wallet.",
+          description: "Please manually switch to Ethereum Mainnet in your wallet app. Look for 'Networks' or 'Settings' in your wallet.",
           variant: "destructive",
         })
       } else {
         toast({
           title: "Network Switch Failed",
-          description: "Please switch to Sepolia Testnet manually in your wallet.",
+          description: "Please switch to Ethereum Mainnet manually in your wallet.",
           variant: "destructive",
         })
       }
@@ -403,6 +558,19 @@ function TokenPurchaseNew({
   }
 
   const handlePurchase = () => {
+    // Check network first - this is critical for transaction safety
+    // Verify chainId is available and matches required network
+    if (!isConnected || !chainId || chainId !== REQUIRED_NETWORK) {
+      console.log('Network check failed in handlePurchase:', { isConnected, chainId, REQUIRED_NETWORK })
+      setShowNetworkDialog(true)
+      toast({
+        title: "Wrong Network",
+        description: "Please switch to Ethereum Mainnet to purchase tokens.",
+        variant: "destructive",
+      })
+      return
+    }
+
     if (!contractData.saleActive) {
       toast({
         title: "Sale Not Active",
@@ -417,15 +585,6 @@ function TokenPurchaseNew({
       toast({
         title: "Invalid Amount",
         description: "Please enter a valid amount to purchase.",
-        variant: "destructive",
-      })
-      return
-    }
-
-    if (!isCorrectNetwork) {
-      toast({
-        title: "Wrong Network",
-        description: "Please switch to Sepolia testnet to purchase tokens.",
         variant: "destructive",
       })
       return
@@ -449,6 +608,19 @@ function TokenPurchaseNew({
 
   // Handle approval
   const handleApprove = () => {
+    // Check network first - this is critical for transaction safety
+    // Verify chainId is available and matches required network
+    if (!isConnected || !chainId || chainId !== REQUIRED_NETWORK) {
+      console.log('Network check failed in handleApprove:', { isConnected, chainId, REQUIRED_NETWORK })
+      setShowNetworkDialog(true)
+      toast({
+        title: "Wrong Network",
+        description: "Please switch to Ethereum Mainnet to approve tokens.",
+        variant: "destructive",
+      })
+      return
+    }
+
     // Show mobile banner if on mobile device or mobile wallet browser
     if (isMobileDevice() || isMobileWallet) {
       setShowMobileApprovalBanner(true)
@@ -518,6 +690,8 @@ function TokenPurchaseNew({
           saleActive={contractData.saleActive}
           isPurchasing={isPurchasing}
           debouncedAmount={debouncedAmount}
+          walletBalance={formattedWalletBalance}
+          isConnected={isConnected}
         />
 
         {/* NWIS Amount Input */}
@@ -569,6 +743,8 @@ function TokenPurchaseNew({
           isApprovalPending={isApprovalPending}
           simulationData={simulationData}
           isCorrectNetwork={isCorrectNetwork}
+          hasInsufficientBalance={hasInsufficientBalance}
+          onShowNetworkDialog={() => setShowNetworkDialog(true)}
         />
       </div>
       

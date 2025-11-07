@@ -21,7 +21,7 @@ export const NetworkSwitchDialog = ({
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-white">Wrong Network</DialogTitle>
           <DialogDescription className="text-gray-300">
-            Your wallet is connected to the wrong network. Please switch to Sepolia Testnet to continue with the token purchase.
+            Your wallet is connected to the wrong network. Please switch to Ethereum Mainnet to continue with the token purchase.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -32,7 +32,7 @@ export const NetworkSwitchDialog = ({
             </div>
             <div className="flex items-center space-x-3 mt-2">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-sm text-gray-300">Required Network: Sepolia Testnet</span>
+              <span className="text-sm text-gray-300">Required Network: Ethereum Mainnet</span>
             </div>
           </div>
           
@@ -43,8 +43,7 @@ export const NetworkSwitchDialog = ({
               <div className="text-xs text-yellow-200 space-y-1">
                 <p>• Open your wallet app (MetaMask, Trust Wallet, etc.)</p>
                 <p>• Go to Settings → Networks or Network Settings</p>
-                <p>• Enable "Show test networks" if needed</p>
-                <p>• Select "Sepolia Test Network"</p>
+                <p>• Select "Ethereum Mainnet"</p>
                 <p>• Return to this page and refresh</p>
               </div>
             </div>
@@ -55,7 +54,7 @@ export const NetworkSwitchDialog = ({
               onClick={onSwitchNetwork}
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Switch to Sepolia
+              Switch to Ethereum
             </Button>
             <Button
               variant="outline"
