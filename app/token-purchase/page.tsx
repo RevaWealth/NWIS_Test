@@ -126,7 +126,9 @@ export default function TokenPurchasePage() {
 
               <CountdownTimer />
 
-              <p className="text-gray-400 text-center text-sm mt-4 mb-6">Presale Ends on December 31st, 2025</p>
+              <p className="text-gray-400 text-center text-sm mt-4 mb-6">
+                Total Funds Raised: <span className="text-white font-semibold">{tokenSaleData.amountRaised || "$0"}</span>
+              </p>
 
               <TokenPurchaseNew />
             </div>

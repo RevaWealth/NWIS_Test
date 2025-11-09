@@ -56,7 +56,7 @@ export const NwisAmountInput = ({
         </div>
       </div>
       <div className="text-xs text-gray-500 mt-1">
-        <span>Enter NWIS token amount to calculate required payment</span>
+        <span>Enter NWIS token amount</span>
       </div>
       {nwisTokenAmount && nwisTokenAmount !== debouncedNwisTokenAmount && (
         <div className="text-xs text-blue-400 mt-1">

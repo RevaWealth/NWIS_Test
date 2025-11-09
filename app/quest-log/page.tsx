@@ -87,7 +87,7 @@ export default function QuestLogPage() {
 
   const getQuestName = (questId: number) => {
     const questNames: { [key: number]: string } = {
-      1: 'Early Adopter Quest',
+    1: 'Early Investor Quest',
       2: 'Social Media Champion',
       3: 'Community Builder'
     }

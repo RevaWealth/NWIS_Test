@@ -10,6 +10,30 @@ interface TokenSaleCache {
 let tokenSaleCache: TokenSaleCache | null = null;
 const TOKEN_SALE_CACHE_DURATION = 60000; // 1 minute in milliseconds (longer than ETH price since blockchain data changes less frequently)
 
+type TierInfoResponse = {
+  0: string;
+  1: string;
+  2: string;
+  3: string;
+  tierIndex: string;
+  startAmount: string;
+  endAmount: string;
+  price: string;
+};
+
+type NextTierInfoResponse = {
+  0: boolean;
+  1: string;
+  2: string;
+  3: string;
+  4: string;
+  hasNextTier: boolean;
+  tierIndex: string;
+  startAmount: string;
+  endAmount: string;
+  price: string;
+};
+
 // Contract ABI for the NexusWealthPresale contract - UPDATED
 const PRESALE_ABI = [
   // Sale Status
@@ -138,23 +162,29 @@ export async function GET() {
     
     // Get current tier information
     console.log('📊 Fetching current tier info...');
-    const currentTierInfo = await presaleContract.methods.getCurrentTierInfo().call() as any;
+    const currentTierInfoRaw = await presaleContract.methods.getCurrentTierInfo().call();
+    const currentTierInfo = currentTierInfoRaw as unknown as TierInfoResponse;
     console.log('✅ Current tier info:', currentTierInfo);
     
     console.log('📊 Fetching next tier info...');
-    const nextTierInfo = await presaleContract.methods.getNextTierInfo().call() as any;
+    const nextTierInfoRaw = await presaleContract.methods.getNextTierInfo().call();
+    const nextTierInfo = nextTierInfoRaw as unknown as NextTierInfoResponse;
     console.log('✅ Next tier info:', nextTierInfo);
     
     // Convert price from smallest units (6 decimals) to USD
     const currentPriceUSD = parseFloat(currentTierInfo.price.toString()) / 1e6;
     
+    // Convert totals from wei (1e18) to whole tokens
+    const totalTokensForSaleTokens = parseFloat(totalTokensForSale.toString()) / 1e18;
+    const totalTokensSoldTokens = parseFloat(totalTokensSold.toString()) / 1e18;
+
     // Calculate progress percentage
     const progressPercentage = totalTokensForSale > 0 
-      ? ((parseFloat(totalTokensSold.toString()) / parseFloat(totalTokensForSale.toString())) * 100).toFixed(2)
+      ? ((totalTokensSoldTokens / totalTokensForSaleTokens) * 100).toFixed(2)
       : "0.00";
     
-    // Calculate amount raised (tokens sold * current price)
-    const amountRaised = parseFloat(totalTokensSold.toString()) * currentPriceUSD;
+    // Calculate amount raised (tokens sold * current USD price per token)
+    const amountRaised = totalTokensSoldTokens * currentPriceUSD;
     
     const data = {
       saleActive: saleStatus,
@@ -177,7 +207,10 @@ export async function GET() {
         price: parseFloat(nextTierInfo.price.toString()) / 1e6
       } : null,
       tokensUntilNextTier: nextTierInfo.hasNextTier 
-        ? (parseFloat(nextTierInfo.startAmount.toString()) - parseFloat(totalTokensSold.toString())).toString()
+        ? (
+            parseFloat(nextTierInfo.startAmount?.toString() ?? "0") -
+            parseFloat(totalTokensSold?.toString?.() ?? "0")
+          ).toString()
         : "0"
     };
 

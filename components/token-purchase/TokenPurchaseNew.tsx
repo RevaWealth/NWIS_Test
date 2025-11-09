@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react"
-import { useAccount, useSimulateContract, useChainId, useReadContract, useSwitchChain } from "wagmi" 
+import { useAccount, useSimulateContract, useChainId, useReadContract, useSwitchChain, useBalance } from "wagmi" 
 import { useModal } from "connectkit"
 import { useToast } from "@/hooks/use-toast"
 import { useTokenCalculation } from "@/hooks/use-token-calculation"
@@ -66,6 +66,51 @@ function TokenPurchaseNew({
   // Custom hooks
   const { ethPrice, isLoading: isEthPriceLoading, error: ethPriceError } = useEthPrice()
   const { contractData, isLoadingContractData, fetchContractData } = useContractData()
+  
+  // Wallet balance checks - always fetch when connected to have balances ready
+  const { data: ethBalance, isLoading: isEthBalanceLoading } = useBalance({
+    address: address,
+    query: {
+      enabled: isConnected && !!address
+    }
+  })
+  
+  const { data: usdtBalance, isLoading: isUsdtBalanceLoading } = useReadContract({
+    address: isConnected && address ? (getTokenAddress("USDT") as `0x${string}`) : undefined,
+    abi: [
+      {
+        "inputs": [{"name": "account", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: isConnected && !!address
+    }
+  })
+  
+  const { data: usdcBalance, isLoading: isUsdcBalanceLoading } = useReadContract({
+    address: isConnected && address ? (getTokenAddress("USDC") as `0x${string}`) : undefined,
+    abi: [
+      {
+        "inputs": [{"name": "account", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: isConnected && !!address
+    }
+  })
+  
   const { tokenAmount, isCalculating } = useTokenCalculation({ 
     amount: amount, 
     currency,
@@ -206,19 +251,22 @@ function TokenPurchaseNew({
   }, [currency, needsApproval, simulationData, simulationDataETH, simulationDataERC20, isSimulating, isSimulatingETH, isSimulatingERC20, simulateError, simulateErrorETH, simulateErrorERC20, amountInSmallestUnits, isConnected, contractData.saleActive, debouncedAmount, amount, ethPrice, timestamp])
 
   // Get pay amount for ERC20 tokens
+  const getPayAmountArgs = useMemo(() => {
+    if (!debouncedNwisTokenAmount || currency === "ETH") return undefined
+    const parsedAmount = Number.parseFloat(debouncedNwisTokenAmount)
+    if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) {
+      return undefined
+    }
+    return [getTokenAddress(currency) as `0x${string}`, BigInt(Math.floor(parsedAmount * 1e18))] as const
+  }, [debouncedNwisTokenAmount, currency])
+
   const { data: payAmountData, isLoading: isPayAmountLoading, error: payAmountError } = useReadContract({
     address: PRESALE_CONTRACT_ADDRESS,
     abi: PRESALE_ABI,
     functionName: "getPayAmount",
-    args: debouncedNwisTokenAmount && currency !== "ETH" ? (() => {
-      const parsedAmount = Number.parseFloat(debouncedNwisTokenAmount)
-      if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) {
-        return undefined
-      }
-      return [getTokenAddress(currency) as `0x${string}`, BigInt(Math.floor(parsedAmount * 1e18))]
-    })() : undefined,
+    args: getPayAmountArgs,
     query: {
-      enabled: Boolean(debouncedNwisTokenAmount && contractData.saleActive && currency !== "ETH"),
+      enabled: Boolean(getPayAmountArgs && contractData.saleActive && currency !== "ETH" && isConnected),
     }
   })
 
@@ -250,6 +298,69 @@ function TokenPurchaseNew({
     }
     return null
   }, [currency, ethPayAmount, payAmountData])
+  
+  // Format wallet balance for display - always show when connected, even if zero
+  const formattedWalletBalance = useMemo(() => {
+    if (!isConnected) return null
+    
+    if (currency === "ETH") {
+      if (isEthBalanceLoading) return "Loading..."
+      if (!ethBalance) return "0.000000"
+      const balanceInEth = Number(ethBalance.value) / 1e18
+      return balanceInEth.toFixed(6)
+    } else if (currency === "USDT") {
+      if (isUsdtBalanceLoading) return "Loading..."
+      if (!usdtBalance) return "0.00"
+      const balanceInUsdt = Number(usdtBalance) / 1e6
+      return balanceInUsdt.toFixed(2)
+    } else if (currency === "USDC") {
+      if (isUsdcBalanceLoading) return "Loading..."
+      if (!usdcBalance) return "0.00"
+      const balanceInUsdc = Number(usdcBalance) / 1e6
+      return balanceInUsdc.toFixed(2)
+    }
+    
+    return null
+  }, [currency, ethBalance, usdtBalance, usdcBalance, isConnected, isEthBalanceLoading, isUsdtBalanceLoading, isUsdcBalanceLoading])
+  
+  // Check if balance is insufficient
+  const hasInsufficientBalance = useMemo(() => {
+    // Always check against the amount the user entered (what they want to spend)
+    if (!amount || !isConnected) return false
+    
+    const parsedAmount = Number.parseFloat(amount)
+    if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount <= 0) return false
+    
+    // Check if balance is still loading - if so, don't disable yet
+    if (currency === "ETH") {
+      if (isEthBalanceLoading) return false
+      // If balance data exists (even if zero), check it
+      if (ethBalance !== undefined) {
+        const balanceInEth = Number(ethBalance.value) / 1e18
+        return parsedAmount > balanceInEth
+      }
+      // If balance is not loaded yet, don't show insufficient balance
+      return false
+    } else if (currency === "USDT") {
+      if (isUsdtBalanceLoading) return false
+      // If balance data exists (even if zero), check it
+      if (usdtBalance !== undefined) {
+        const balanceInUsdt = Number(usdtBalance) / 1e6
+        return parsedAmount > balanceInUsdt
+      }
+      return false
+    } else if (currency === "USDC") {
+      if (isUsdcBalanceLoading) return false
+      // If balance data exists (even if zero), check it
+      if (usdcBalance !== undefined) {
+        const balanceInUsdc = Number(usdcBalance) / 1e6
+        return parsedAmount > balanceInUsdc
+      }
+      return false
+    }
+    
+    return false
+  }, [amount, currency, ethBalance, usdtBalance, usdcBalance, isConnected, isEthBalanceLoading, isUsdtBalanceLoading, isUsdcBalanceLoading])
 
   // Effects
   useLayoutEffect(() => {
@@ -518,6 +629,8 @@ function TokenPurchaseNew({
           saleActive={contractData.saleActive}
           isPurchasing={isPurchasing}
           debouncedAmount={debouncedAmount}
+          walletBalance={formattedWalletBalance}
+          isConnected={isConnected}
         />
 
         {/* NWIS Amount Input */}
@@ -569,6 +682,7 @@ function TokenPurchaseNew({
           isApprovalPending={isApprovalPending}
           simulationData={simulationData}
           isCorrectNetwork={isCorrectNetwork}
+          hasInsufficientBalance={hasInsufficientBalance}
         />
       </div>
       

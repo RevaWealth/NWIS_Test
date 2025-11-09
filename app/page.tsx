@@ -106,8 +106,10 @@ export default function Home() {
               {/* Buy NWIS Token Button */}
               <div className="flex justify-center">
                 <Link
-                  href="/token-purchase"
+                  href="https://App.nwis.io"
                   className="inline-flex items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 bg-[#a57e24] hover:bg-[#8a671d] text-white font-semibold text-sm sm:text-base md:text-lg rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-auto"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Buy NWIS Token
                 </Link>

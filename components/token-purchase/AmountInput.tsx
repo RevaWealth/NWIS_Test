@@ -10,6 +10,8 @@ interface AmountInputProps {
   saleActive: boolean
   isPurchasing: boolean
   debouncedAmount: string
+  walletBalance: string | null
+  isConnected: boolean
 }
 
 export const AmountInput = ({
@@ -20,7 +22,9 @@ export const AmountInput = ({
   onBlur,
   saleActive,
   isPurchasing,
-  debouncedAmount
+  debouncedAmount,
+  walletBalance,
+  isConnected
 }: AmountInputProps) => {
   return (
     <div className="mb-4">
@@ -54,11 +58,13 @@ export const AmountInput = ({
         </div>
       </div>
       <div className="text-xs text-gray-500 mt-1">
-        <span>Enter any amount to purchase NWIS tokens</span>
+        <span>Enter amount to pay</span>
       </div>
-      <div className="text-xs text-gray-400 mt-1">
-        💡 Type your amount - press Enter or click outside to calculate NWIS tokens
-      </div>
+      {isConnected && walletBalance !== null && (
+        <div className="text-xs text-gray-400 mt-1 flex items-center justify-end">
+          <span>Wallet Balance: <span className="font-medium text-white">{walletBalance === "Loading..." ? walletBalance : `${walletBalance} ${currency}`}</span></span>
+        </div>
+      )}
       {amount !== debouncedAmount && (
         <div className="text-xs text-blue-400 mt-1">
           ⏳ Ready to calculate - press Enter or click outside

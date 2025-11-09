@@ -16,6 +16,7 @@ interface PurchaseButtonProps {
   isApprovalPending: boolean
   simulationData: any
   isCorrectNetwork: boolean
+  hasInsufficientBalance: boolean
 }
 
 export const PurchaseButton = ({
@@ -31,7 +32,8 @@ export const PurchaseButton = ({
   localIsApproving,
   isApprovalPending,
   simulationData,
-  isCorrectNetwork
+  isCorrectNetwork,
+  hasInsufficientBalance
 }: PurchaseButtonProps) => {
   if (!isConnected) {
     return (
@@ -46,9 +48,15 @@ export const PurchaseButton = ({
   }
 
   const handleClick = () => {
+    // Prevent action if balance is insufficient
+    if (hasInsufficientBalance) {
+      return
+    }
+    
     console.log('Button clicked:', {
       needsApproval,
-      currency
+      currency,
+      hasInsufficientBalance
     })
     if (needsApproval) {
       onApprove()
@@ -57,7 +65,7 @@ export const PurchaseButton = ({
     }
   }
 
-  const isDisabled = !amount || !saleActive || isPurchasing || localIsApproving || isApprovalPending || !isCorrectNetwork
+  const isDisabled = !amount || !saleActive || isPurchasing || localIsApproving || isApprovalPending || !isCorrectNetwork || hasInsufficientBalance
 
   // Debug logging for production issues
   console.log('PurchaseButton state:', {
@@ -87,7 +95,9 @@ export const PurchaseButton = ({
           {isApprovalPending ? "Processing..." : localIsApproving ? "Approving..." : (isPurchasing ? "Sending..." : "Processing...")}
         </div>
       ) : !isCorrectNetwork ? (
-        "Switch to Sepolia"
+        "Switch to Ethereum"
+      ) : hasInsufficientBalance ? (
+        "Insufficient Balance"
       ) : needsApproval ? (
         `Approve ${currency}`
       ) : (

@@ -58,16 +58,13 @@ export const AmountInput = ({
         </div>
       </div>
       <div className="text-xs text-gray-500 mt-1">
-        <span>Enter any amount to purchase NWIS tokens</span>
+        <span>Enter amount to pay</span>
       </div>
       {isConnected && walletBalance !== null && (
         <div className="text-xs text-gray-400 mt-1 flex items-center justify-end">
           <span>Wallet Balance: <span className="font-medium text-white">{walletBalance === "Loading..." ? walletBalance : `${walletBalance} ${currency}`}</span></span>
         </div>
       )}
-      <div className="text-xs text-gray-400 mt-1">
-        💡 Type your amount - press Enter or click outside to calculate NWIS tokens
-      </div>
       {amount !== debouncedAmount && (
         <div className="text-xs text-blue-400 mt-1">
           ⏳ Ready to calculate - press Enter or click outside

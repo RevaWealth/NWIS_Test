@@ -14,8 +14,8 @@ export default function QuestsPage() {
   const [activeTab, setActiveTab] = useState('all')
   const [showSocialModal, setShowSocialModal] = useState(false)
   const [questProgress, setQuestProgress] = useState({
-    1: 0, // Early Adopter Quest progress
-    2: 0, // Social Media Champion progress
+    1: 38, // Early Investor Quest progress
+    2: 38, // Social Media Champion progress
     3: 0  // Community Builder progress
   })
 
@@ -34,7 +34,7 @@ export default function QuestsPage() {
   const quests = [
     {
       id: 1,
-      title: "Early Adopter Quest",
+      title: "Early Investor Quest",
       description: "Be among the first 1000 users to purchase NWIS tokens",
       reward: "5000 NWIS",
       status: "active",
@@ -68,7 +68,7 @@ export default function QuestsPage() {
   // Handle quest button clicks
   const handleQuestClick = (quest: any) => {
     if (quest.id === 1) {
-      // Early Adopter Quest - check wallet connection first
+      // Early Investor Quest - check wallet connection first
       if (!isConnected) {
         // ConnectKit will handle the wallet connection modal
         return
@@ -148,7 +148,7 @@ export default function QuestsPage() {
                 body: JSON.stringify({
                   walletAddress: address,
                   transactionHash: event.transactionHash,
-                  questId: 1, // Early Adopter Quest
+                  questId: 1, // Early Investor Quest
                   timestamp: new Date().toISOString(),
                   tokenAmount: tokenAmount
                 })
@@ -161,7 +161,7 @@ export default function QuestsPage() {
                   1: Math.min(prev[1] + 1, 1000) // Increment by 1, max 1000
                 }))
                 
-                alert(`🎉 Early Adopter Quest Completed!\n\nPurchased: ${tokenAmount.toLocaleString()} NWIS\nTransaction: ${event.transactionHash}\n\nYou're now eligible for the $1000 USDT reward!`)
+                alert(`🎉 Early Investor Quest Completed!\n\nPurchased: ${tokenAmount.toLocaleString()} NWIS\nTransaction: ${event.transactionHash}\n\nYou're now eligible for the $1000 USDT reward!`)
                 
                 // Stop listening for this wallet (quest completed)
                 contract.removeAllListeners('Transfer')
@@ -388,7 +388,7 @@ export default function QuestsPage() {
           ))}
         </div>
 
-        {/* Quest Log Link */}
+        {/* Quest Log Link
         <div className="mt-12 text-center">
           <Link 
             href="/quest-log"
@@ -396,7 +396,7 @@ export default function QuestsPage() {
           >
             View Quest Completion Log
           </Link>
-        </div>
+        </div> */}
 
         {/* Coming Soon Section */}
         <div className="mt-16 text-center">

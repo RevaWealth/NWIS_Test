@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Multi-Region Deployment Script for NexusWealth Dapp
+# Multi-Region Deployment Script for NexusWealth Main Website (nwis.io)
 # Deploys to US, Europe, and Asia for global low-latency access
 
 # Configuration
